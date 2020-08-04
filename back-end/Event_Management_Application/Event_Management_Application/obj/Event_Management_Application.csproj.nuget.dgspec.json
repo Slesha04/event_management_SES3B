@@ -1,0 +1,66 @@
+{
+  "format": 1,
+  "restore": {
+    "C:\\Users\\Andre Bella\\event_management_SES3B\\back-end\\Event_Management_Application\\Event_Management_Application\\Event_Management_Application.csproj": {}
+  },
+  "projects": {
+    "C:\\Users\\Andre Bella\\event_management_SES3B\\back-end\\Event_Management_Application\\Event_Management_Application\\Event_Management_Application.csproj": {
+      "version": "1.0.0",
+      "restore": {
+        "projectUniqueName": "C:\\Users\\Andre Bella\\event_management_SES3B\\back-end\\Event_Management_Application\\Event_Management_Application\\Event_Management_Application.csproj",
+        "projectName": "Event_Management_Application",
+        "projectPath": "C:\\Users\\Andre Bella\\event_management_SES3B\\back-end\\Event_Management_Application\\Event_Management_Application\\Event_Management_Application.csproj",
+        "packagesPath": "C:\\Users\\Andre Bella\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\Andre Bella\\event_management_SES3B\\back-end\\Event_Management_Application\\Event_Management_Application\\obj\\",
+        "projectStyle": "PackageReference",
+        "fallbackFolders": [
+          "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder"
+        ],
+        "configFilePaths": [
+          "C:\\Users\\Andre Bella\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
+        ],
+        "originalTargetFrameworks": [
+          "net461"
+        ],
+        "sources": {
+          "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
+          "https://api.nuget.org/v3/index.json": {}
+        },
+        "frameworks": {
+          "net461": {
+            "projectReferences": {}
+          }
+        },
+        "warningProperties": {
+          "warnAsError": [
+            "NU1605"
+          ]
+        }
+      },
+      "frameworks": {
+        "net461": {
+          "dependencies": {
+            "Microsoft.AspNetCore": {
+              "target": "Package",
+              "version": "[2.2.0, )"
+            },
+            "Microsoft.AspNetCore.HttpsPolicy": {
+              "target": "Package",
+              "version": "[2.2.0, )"
+            },
+            "Microsoft.AspNetCore.Mvc": {
+              "target": "Package",
+              "version": "[2.2.0, )"
+            }
+          }
+        }
+      },
+      "runtimes": {
+        "win7-x86": {
+          "#import": []
+        }
+      }
+    }
+  }
+}
