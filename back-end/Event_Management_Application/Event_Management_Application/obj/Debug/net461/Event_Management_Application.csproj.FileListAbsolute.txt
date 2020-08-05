@@ -92,7 +92,6 @@ C:\Users\Andre Bella\event_management_SES3B\back-end\Event_Management_Applicatio
 C:\Users\Andre Bella\event_management_SES3B\back-end\Event_Management_Application\Event_Management_Application\bin\Debug\net461\refs\System.Threading.Thread.dll
 C:\Users\Andre Bella\event_management_SES3B\back-end\Event_Management_Application\Event_Management_Application\bin\Debug\net461\refs\System.Threading.ThreadPool.dll
 C:\Users\Andre Bella\event_management_SES3B\back-end\Event_Management_Application\Event_Management_Application\bin\Debug\net461\refs\System.Threading.Timer.dll
-C:\Users\Andre Bella\event_management_SES3B\back-end\Event_Management_Application\Event_Management_Application\bin\Debug\net461\refs\System.ValueTuple.dll
 C:\Users\Andre Bella\event_management_SES3B\back-end\Event_Management_Application\Event_Management_Application\bin\Debug\net461\refs\System.Xml.ReaderWriter.dll
 C:\Users\Andre Bella\event_management_SES3B\back-end\Event_Management_Application\Event_Management_Application\bin\Debug\net461\refs\System.Xml.XDocument.dll
 C:\Users\Andre Bella\event_management_SES3B\back-end\Event_Management_Application\Event_Management_Application\bin\Debug\net461\refs\System.Xml.XmlDocument.dll
@@ -315,3 +314,11 @@ C:\Users\Andre Bella\event_management_SES3B\back-end\Event_Management_Applicatio
 C:\Users\Andre Bella\event_management_SES3B\back-end\Event_Management_Application\Event_Management_Application\obj\Debug\net461\Event_Management_Application.csproj.CopyComplete
 C:\Users\Andre Bella\event_management_SES3B\back-end\Event_Management_Application\Event_Management_Application\obj\Debug\net461\Event_Management_Application.exe
 C:\Users\Andre Bella\event_management_SES3B\back-end\Event_Management_Application\Event_Management_Application\obj\Debug\net461\Event_Management_Application.pdb
+C:\Users\Andre Bella\event_management_SES3B\back-end\Event_Management_Application\Event_Management_Application\bin\Debug\net461\Microsoft.AspNetCore.StaticFiles.dll
+C:\Users\Andre Bella\event_management_SES3B\back-end\Event_Management_Application\Event_Management_Application\bin\Debug\net461\Microsoft.Bcl.AsyncInterfaces.dll
+C:\Users\Andre Bella\event_management_SES3B\back-end\Event_Management_Application\Event_Management_Application\bin\Debug\net461\Microsoft.Extensions.FileProviders.Embedded.dll
+C:\Users\Andre Bella\event_management_SES3B\back-end\Event_Management_Application\Event_Management_Application\bin\Debug\net461\Microsoft.OpenApi.dll
+C:\Users\Andre Bella\event_management_SES3B\back-end\Event_Management_Application\Event_Management_Application\bin\Debug\net461\Swashbuckle.AspNetCore.Swagger.dll
+C:\Users\Andre Bella\event_management_SES3B\back-end\Event_Management_Application\Event_Management_Application\bin\Debug\net461\Swashbuckle.AspNetCore.SwaggerGen.dll
+C:\Users\Andre Bella\event_management_SES3B\back-end\Event_Management_Application\Event_Management_Application\bin\Debug\net461\Swashbuckle.AspNetCore.SwaggerUI.dll
+C:\Users\Andre Bella\event_management_SES3B\back-end\Event_Management_Application\Event_Management_Application\bin\Debug\net461\System.Text.Json.dll
