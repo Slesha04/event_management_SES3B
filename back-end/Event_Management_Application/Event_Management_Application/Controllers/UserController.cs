@@ -24,7 +24,7 @@ namespace Event_Management_Application.Controllers
 
         [Route("DeleteUser/{tokenId}")]
         [HttpDelete]
-        public bool DeleteUser(string tokenId)
+        public void DeleteUser([FromRoute] string tokenId)
         {
             throw new NotImplementedException();
         }
@@ -45,21 +45,21 @@ namespace Event_Management_Application.Controllers
 
         [Route("LogoutUser/{tokenId}")]
         [HttpPost]
-        public bool LogoutUser(string tokenId)
+        public void LogoutUser(string tokenId)
         {
             throw new NotImplementedException();
         }
 
         [Route("RegisterUser/{userName}/{dob}/{gender}/{userEmail}/{userPassword}")]
-        [HttpPost]
+        [HttpGet]
         public string RegisterUser(string userName, string dob, int gender, string userEmail, string userPassword)
         {
             throw new NotImplementedException();
         }
 
-        [Route("RegisterUser/{userId}/{userName}/{dob}/{gender}/{userEmail}/{userPassword}/{mobilePhone}/{landline}/{profilePicture}/{userDesc}/{tokenId}")]
-        [HttpPost]
-        public bool UpdateUser(int userId, string userName, string dob, int gender, string userEmail, string userPassword, string mobilePhone, string landline, byte[] profilePicture, string userDesc, string tokenId)
+        [Route("UpdateUser/{userId}/{userName}/{dob}/{gender}/{userEmail}/{userPassword}/{mobilePhone}/{landline}/{profilePicture}/{userDesc}/{tokenId}")]
+        [HttpPut]
+        public void UpdateUser(int userId, string userName, string dob, int gender, string userEmail, string userPassword, string mobilePhone, string landline, byte[] profilePicture, string userDesc, string tokenId)
         {
             throw new NotImplementedException();
         }
