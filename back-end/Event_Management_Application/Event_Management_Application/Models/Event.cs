@@ -1,5 +1,4 @@
 ﻿using Event_Management_Application.Enums;
-using Event_Management_Application.Models.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.Linq;
