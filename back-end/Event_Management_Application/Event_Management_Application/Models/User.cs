@@ -1,12 +1,10 @@
 ﻿using Event_Management_Application.Enums;
+using Event_Management_Application.Models.Interfaces;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace Event_Management_Application.Models
 {
-    public class User
+    public class User : IUser
     {
         public int UserId { get; set; }
         public string UserName { get; set; }

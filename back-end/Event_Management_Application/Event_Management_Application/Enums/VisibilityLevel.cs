@@ -1,7 +1,7 @@
 ﻿namespace Event_Management_Application.Enums
 {
-    public enum UserGender
+    public enum VisibilityLevel
     {
-        Male, Female
+        Public, Unlisted
     }
 }
