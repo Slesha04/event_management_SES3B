@@ -7,12 +7,12 @@ using System.Threading.Tasks;
 
 namespace Event_Management_Application.Models
 {
-    public class Event : IEvent
+    public class Event
     {
         public int EventId { get; set; }
         public string EventTitle { get; set; }
         public string BodyText { get; set; }
-        public string Location { get; set; }
+        public FormalAddress Location { get; set; }
         public int EventOrganiserId { get; set; }
         public DateTime EventDate { get; set; }
         public DateTime EventCreationDate { get; set; }

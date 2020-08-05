@@ -20,8 +20,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="DataAccess\" />
-    <Folder Include="ResourceManagement\" />
     <Folder Include="Security\" />
   </ItemGroup>
 

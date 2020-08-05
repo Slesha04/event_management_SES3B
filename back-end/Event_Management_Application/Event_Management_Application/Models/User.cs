@@ -4,7 +4,7 @@ using System;
 
 namespace Event_Management_Application.Models
 {
-    public class User : IUser
+    public class User
     {
         public int UserId { get; set; }
         public string UserName { get; set; }
