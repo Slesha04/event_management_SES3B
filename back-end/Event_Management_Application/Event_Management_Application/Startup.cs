@@ -33,12 +33,13 @@ namespace Event_Management_Application
                 options.SwaggerDoc("v1", new OpenApiInfo()
                 {
                     Title = "Event Management API UI",
-                    Description = "Automated documentation and UI for API usuage",
+                    Description = "Automated documentation and UI for API usage",
                     Version = "v1"
                 });
             });
 
             services.AddDbContext<EventManagementApplicationDbContext>();
+
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

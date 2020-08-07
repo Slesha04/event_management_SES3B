@@ -1,6 +1,7 @@
 ﻿using Event_Management_Application.Enums;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -13,6 +14,8 @@ namespace Event_Management_Application.Models
         public string BodyText { get; set; }
         public FormalAddress Location { get; set; }
         public int EventOrganiserId { get; set; }
+        [ForeignKey("EventOrganiserId")]
+        public User EventOrganiser { get; set; }
         public DateTime EventDate { get; set; }
         public DateTime EventCreationDate { get; set; }
         public DateTime EventLastModifiedDate { get; set; }

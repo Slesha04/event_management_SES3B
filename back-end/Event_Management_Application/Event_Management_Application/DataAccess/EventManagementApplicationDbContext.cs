@@ -12,6 +12,7 @@ namespace Event_Management_Application.DataAccess
     {
         public DbSet<User> Users { get; set; }
         public DbSet<Event> Events { get; set; }
+        public DbSet<UserTokenEntry> UserTokenEntries { get; set; }
 
         private readonly bool _isInTestingMode;
 
@@ -37,6 +38,7 @@ namespace Event_Management_Application.DataAccess
         {
             modelBuilder.Entity<User>().HasAlternateKey(x => x.UserName);
             modelBuilder.Entity<Event>().OwnsOne(x => x.Location);
+            modelBuilder.Entity<UserTokenEntry>();
         }
     }
 }

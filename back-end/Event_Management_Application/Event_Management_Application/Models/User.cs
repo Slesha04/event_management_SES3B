@@ -1,5 +1,6 @@
 ﻿using Event_Management_Application.Enums;
 using System;
+using System.Collections.Generic;
 
 namespace Event_Management_Application.Models
 {
@@ -16,5 +17,6 @@ namespace Event_Management_Application.Models
         public byte[] ProfilePicture { get; set; }
         public string UserPassword { get; set; }
         public bool UserVerified { get; set; }
+        public ICollection<UserTokenEntry> UserTokenEntries { get; set; }
     }
 }
