@@ -1,5 +1,4 @@
-﻿using Event_Management_Application.DataAccess.Interfaces;
-using Event_Management_Application.Models;
+﻿using Event_Management_Application.Models;
 using Event_Management_Application.ResourceManagement;
 using Microsoft.EntityFrameworkCore;
 using System;
@@ -9,14 +8,29 @@ using System.Threading.Tasks;
 
 namespace Event_Management_Application.DataAccess
 {
-    public class EventManagementApplicationDbContext : DbContext, IApplicationDbContext
+    public class EventManagementApplicationDbContext : DbContext
     {
         public DbSet<User> Users { get; set; }
         public DbSet<Event> Events { get; set; }
 
+        private readonly bool _isInTestingMode;
+
+        public EventManagementApplicationDbContext(bool inTestMode = false)
+        {
+            _isInTestingMode = inTestMode;
+        }
+
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            optionsBuilder.UseSqlServer(SystemResources.DATABASE_CONNECTION_STRING);
+            // We should connect to different databases depending on whether we are going live or doing unit testing
+            if(!_isInTestingMode)
+            {
+                optionsBuilder.UseSqlServer(SystemResources.DATABASE_CONNECTION_STRING);
+            }
+            else
+            {
+                optionsBuilder.UseSqlServer(SystemResources.TEST_DATABASE_CONNECTION_STRING);
+            }
         }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
