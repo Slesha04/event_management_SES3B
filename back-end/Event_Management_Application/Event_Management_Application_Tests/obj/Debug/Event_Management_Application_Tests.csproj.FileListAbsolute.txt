@@ -157,3 +157,11 @@ C:\Users\Andre Bella\event_management_SES3B\back-end\Event_Management_Applicatio
 C:\Users\Andre Bella\event_management_SES3B\back-end\Event_Management_Application\Event_Management_Application_Tests\bin\Debug\System.Memory.xml
 C:\Users\Andre Bella\event_management_SES3B\back-end\Event_Management_Application\Event_Management_Application_Tests\bin\Debug\System.Numerics.Vectors.xml
 C:\Users\Andre Bella\event_management_SES3B\back-end\Event_Management_Application\Event_Management_Application_Tests\bin\Debug\System.Runtime.CompilerServices.Unsafe.xml
+C:\Users\Andre Bella\event_management_SES3B\back-end\Event_Management_Application\Event_Management_Application_Tests\bin\Debug\Microsoft.IdentityModel.Tokens.dll
+C:\Users\Andre Bella\event_management_SES3B\back-end\Event_Management_Application\Event_Management_Application_Tests\bin\Debug\Microsoft.AspNetCore.Authentication.JwtBearer.dll
+C:\Users\Andre Bella\event_management_SES3B\back-end\Event_Management_Application\Event_Management_Application_Tests\bin\Debug\System.IdentityModel.Tokens.Jwt.dll
+C:\Users\Andre Bella\event_management_SES3B\back-end\Event_Management_Application\Event_Management_Application_Tests\bin\Debug\Microsoft.AspNetCore.Authentication.dll
+C:\Users\Andre Bella\event_management_SES3B\back-end\Event_Management_Application\Event_Management_Application_Tests\bin\Debug\Microsoft.IdentityModel.Logging.dll
+C:\Users\Andre Bella\event_management_SES3B\back-end\Event_Management_Application\Event_Management_Application_Tests\bin\Debug\Microsoft.IdentityModel.Protocols.OpenIdConnect.dll
+C:\Users\Andre Bella\event_management_SES3B\back-end\Event_Management_Application\Event_Management_Application_Tests\bin\Debug\Microsoft.IdentityModel.Protocols.dll
+C:\Users\Andre Bella\event_management_SES3B\back-end\Event_Management_Application\Event_Management_Application_Tests\bin\Debug\Microsoft.IdentityModel.JsonWebTokens.dll

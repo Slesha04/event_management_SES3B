@@ -12,6 +12,10 @@ using Microsoft.OpenApi.Models;
 using Event_Management_Application.DataAccess;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.IdentityModel.Tokens;
+using Event_Management_Application.ResourceManagement;
+using System.Text;
 
 namespace Event_Management_Application
 {
@@ -40,6 +44,23 @@ namespace Event_Management_Application
 
             services.AddDbContext<EventManagementApplicationDbContext>();
 
+            string securityKey = SystemResources.TOKEN_SECURITY_KEY;
+
+            var symmetricSecurityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(securityKey));
+
+            services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJwtBearer(
+                options =>
+                {
+                    options.TokenValidationParameters = new TokenValidationParameters
+                    {
+                        ValidateIssuer = true,
+                        ValidateAudience = true,
+                        ValidateIssuerSigningKey = true,
+                        ValidIssuer = SystemResources.VALID_ISSUER,
+                        ValidAudience = SystemResources.VALID_AUDIENCE,
+                        IssuerSigningKey = symmetricSecurityKey
+                    };
+                });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

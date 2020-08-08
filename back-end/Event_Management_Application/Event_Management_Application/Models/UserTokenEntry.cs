@@ -10,8 +10,9 @@ namespace Event_Management_Application.Models
     public class UserTokenEntry
     {
         [Key]
-        public Guid TokenId { get; set; }
+        public string TokenId { get; set; }
         public int UserId { get; set; }
+
         [ForeignKey("UserId")]
         public User User { get; set; }
         public DateTime TokenIssueDate { get; set; }

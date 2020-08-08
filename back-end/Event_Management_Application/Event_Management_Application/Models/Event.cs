@@ -14,6 +14,7 @@ namespace Event_Management_Application.Models
         public string BodyText { get; set; }
         public FormalAddress Location { get; set; }
         public int EventOrganiserId { get; set; }
+
         [ForeignKey("EventOrganiserId")]
         public User EventOrganiser { get; set; }
         public DateTime EventDate { get; set; }

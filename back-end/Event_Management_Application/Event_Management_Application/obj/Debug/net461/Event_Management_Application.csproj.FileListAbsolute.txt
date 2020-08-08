@@ -352,3 +352,7 @@ C:\Users\Andre Bella\event_management_SES3B\back-end\Event_Management_Applicatio
 C:\Users\Andre Bella\event_management_SES3B\back-end\Event_Management_Application\Event_Management_Application\bin\Debug\net461\Microsoft.IdentityModel.Logging.dll
 C:\Users\Andre Bella\event_management_SES3B\back-end\Event_Management_Application\Event_Management_Application\bin\Debug\net461\Microsoft.IdentityModel.Tokens.dll
 C:\Users\Andre Bella\event_management_SES3B\back-end\Event_Management_Application\Event_Management_Application\bin\Debug\net461\System.IdentityModel.Tokens.Jwt.dll
+C:\Users\Andre Bella\event_management_SES3B\back-end\Event_Management_Application\Event_Management_Application\bin\Debug\net461\Microsoft.AspNetCore.Authentication.dll
+C:\Users\Andre Bella\event_management_SES3B\back-end\Event_Management_Application\Event_Management_Application\bin\Debug\net461\Microsoft.AspNetCore.Authentication.JwtBearer.dll
+C:\Users\Andre Bella\event_management_SES3B\back-end\Event_Management_Application\Event_Management_Application\bin\Debug\net461\Microsoft.IdentityModel.Protocols.dll
+C:\Users\Andre Bella\event_management_SES3B\back-end\Event_Management_Application\Event_Management_Application\bin\Debug\net461\Microsoft.IdentityModel.Protocols.OpenIdConnect.dll
