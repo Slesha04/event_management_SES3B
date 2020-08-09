@@ -9,5 +9,9 @@
         public const string VALID_AUDIENCE = "users";
         public const string ACCESS_TOKEN_PARAM_NAME = "Authorization";
         public const string INVALID_TOKEN_MESSAGE = "Invalid Token";
+        public const string SWAGGER_API_DESCRIPTION = "Automated documentation and UI for API usage. " +
+            "The authentication method for APIs requiring credentials, is to use JWT Bearer tokens. " +
+            "To test this on Swagger, type in the 'Authorization' dialog box, 'Bearer [token_contents]'. " +
+            "Then click 'Authorize' and 'Close' to continue. ";
     }
 }

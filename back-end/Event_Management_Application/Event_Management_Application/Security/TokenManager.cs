@@ -46,14 +46,15 @@ namespace Event_Management_Application.Security
             return writtenToken;
         }
 
-        public bool DestroyToken(string token)
+        public bool DestroyUserTokens(string token)
         {
             try
             {
                 var userTokenEntry = _dbContext.UserTokenEntries.Where(x => x.TokenId.Equals(token)).FirstOrDefault();
+                var userTokens = _dbContext.UserTokenEntries.Where(x => x.UserId == userTokenEntry.UserId).ToList();
                 if (userTokenEntry != null)
                 {
-                    _dbContext.UserTokenEntries.Remove(userTokenEntry);
+                    _dbContext.UserTokenEntries.RemoveRange(userTokens);
                     _dbContext.SaveChanges();
                     return true;
                 }

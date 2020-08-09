@@ -29,7 +29,7 @@ namespace Event_Management_Application
                 options.SwaggerDoc("v1", new OpenApiInfo()
                 {
                     Title = "Event Management API UI",
-                    Description = "Automated documentation and UI for API usage",
+                    Description = SystemResources.SWAGGER_API_DESCRIPTION,
                     Version = "v1"
                 });
                 options.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme {

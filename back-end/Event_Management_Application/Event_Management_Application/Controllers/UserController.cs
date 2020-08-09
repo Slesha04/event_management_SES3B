@@ -11,6 +11,11 @@ using Event_Management_Application.ResourceManagement;
 
 namespace Event_Management_Application.Controllers
 {
+    ///
+    ///<summary>This controller provides back-end functionality for all user-related functions.
+    ///Such as signing in, out and registration. Also allows users to update, view or delete their
+    ///accounts.</summary>
+    ///
     [Route("api/UserController")]
     [ApiController]
     public class UserController : ControllerBase, IUserController
@@ -24,6 +29,10 @@ namespace Event_Management_Application.Controllers
             _tokenManager = new TokenManager(_dbContext);
         }
 
+        ///
+        ///<summary>Allows the user to delete their own account
+        /// User must be authenticated to use this function</summary>
+        ///
         [Route("DeleteUser")]
         [HttpDelete]
         [Authorize]
@@ -50,6 +59,9 @@ namespace Event_Management_Application.Controllers
             }
         }
 
+        ///
+        ///<summary>Gets details about a user using a userId.</summary>
+        ///
         [Route("GetUserById/{userId}")]
         [HttpGet]
         public User GetUserById([FromRoute] int userId)
@@ -57,6 +69,9 @@ namespace Event_Management_Application.Controllers
             return _dbContext.Users.Where(x => x.UserId == userId).FirstOrDefault();
         }
 
+        ///
+        ///<summary>Allows a user to sign in and issues them a JWT token.</summary>
+        ///
         [Route("LoginUser/{userName}/{hashedPassword}")]
         [HttpGet]
         public ActionResult LoginUser([FromRoute] string userName, [FromRoute] string hashedPassword)
@@ -69,13 +84,17 @@ namespace Event_Management_Application.Controllers
             return StatusCode(401, "Supplied Credentials are Invalid");
         }
 
+        ///
+        ///<summary>Logs out a user by destroying all their tokens.
+        /// User must be authenticated to use this function</summary>
+        ///
         [Route("LogoutUser")]
         [HttpPost]
         [Authorize]
         public ActionResult LogoutUser()
         {
             var token = _tokenManager.ExtractToken(Request);
-            var logoutSuccess = _tokenManager.DestroyToken(token);
+            var logoutSuccess = _tokenManager.DestroyUserTokens(token);
             if(logoutSuccess)
             {
                 return Ok();
@@ -83,6 +102,9 @@ namespace Event_Management_Application.Controllers
             return StatusCode(401, SystemResources.INVALID_TOKEN_MESSAGE);
         }
 
+        ///
+        ///<summary>Registers a new user into the system then issues a token for that user.</summary>
+        ///
         [Route("RegisterUser/{userName}/{dob}/{gender}/{userEmail}/{userPassword}")]
         [HttpGet]
         public ActionResult RegisterUser([FromRoute] string userName, [FromRoute] string dob, [FromRoute] int gender, [FromRoute] string userEmail, [FromRoute] string userPassword)
@@ -110,6 +132,10 @@ namespace Event_Management_Application.Controllers
 
         }
 
+        ///
+        ///<summary>Updates user information by using UserId. 
+        /// User must be authenticated to use this function</summary>
+        ///
         [Route("UpdateUser/{userId}/{userName}/{dob}/{gender}/{userEmail}/{userPassword}/{mobilePhone}/{landline}/{profilePicture}/{userDesc}")]
         [HttpPut]
         [Authorize]
@@ -150,6 +176,10 @@ namespace Event_Management_Application.Controllers
             }
         }
 
+        ///
+        ///<summary>Allows a user to view their own profile 
+        /// User must be authenticated to use this function</summary>
+        ///
         [Route("ViewUser")]
         [HttpGet]
         [Authorize]
