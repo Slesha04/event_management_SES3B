@@ -16,5 +16,6 @@ namespace Event_Management_Application.Models
         [ForeignKey("UserId")]
         public User User { get; set; }
         public DateTime TokenIssueDate { get; set; }
+        public DateTime TokenExpiryDate { get; set; }
     }
 }

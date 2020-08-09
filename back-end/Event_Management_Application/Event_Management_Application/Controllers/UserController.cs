@@ -1,19 +1,13 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
 using Event_Management_Application.Controllers.Interfaces;
 using Event_Management_Application.Models;
 using Event_Management_Application.DataAccess;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using Event_Management_Application.ResourceManagement;
-using Microsoft.IdentityModel.Tokens;
-using System.Text;
 using Event_Management_Application.Security;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Authentication;
+using Event_Management_Application.Enums;
+using Event_Management_Application.ResourceManagement;
 
 namespace Event_Management_Application.Controllers
 {
@@ -24,7 +18,6 @@ namespace Event_Management_Application.Controllers
         private readonly EventManagementApplicationDbContext _dbContext;
         private readonly TokenManager _tokenManager;
 
-        // Making the parameter optional allows for unit testing to become possible
         public UserController(EventManagementApplicationDbContext dbContext)
         {
             _dbContext = dbContext;
@@ -34,16 +27,34 @@ namespace Event_Management_Application.Controllers
         [Route("DeleteUser")]
         [HttpDelete]
         [Authorize]
-        public async Task<ActionResult> DeleteUser()
+        public ActionResult DeleteUser()
         {
-            throw new NotImplementedException();
+            var token = _tokenManager.ExtractToken(Request);
+            var tokenEntry = _tokenManager.ValidateAndReturnTokenEntry(token);
+
+            if (tokenEntry != null)
+            {
+                var user = tokenEntry.User;
+
+                if(user != null)
+                {
+                    _dbContext.Users.Remove(user);
+                    _dbContext.SaveChanges();
+                    return Ok();
+                }
+                return BadRequest("Bad Token Supplied");
+            }
+            else
+            {
+                return StatusCode(401, SystemResources.INVALID_TOKEN_MESSAGE);
+            }
         }
 
         [Route("GetUserById/{userId}")]
         [HttpGet]
-        public ActionResult GetUserById([FromRoute] int userId)
+        public User GetUserById([FromRoute] int userId)
         {
-            throw new NotImplementedException();
+            return _dbContext.Users.Where(x => x.UserId == userId).FirstOrDefault();
         }
 
         [Route("LoginUser/{userName}/{hashedPassword}")]
@@ -61,38 +72,100 @@ namespace Event_Management_Application.Controllers
         [Route("LogoutUser")]
         [HttpPost]
         [Authorize]
-        public async Task<ActionResult> LogoutUser()
+        public ActionResult LogoutUser()
         {
-            var token = await HttpContext.GetTokenAsync("access_token");
+            var token = _tokenManager.ExtractToken(Request);
             var logoutSuccess = _tokenManager.DestroyToken(token);
             if(logoutSuccess)
             {
                 return Ok();
             }
-            return BadRequest("Token not valid");
+            return StatusCode(401, SystemResources.INVALID_TOKEN_MESSAGE);
         }
 
         [Route("RegisterUser/{userName}/{dob}/{gender}/{userEmail}/{userPassword}")]
         [HttpGet]
         public ActionResult RegisterUser([FromRoute] string userName, [FromRoute] string dob, [FromRoute] int gender, [FromRoute] string userEmail, [FromRoute] string userPassword)
         {
-            throw new NotImplementedException();
+            var user = new User() {
+                UserName = userName,
+                UserPassword = userPassword,
+                UserDob = DateTime.Parse(dob),
+                UserGender = (UserGender)gender,
+                UserEmail = userEmail,
+                UserVerified = false
+            };
+
+            if(_dbContext.Users.Where(x => x.UserName.Equals(user.UserName)).FirstOrDefault() != null)
+            {
+                return BadRequest("Username is already taken");
+            }
+            else
+            {
+                _dbContext.Users.Add(user);
+                _dbContext.SaveChanges();
+            }
+
+            return Ok(_tokenManager.IssueToken(user));
+
         }
 
         [Route("UpdateUser/{userId}/{userName}/{dob}/{gender}/{userEmail}/{userPassword}/{mobilePhone}/{landline}/{profilePicture}/{userDesc}")]
         [HttpPut]
         [Authorize]
-        public async Task<ActionResult> UpdateUser([FromRoute] int userId, [FromRoute] string userName, [FromRoute] string dob, [FromRoute] int gender, [FromRoute] string userEmail, [FromRoute] string userPassword, [FromRoute] string mobilePhone, [FromRoute] string landline, [FromRoute] byte[] profilePicture, [FromRoute] string userDesc)
+        public ActionResult UpdateUser([FromRoute] int userId, [FromRoute] string userName, [FromRoute] string dob, [FromRoute] int gender, [FromRoute] string userEmail, [FromRoute] string userPassword, [FromRoute] string mobilePhone, [FromRoute] string landline, [FromRoute] byte[] profilePicture, [FromRoute] string userDesc)
         {
-            throw new NotImplementedException();
+            var token = _tokenManager.ExtractToken(Request);
+            var tokenEntry = _tokenManager.ValidateAndReturnTokenEntry(token);
+
+            if(tokenEntry == null)
+            {
+                return StatusCode(401, SystemResources.INVALID_TOKEN_MESSAGE);
+            }
+
+            if (tokenEntry.UserId != userId)
+            {
+                return StatusCode(401, SystemResources.INVALID_TOKEN_MESSAGE);
+            }
+
+            var user = tokenEntry.User;
+
+            if(user != null)
+            {
+                user.UserName = userName;
+                user.UserDob = DateTime.Parse(dob);
+                user.UserGender = (UserGender)gender;
+                user.UserEmail = userEmail;
+                user.UserPassword = userPassword;
+                user.UserMobile = mobilePhone;
+                user.UserLandline = landline;
+                user.ProfilePicture = profilePicture;
+                user.UserDesc = userDesc;
+                _dbContext.SaveChanges();
+                return Ok();
+            }
+            else
+            {
+                return BadRequest("User Id is not valid");
+            }
         }
 
         [Route("ViewUser")]
         [HttpGet]
         [Authorize]
-        public async Task<ActionResult> ViewUser()
+        public ActionResult ViewUser()
         {
-            throw new NotImplementedException();
+            var token = _tokenManager.ExtractToken(Request);
+            var tokenEntry = _tokenManager.ValidateAndReturnTokenEntry(token);
+
+            if(tokenEntry != null)
+            {
+                return Ok(tokenEntry.User);
+            }
+            else
+            {
+                return StatusCode(401, SystemResources.INVALID_TOKEN_MESSAGE);
+            }
         }
     }
 }

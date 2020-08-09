@@ -1,9 +1,6 @@
 ﻿using Event_Management_Application.Enums;
 using System;
-using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations.Schema;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace Event_Management_Application.Models
 {

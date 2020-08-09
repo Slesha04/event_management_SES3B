@@ -52,6 +52,7 @@
           "System.Transactions": "4.0.0.0",
           "System.Xml": "4.0.0.0",
           "System.Xml.Linq": "4.0.0.0",
+          "System.IdentityModel": "4.0.0.0",
           "System.IO.Compression.FileSystem": "4.0.0.0",
           "System.Runtime.Serialization": "4.0.0.0",
           "System.Reflection.Emit": "0.0.0.0",
@@ -242,6 +243,11 @@
       "System.Xml.Linq/4.0.0.0": {
         "compile": {
           ".NETFramework/v4.6.1/System.Xml.Linq.dll": {}
+        }
+      },
+      "System.IdentityModel/4.0.0.0": {
+        "compile": {
+          ".NETFramework/v4.6.1/System.IdentityModel.dll": {}
         }
       },
       "System.IO.Compression.FileSystem/4.0.0.0": {
@@ -2320,6 +2326,7 @@
           "System.Transactions": "4.0.0.0",
           "System.Xml": "4.0.0.0",
           "System.Xml.Linq": "4.0.0.0",
+          "System.IdentityModel": "4.0.0.0",
           "System.IO.Compression.FileSystem": "4.0.0.0",
           "System.Runtime.Serialization": "4.0.0.0",
           "System.Reflection.Emit": "0.0.0.0",
@@ -5415,6 +5422,11 @@
       "sha512": ""
     },
     "System.Xml.Linq/4.0.0.0": {
+      "type": "referenceassembly",
+      "serviceable": false,
+      "sha512": ""
+    },
+    "System.IdentityModel/4.0.0.0": {
       "type": "referenceassembly",
       "serviceable": false,
       "sha512": ""

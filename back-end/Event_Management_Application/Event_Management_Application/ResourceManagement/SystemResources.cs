@@ -7,5 +7,7 @@
         public const string TOKEN_SECURITY_KEY = "6170ac834a44388f4f419f48605f887f162fcb1ccdd7c2108bdde362c307096f";
         public const string VALID_ISSUER = "eventmanagementsys";
         public const string VALID_AUDIENCE = "users";
+        public const string ACCESS_TOKEN_PARAM_NAME = "Authorization";
+        public const string INVALID_TOKEN_MESSAGE = "Invalid Token";
     }
 }

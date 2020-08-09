@@ -6,6 +6,7 @@ using System;
 using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
 using System.Text;
+using Microsoft.AspNetCore.Http;
 
 namespace Event_Management_Application.Security
 {
@@ -35,7 +36,9 @@ namespace Event_Management_Application.Security
             _dbContext.UserTokenEntries.Add(new UserTokenEntry() {
                 TokenId = writtenToken,
                 UserId = user.UserId,
-                TokenIssueDate = token.IssuedAt
+                User = user,
+                TokenIssueDate = DateTime.Now,
+                TokenExpiryDate = token.ValidTo
             });
 
             _dbContext.SaveChanges();
@@ -62,23 +65,34 @@ namespace Event_Management_Application.Security
             return false;
         }
 
-        public User GetUserByToken(string token)
+        public string ExtractToken(HttpRequest request)
         {
-            try
+            return request.Headers[SystemResources.ACCESS_TOKEN_PARAM_NAME].ToString().Replace("Bearer ", "");
+        }
+
+        public UserTokenEntry ValidateAndReturnTokenEntry(string token)
+        {
+            var tokenEntry = _dbContext.UserTokenEntries.Where(x => x.TokenId.Equals(token)).FirstOrDefault();
+            if(tokenEntry != null)
             {
-                var tokenEntry = _dbContext.UserTokenEntries.Where(x => x.TokenId.Equals(token)).FirstOrDefault();
-                if(tokenEntry != null)
+                if(tokenEntry.TokenExpiryDate <= DateTime.Now)
                 {
-                    return tokenEntry.User;
+                    _dbContext.UserTokenEntries.Remove(tokenEntry);
+                    _dbContext.SaveChanges();
+                    return null;
                 }
+                tokenEntry.User = GetUserByTokenEntry(tokenEntry);
+                return tokenEntry;
             }
-            catch(Exception)
+            else
             {
                 return null;
             }
-            return null;
         }
-
-
+        
+        public User GetUserByTokenEntry(UserTokenEntry entry)
+        {
+            return _dbContext.Users.Where(x => x.UserId == entry.UserId).FirstOrDefault();
+        }
     }
 }
