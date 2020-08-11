@@ -15,16 +15,30 @@ namespace Event_Management_Application.DataAccess
 
         }
 
+        public EventManagementApplicationDbContext(DbContextOptions options) : base(options)
+        {
+
+        }
+
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            optionsBuilder.UseSqlServer(SystemResources.DATABASE_CONNECTION_STRING);
+
         }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            modelBuilder.Entity<User>().ToTable("Users").HasAlternateKey(x => x.UserName);
-            modelBuilder.Entity<Event>().ToTable("Events").OwnsOne(x => x.Location);
-            modelBuilder.Entity<UserTokenEntry>().ToTable("UserTokenEntries");
+            if(Database.IsInMemory())
+            {
+                modelBuilder.Entity<User>().ToTable("Users").HasAlternateKey(x => x.UserName);
+                modelBuilder.Entity<Event>().ToTable("Events").OwnsOne(x => x.Location);
+                modelBuilder.Entity<UserTokenEntry>().ToTable("UserTokenEntries");
+            }
+            else
+            {
+                modelBuilder.Entity<User>().ToTable("Users").HasAlternateKey(x => x.UserName);
+                modelBuilder.Entity<Event>().ToTable("Events").OwnsOne(x => x.Location);
+                modelBuilder.Entity<UserTokenEntry>().ToTable("UserTokenEntries");
+            }
         }
     }
 }

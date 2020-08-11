@@ -9,6 +9,7 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using Event_Management_Application.ResourceManagement;
 using System.Text;
+using Microsoft.EntityFrameworkCore;
 
 namespace Event_Management_Application
 {
@@ -53,7 +54,8 @@ namespace Event_Management_Application
                 });
             });
 
-            services.AddDbContext<EventManagementApplicationDbContext>();
+            services.AddDbContext<EventManagementApplicationDbContext>(options =>
+                options.UseSqlServer(SystemResources.DATABASE_CONNECTION_STRING));
 
             string securityKey = SystemResources.TOKEN_SECURITY_KEY;
 

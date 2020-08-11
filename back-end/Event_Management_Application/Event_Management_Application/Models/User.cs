@@ -18,5 +18,18 @@ namespace Event_Management_Application.Models
         public string UserPassword { get; set; }
         public bool UserVerified { get; set; }
         public ICollection<UserTokenEntry> UserTokenEntries { get; set; }
+
+        public bool Equals(User user)
+        {
+            if(user != null)
+            {
+                return user.UserId == UserId && user.UserName == UserName 
+                    && user.UserEmail.Equals(UserEmail) && user.UserVerified == UserVerified;
+            }
+            else
+            {
+                return false;
+            }
+        }
     }
 }

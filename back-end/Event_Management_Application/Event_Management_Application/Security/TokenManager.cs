@@ -7,12 +7,16 @@ using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
 using System.Text;
 using Microsoft.AspNetCore.Http;
+using System.Threading.Tasks;
+using System.Collections.Generic;
+using System.Security.Claims;
 
 namespace Event_Management_Application.Security
 {
     public class TokenManager
     {
         private readonly EventManagementApplicationDbContext _dbContext;
+
         public TokenManager(EventManagementApplicationDbContext dbContext)
         {
             _dbContext = dbContext;
@@ -24,11 +28,22 @@ namespace Event_Management_Application.Security
             var symmetricSecurityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(securityKey));
 
             var signingCredentials = new SigningCredentials(symmetricSecurityKey, SecurityAlgorithms.HmacSha256Signature);
+
+            var claims = new List<Claim>();
+
+            var jwtId = Guid.NewGuid().ToString();
+            var utcDate = EpochTime.GetIntDate(DateTime.Now);
+
+            claims.Add(new Claim("iat", $"{utcDate}", ClaimValueTypes.Integer64));
+            claims.Add(new Claim("jti", jwtId));
+            claims.Add(new Claim("user_id", $"{user.UserId}", ClaimValueTypes.Integer32));
+
             var token = new JwtSecurityToken(
                     issuer: SystemResources.VALID_ISSUER,
                     audience: SystemResources.VALID_AUDIENCE,
                     expires: DateTime.Now.AddHours(24),
-                    signingCredentials: signingCredentials
+                    signingCredentials: signingCredentials,
+                    claims: claims
                 );
 
             var writtenToken = new JwtSecurityTokenHandler().WriteToken(token);
@@ -37,7 +52,7 @@ namespace Event_Management_Application.Security
                 TokenId = writtenToken,
                 UserId = user.UserId,
                 User = user,
-                TokenIssueDate = DateTime.Now,
+                TokenIssueDate = token.IssuedAt,
                 TokenExpiryDate = token.ValidTo
             });
 
