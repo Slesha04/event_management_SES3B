@@ -23,5 +23,6 @@ namespace Event_Management_Application.Models
         public EventStatus EventStatus { get; set; }
         public float EventTicketPrice { get; set; }
         public EventType EventType { get; set; }
+        public int ViewCount { get; set; }
     }
 }

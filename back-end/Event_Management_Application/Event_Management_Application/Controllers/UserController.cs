@@ -22,11 +22,13 @@ namespace Event_Management_Application.Controllers
     {
         private readonly EventManagementApplicationDbContext _dbContext;
         private readonly TokenManager _tokenManager;
+        private readonly HashingModule _hashingModule;
 
         public UserController(EventManagementApplicationDbContext dbContext)
         {
             _dbContext = dbContext;
             _tokenManager = new TokenManager(_dbContext);
+            _hashingModule = new HashingModule();
         }
 
         ///
@@ -72,11 +74,11 @@ namespace Event_Management_Application.Controllers
         ///
         ///<summary>Allows a user to sign in and issues them a JWT token.</summary>
         ///
-        [Route("LoginUser/{userName}/{hashedPassword}")]
+        [Route("LoginUser/{userName}/{password}")]
         [HttpGet]
-        public ActionResult LoginUser([FromRoute] string userName, [FromRoute] string hashedPassword)
+        public ActionResult LoginUser([FromRoute] string userName, [FromRoute] string password)
         {
-            var user = _dbContext.Users.Where(x => x.UserName.Equals(userName) && x.UserPassword.Equals(hashedPassword)).FirstOrDefault();
+            var user = _dbContext.Users.Where(x => x.UserName.Equals(userName) && x.UserPassword.Equals(_hashingModule.HashString(password))).FirstOrDefault();
             if(user != null)
             {
                return Ok(_tokenManager.IssueToken(user));
@@ -111,7 +113,7 @@ namespace Event_Management_Application.Controllers
         {
             var user = new User() {
                 UserName = userName,
-                UserPassword = userPassword,
+                UserPassword = _hashingModule.HashString(userPassword),
                 UserDob = DateTime.Parse(dob),
                 UserGender = (UserGender)gender,
                 UserEmail = userEmail,
@@ -162,7 +164,7 @@ namespace Event_Management_Application.Controllers
                 user.UserDob = DateTime.Parse(dob);
                 user.UserGender = (UserGender)gender;
                 user.UserEmail = userEmail;
-                user.UserPassword = userPassword;
+                user.UserPassword = _hashingModule.HashString(userPassword);
                 user.UserMobile = mobilePhone;
                 user.UserLandline = landline;
                 user.ProfilePicture = profilePicture;

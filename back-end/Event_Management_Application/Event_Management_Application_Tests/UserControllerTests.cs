@@ -5,6 +5,7 @@ using Event_Management_Application.DataAccess;
 using Event_Management_Application.Enums;
 using Event_Management_Application.Models;
 using Event_Management_Application.ResourceManagement;
+using Event_Management_Application.Security;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -17,10 +18,12 @@ namespace Event_Management_Application_Tests
     {
         private readonly EventManagementApplicationDbContext _dbContext;
         private readonly UserController _userController;
+        private readonly HashingModule _hashingModule;
 
         // Environment set-up
         public UserControllerTests()
         {
+            _hashingModule = new HashingModule();
             _dbContext = GenerateTestDbContext();
             _userController = SetupControllerContext(new UserController(_dbContext));
         }
@@ -275,7 +278,7 @@ namespace Event_Management_Application_Tests
             databseContext.Users.Add(new User
             {
                 UserName = "TestUser",
-                UserPassword = "password",
+                UserPassword = _hashingModule.HashString("password"),
                 UserGender = UserGender.Male,
                 UserDob = DateTime.Now,
                 UserEmail = "test@test.com"
@@ -283,7 +286,7 @@ namespace Event_Management_Application_Tests
             databseContext.Users.Add(new User
             {
                 UserName = "TestUserToDelete",
-                UserPassword = "password",
+                UserPassword = _hashingModule.HashString("password"),
                 UserGender = UserGender.Male,
                 UserDob = DateTime.Now,
                 UserEmail = "test2@test.com"
@@ -291,7 +294,7 @@ namespace Event_Management_Application_Tests
             databseContext.Users.Add(new User
             {
                 UserName = "TestUserToUpdate",
-                UserPassword = "password",
+                UserPassword = _hashingModule.HashString("password"),
                 UserGender = UserGender.Male,
                 UserDob = DateTime.Now,
                 UserEmail = "test3@test.com"
