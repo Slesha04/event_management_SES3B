@@ -1,0 +1,12 @@
+.Login {
+    background-color: green; 
+    border: none;
+    color: rgb(24, 20, 20);
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+    margin: 300px 2px;
+    transition-duration: 0.4s;
+    cursor: pointer;
+  }
