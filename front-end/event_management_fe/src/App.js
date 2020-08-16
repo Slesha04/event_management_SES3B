@@ -13,16 +13,17 @@ import EventConfirmation from './Events/EventConformation';
 import GlobalChat from './Chats/GlobalChat';
 import EventChat from './Chats/EventChat';
 import Profile from './Profile/Profile';
+import AllEvents from './Events/Allevents';
 
 function App() {
   return (
     <Router>
       <div className="App">
-        <Nav/>
+      <Nav/>
         <Switch>
           <Route path = '/login' component={Login}/>
           <Route path='/rego' component={Registration}/>
-          <Route path='/home' component={homePage}/>
+          <Route path='/' exact component={homePage}/>
           <Route path='/create-event' component={CreateEvent}/>
           <Route path='/edit-event' component={EditEvent}/>
           <Route path='/ticket' component={Ticket}/>
@@ -30,6 +31,7 @@ function App() {
           <Route path='/global-chat' component={GlobalChat}/>
           <Route path='/event-chat' component={EventChat}/>
           <Route path='/profile' component={Profile}/>
+          <Route path='/all-events' component={AllEvents}/>
         </Switch>
       </div>
     </Router>
