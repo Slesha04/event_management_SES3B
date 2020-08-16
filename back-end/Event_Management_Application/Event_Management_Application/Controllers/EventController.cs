@@ -1,6 +1,8 @@
 ﻿using Event_Management_Application.Controllers.Interfaces;
+using Event_Management_Application.DataAccess;
 using Event_Management_Application.Enums;
 using Event_Management_Application.Models;
+using Event_Management_Application.Security;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System;
@@ -14,15 +16,19 @@ namespace Event_Management_Application.Controllers
     [ApiController]
     public class EventController : ControllerBase, IEventController
     {
-        public EventController()
-        {
+        private readonly EventManagementApplicationDbContext _dbContext;
+        private readonly TokenManager _tokenManager;
 
+        public EventController(EventManagementApplicationDbContext dbContext)
+        {
+            _dbContext = dbContext;
+            _tokenManager = new TokenManager(_dbContext);
         }
 
-        [Route("CreateEvent/{eventTitle}/{eventBodyText}/{eventLocation}/{eventDate}/{tags}/{eventCoverImageId?}/{eventTrailerVideoId?}")]
+        [Route("CreateEvent/{eventTitle}/{eventBodyText}/{eventLocation}/{eventDate}/{tags?}/{eventCoverImageId?}/{eventTrailerVideoId?}")]
         [HttpPut]
         [Authorize]
-        public ActionResult CreateEvent([FromRoute] string eventTitle, [FromRoute] string eventBodyText, [FromRoute] string eventLocation, [FromRoute] string eventDate, [FromRoute] string tags, [FromRoute] int? eventCoverImageId, [FromRoute] int? eventTrailerVideoId)
+        public ActionResult CreateEvent([FromRoute] string eventTitle, [FromRoute] string eventBodyText, [FromRoute] string eventLocation, [FromRoute] string eventDate, [FromRoute] string tags = null, [FromRoute] int? eventCoverImageId = null, [FromRoute] int? eventTrailerVideoId = null)
         {
             throw new NotImplementedException();
         }
@@ -70,10 +76,10 @@ namespace Event_Management_Application.Controllers
             throw new NotImplementedException();
         }
 
-        [Route("UpdateEvent/{eventId}/{eventTitle}/{eventBodyText}/{eventLocation}/{eventDate}/{eventStatus}/{eventCoverImageId?}/{eventTrailerVideoId?}")]
+        [Route("UpdateEvent/{eventId}/{eventTitle}/{eventBodyText}/{eventLocation}/{eventDate}/{eventStatus}/{newTags?}/{eventCoverImageId?}/{eventTrailerVideoId?}")]
         [HttpPut]
         [Authorize]
-        public ActionResult UpdateEvent([FromRoute] int eventId, [FromRoute] string eventTitle, [FromRoute] string eventBodyText, [FromRoute] string eventLocation, [FromRoute] string eventDate, [FromRoute] int eventStatus, [FromRoute] int? eventCoverImageId, [FromRoute] int? eventTrailerVideoId)
+        public ActionResult UpdateEvent([FromRoute] int eventId, [FromRoute] string eventTitle, [FromRoute] string eventBodyText, [FromRoute] string eventLocation, [FromRoute] string eventDate, [FromRoute] int eventStatus, [FromRoute] string newTags = null, [FromRoute] int? eventCoverImageId = null, [FromRoute] int? eventTrailerVideoId = null)
         {
             throw new NotImplementedException();
         }

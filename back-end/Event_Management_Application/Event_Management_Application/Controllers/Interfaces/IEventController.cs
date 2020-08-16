@@ -12,8 +12,8 @@ namespace Event_Management_Application.Controllers.Interfaces
     {
         List<Event> LoadRecentEvents(int pageNumber, int eventLoadLimit = 20);
         Event ViewEvent(int eventId);
-        ActionResult CreateEvent(string eventTitle, string eventBodyText, string eventLocation, string eventDate, string tags, int? eventCoverImageId, int? eventTrailerVideoId);
-        ActionResult UpdateEvent(int eventId, string eventTitle, string eventBodyText, string eventLocation, string eventDate, int eventStatus, int? eventCoverImageId, int? eventTrailerVideoId);
+        ActionResult CreateEvent(string eventTitle, string eventBodyText, string eventLocation, string eventDate, string tags = null, int? eventCoverImageId = null, int? eventTrailerVideoId = null);
+        ActionResult UpdateEvent(int eventId, string eventTitle, string eventBodyText, string eventLocation, string eventDate, int eventStatus, string newTags = null, int? eventCoverImageId = null, int? eventTrailerVideoId = null);
         ActionResult DeleteEvent(int eventId);
         Event GetEventByChannelId(int channelId);
         List<Event> SearchEventsByName(string searchCriteria, int pageNumber, int resultLimit = 20);
