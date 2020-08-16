@@ -2,6 +2,7 @@ import React from 'react';
 
 
 const AllEvents =(props) =>{
+
     return(
         <div>
             <h1>This is the All Events Page</h1>
