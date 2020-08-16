@@ -1,4 +1,4 @@
-.Sharedcomponents{
+.Nav{
     display: flex;
     justify-content: space-around;
     align-items: center;
@@ -6,7 +6,7 @@
     background: rgb(2, 42, 95);
     color: rgb(248, 238, 238);
 }
-.Sharedcomponents{
+.Nav-links{
     width: 40%;
     display: flex;
     justify-content: space-around;
