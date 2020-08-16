@@ -9,6 +9,10 @@ namespace Event_Management_Application.DataAccess
         public DbSet<User> Users { get; set; }
         public DbSet<Event> Events { get; set; }
         public DbSet<UserTokenEntry> UserTokenEntries { get; set; }
+        public DbSet<Channel> Channels { get; set; }
+        public DbSet<EventFlair> EventFlairs { get; set; }
+        public DbSet<FlairTag> FlairTags { get; set; }
+        public DbSet<Medium> Media { get; set; }
 
         public EventManagementApplicationDbContext()
         {
@@ -27,18 +31,13 @@ namespace Event_Management_Application.DataAccess
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            if(Database.IsInMemory())
-            {
-                modelBuilder.Entity<User>().ToTable("Users").HasAlternateKey(x => x.UserName);
-                modelBuilder.Entity<Event>().ToTable("Events").OwnsOne(x => x.Location);
-                modelBuilder.Entity<UserTokenEntry>().ToTable("UserTokenEntries");
-            }
-            else
-            {
-                modelBuilder.Entity<User>().ToTable("Users").HasAlternateKey(x => x.UserName);
-                modelBuilder.Entity<Event>().ToTable("Events").OwnsOne(x => x.Location);
-                modelBuilder.Entity<UserTokenEntry>().ToTable("UserTokenEntries");
-            }
+            modelBuilder.Entity<User>().ToTable("Users").HasAlternateKey(x => x.UserName);
+            modelBuilder.Entity<Event>().ToTable("Events").OwnsOne(x => x.Location);
+            modelBuilder.Entity<UserTokenEntry>().ToTable("UserTokenEntries");
+            modelBuilder.Entity<Channel>().ToTable("Channels");
+            modelBuilder.Entity<EventFlair>().ToTable("EventFlairs");
+            modelBuilder.Entity<FlairTag>().ToTable("FlairTags");
+            modelBuilder.Entity<Medium>().ToTable("Media");
         }
     }
 }
