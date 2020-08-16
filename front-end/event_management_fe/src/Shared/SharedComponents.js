@@ -7,7 +7,7 @@ const SharedComponent =(props) =>{
     return(
         <div className= 'SharedComponent'>
             <ul className='SharedComponent-links'>
-                <li>Profile</li>
+                <li>Shared Component</li>
             </ul>
         </div>
     )

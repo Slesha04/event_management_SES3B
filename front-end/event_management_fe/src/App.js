@@ -5,6 +5,7 @@ import './App.css';
 import Login from './Login/Login';
 import Nav from './Shared/SharedComponents';
 import homePage from './HomePage/HomePage';
+import Registration from './Login/Registration';
 
 function App() {
   return (
@@ -12,8 +13,9 @@ function App() {
       <div className="App">
         <Nav/>
         <Switch>
-        <Route path = '/login' component={Login}/>
-        <Route path='/' component={homePage}/>
+          <Route path = '/login' component={Login}/>
+          <Route path='/rego' component={Registration}/>
+          <Route path='/home' component={homePage}/>
         </Switch>
       </div>
     </Router>

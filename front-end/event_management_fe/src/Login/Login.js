@@ -6,7 +6,7 @@ import HomePage from '../HomePage/HomePage';
 const Login =(props) =>{
     return(
         <div className= "Login">
-            <button onClick={HomePage}>Login</button>
+            <h1>This is the login page</h1>
         </div>
     )
 }
