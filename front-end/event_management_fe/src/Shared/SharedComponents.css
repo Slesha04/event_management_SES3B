@@ -1,0 +1,15 @@
+.Sharedcomponents{
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    min-height: 10vh;
+    background: rgb(2, 42, 95);
+    color: rgb(248, 238, 238);
+}
+.Sharedcomponents{
+    width: 40%;
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    list-style: none;
+}
