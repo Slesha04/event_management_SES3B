@@ -45,7 +45,7 @@ namespace Event_Management_Application.Controllers
         [HttpGet]
         public Event GetEventByChannelId([FromRoute] int channelId)
         {
-            throw new NotImplementedException();
+            return _dbContext.Events.Where(x => x.ChannelId == channelId).FirstOrDefault();
         }
 
         [Route("LoadMostPopularEvents/{pageNumber}/{resultLimit?}")]
@@ -66,7 +66,7 @@ namespace Event_Management_Application.Controllers
         [HttpGet]
         public List<Event> SearchEventsByDate([FromRoute] string date, [FromRoute] int pageNumber, [FromRoute] int resultLimit = 20)
         {
-            throw new NotImplementedException();
+            return _dbContext.Events.Where(x => x.EventDate == DateTime.Parse(date)).Take(resultLimit).ToList();
         }
 
         [Route("SearchEventsByName/{searchCriteria}/{pageNumber}/{resultLimit?}")]
