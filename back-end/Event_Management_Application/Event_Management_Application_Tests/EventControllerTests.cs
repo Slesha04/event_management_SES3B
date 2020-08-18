@@ -54,8 +54,8 @@ namespace Event_Management_Application_Tests
                 , "Hey brothers, I will be hosting a massive HSP eating competition at my" +
                 " establishment. Prize tiers are: 1st - $10,000\n" +
                 "2nd - $5,000\n" +
-                "3rd - $1,000", "488 Princes Hwy Rockdale NSW 2216", "22-09-2021"
-                , "kebab,eating,competition");
+                "3rd - $1,000", "488 Princes Hwy Rockdale NSW 2216", "22-09-2021", 0, 3, 0,
+                "kebab,eating,competition");
 
             var user = (User)(_userController.ViewUser() as ObjectResult).Value;
 
@@ -176,7 +176,7 @@ namespace Event_Management_Application_Tests
             bool result = false;
 
             // Login a valid user
-            var loginActResult = _userController.LoginUser("TheRock", "password");
+            var loginActResult = _userController.LoginUser("John Stefanakis", "password");
 
             // Cast as an ObjectResult to see value
             var loginObjResult = loginActResult as ObjectResult;
@@ -189,7 +189,7 @@ namespace Event_Management_Application_Tests
 
             _eventController.UpdateEvent(2, "Backgammon Tournament 2021"
                 ,"Mid 2021 backgammon tournament. Winner wins $25,000"
-                ,"Ramsgate RSL Memorial Club", "28-06-2021", 0);
+                ,"Ramsgate RSL Memorial Club", "28-06-2021", 0, 0, 3, 0);
 
             _eventController.Request.Headers.Remove(SystemResources.ACCESS_TOKEN_PARAM_NAME);
 

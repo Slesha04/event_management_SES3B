@@ -2,6 +2,7 @@
 using Event_Management_Application.DataAccess;
 using Event_Management_Application.Enums;
 using Event_Management_Application.Models;
+using Event_Management_Application.ResourceManagement;
 using Event_Management_Application.Security;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -18,19 +19,52 @@ namespace Event_Management_Application.Controllers
     {
         private readonly EventManagementApplicationDbContext _dbContext;
         private readonly TokenManager _tokenManager;
+        private readonly EventTagManager _tagManager;
+        private readonly EventChannelManager _channelManager;
 
         public EventController(EventManagementApplicationDbContext dbContext)
         {
             _dbContext = dbContext;
             _tokenManager = new TokenManager(_dbContext);
+            _tagManager = new EventTagManager(_dbContext);
+            _channelManager = new EventChannelManager(_dbContext);
         }
 
-        [Route("CreateEvent/{eventTitle}/{eventBodyText}/{eventLocation}/{eventDate}/{tags?}/{eventCoverImageId?}/{eventTrailerVideoId?}")]
+        [Route("CreateEvent/{eventTitle}/{eventBodyText}/{eventLocation}/{eventDate}/{ticketPrice}/{eventType}/{eventVisibility}/{tags?}/{eventCoverImageId?}/{eventTrailerVideoId?}")]
         [HttpPut]
         [Authorize]
-        public ActionResult CreateEvent([FromRoute] string eventTitle, [FromRoute] string eventBodyText, [FromRoute] string eventLocation, [FromRoute] string eventDate, [FromRoute] string tags = null, [FromRoute] int? eventCoverImageId = null, [FromRoute] int? eventTrailerVideoId = null)
+        public ActionResult CreateEvent([FromRoute] string eventTitle, [FromRoute] string eventBodyText, [FromRoute] string eventLocation, [FromRoute] string eventDate, [FromRoute] float ticketPrice, [FromRoute] int eventType, [FromRoute] int eventVisibility, [FromRoute] string tags = null, [FromRoute] int? eventCoverImageId = null, [FromRoute] int? eventTrailerVideoId = null)
         {
-            throw new NotImplementedException();
+            var tokenEntry = _tokenManager.ValidateAndReturnTokenEntry(_tokenManager.ExtractToken(Request));
+            if (tokenEntry != null)
+            {
+                var currentDate = DateTime.Now;
+                var userId = tokenEntry.User.UserId;
+                _dbContext.Events.Add(new Event {
+                    EventTitle = eventTitle,
+                    BodyText = eventBodyText,
+                    Location = new FormalAddress(eventLocation),
+                    EventDate = DateTime.Parse(eventDate),
+                    EventCoverImageFileId = eventCoverImageId,
+                    EventVideoTrailerFileId = eventTrailerVideoId,
+                    EventOrganiserId = userId,
+                    EventCreationDate = currentDate,
+                    EventLastModifiedDate = currentDate,
+                    EventType = (EventType)eventType,
+                    EventVisibility = (VisibilityLevel)eventVisibility,
+                    ViewCount = 0,
+                    EventTicketPrice = ticketPrice,
+                    EventStatus = EventStatus.Active
+                });
+                _dbContext.SaveChanges();
+                var createdEvent = _dbContext.Events.Where(x => x.EventOrganiserId == userId && 
+                x.EventCreationDate.Equals(currentDate) && x.EventTitle.Equals(eventTitle))
+                    .FirstOrDefault();
+                _tagManager.AssignTagsToEvent(tags, createdEvent.EventId);
+                _channelManager.AssignChannelToEvent(createdEvent.EventId);
+                return Ok(createdEvent);
+            }
+            return StatusCode(401, SystemResources.INVALID_TOKEN_MESSAGE);
         }
 
         [Route("DeleteEvent/{eventId}")]
@@ -76,12 +110,49 @@ namespace Event_Management_Application.Controllers
             throw new NotImplementedException();
         }
 
-        [Route("UpdateEvent/{eventId}/{eventTitle}/{eventBodyText}/{eventLocation}/{eventDate}/{eventStatus}/{newTags?}/{eventCoverImageId?}/{eventTrailerVideoId?}")]
+        [Route("UpdateEvent/{eventId}/{eventTitle}/{eventBodyText}/{eventLocation}/{eventDate}/{eventStatus}/{ticketPrice}/{eventType}/{eventVisibility}/{newTags?}/{eventCoverImageId?}/{eventTrailerVideoId?}")]
         [HttpPut]
         [Authorize]
-        public ActionResult UpdateEvent([FromRoute] int eventId, [FromRoute] string eventTitle, [FromRoute] string eventBodyText, [FromRoute] string eventLocation, [FromRoute] string eventDate, [FromRoute] int eventStatus, [FromRoute] string newTags = null, [FromRoute] int? eventCoverImageId = null, [FromRoute] int? eventTrailerVideoId = null)
+        public ActionResult UpdateEvent([FromRoute] int eventId, [FromRoute] string eventTitle, [FromRoute] string eventBodyText, [FromRoute] string eventLocation, [FromRoute] string eventDate, [FromRoute] int eventStatus, [FromRoute] float ticketPrice, [FromRoute] int eventType, [FromRoute] int eventVisibility, [FromRoute] string newTags = null, [FromRoute] int? eventCoverImageId = null, [FromRoute] int? eventTrailerVideoId = null)
         {
-            throw new NotImplementedException();
+            var tokenEntry = _tokenManager.ValidateAndReturnTokenEntry(_tokenManager.ExtractToken(Request));
+            var currentEvent = _dbContext.Events.Where(x => x.EventId == eventId).FirstOrDefault();
+
+            if(currentEvent == null)
+            {
+                BadRequest("No event corresponding to event Id");
+            }
+
+            if(tokenEntry.UserId != currentEvent.EventOrganiserId)
+            {
+                return StatusCode(401, SystemResources.INCORRECT_USER_TOKEN_MESSAGE);
+            }
+
+            var currEventDate = currentEvent.EventDate;
+            var newDate = DateTime.Parse(eventDate);
+
+            if(newDate > currEventDate)
+            {
+                return BadRequest("New date must be greater than the current date");
+            }
+
+            currentEvent.EventTitle = eventTitle;
+            currentEvent.BodyText = eventBodyText;
+            currentEvent.Location = new FormalAddress(eventLocation);
+            currentEvent.EventDate = newDate;
+            currentEvent.EventStatus = (currEventDate.Equals(newDate)) ? currentEvent.EventStatus : EventStatus.Postponed;
+            currentEvent.EventTicketPrice = ticketPrice;
+            currentEvent.EventType = (EventType)eventType;
+            currentEvent.EventVisibility = (VisibilityLevel)eventVisibility;
+            currentEvent.EventCoverImageFileId = eventCoverImageId;
+            currentEvent.EventVideoTrailerFileId = eventTrailerVideoId;
+            currentEvent.EventLastModifiedDate = DateTime.Now;
+
+            _dbContext.SaveChanges();
+
+            _tagManager.AssignTagsToEvent(newTags, currentEvent.EventId);
+
+            return Ok();
         }
 
         [Route("ViewEvent/{eventId}")]
