@@ -119,8 +119,6 @@ namespace Event_Management_Application_Tests
 
             var mostPopular = _eventController.LoadMostPopularEvents(1, 2);
 
-            int n = mostPopular.Where(x => x.ViewCount >= 10000).FirstOrDefault().ViewCount;
-
             result = mostPopular.Where(x => x.ViewCount >= 10000).FirstOrDefault() != null;
                 //&& mostPopular.Where(x => x.EventId == 2).FirstOrDefault() != null;
 
