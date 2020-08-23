@@ -100,7 +100,7 @@ namespace Event_Management_Application.Controllers
         [HttpGet]
         public List<Event> SearchEventsByDate([FromRoute] string date, [FromRoute] int pageNumber, [FromRoute] int resultLimit = 20)
         {
-            return _dbContext.Events.Where(x => x.EventDate == DateTime.Parse(date)).Take(resultLimit).ToList();
+            return _dbContext.Events.Where(x => x.EventDate.Date == DateTime.Parse(date).Date).OrderByDescending(x => x.EventDate).ThenBy(x => x.ViewCount).Take(pageNumber * resultLimit).ToList();
         }
 
         [Route("SearchEventsByName/{searchCriteria}/{pageNumber}/{resultLimit?}")]
