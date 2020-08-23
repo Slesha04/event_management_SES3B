@@ -107,7 +107,7 @@ namespace Event_Management_Application.Controllers
         [HttpGet]
         public List<Event> SearchEventsByName([FromRoute] string searchCriteria, [FromRoute] int pageNumber, [FromRoute] int resultLimit = 20)
         {
-            throw new NotImplementedException();
+            return _dbContext.Events.Where(x => x.EventTitle.Contains(searchCriteria)).OrderBy(x => x).Take(resultLimit).ToList();
         }
 
         [Route("UpdateEvent/{eventId}/{eventTitle}/{eventBodyText}/{eventLocation}/{eventDate}/{eventStatus}/{ticketPrice}/{eventType}/{eventVisibility}/{newTags?}/{eventCoverImageId?}/{eventTrailerVideoId?}")]
