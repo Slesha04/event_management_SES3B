@@ -86,7 +86,7 @@ namespace Event_Management_Application.Controllers
         [HttpGet]
         public List<Event> LoadMostPopularEvents([FromRoute] int pageNumber, [FromRoute] int resultLimit = 10)
         {
-            throw new NotImplementedException();
+            return _dbContext.Events.Where(x => true).OrderByDescending(x => x.ViewCount).Take(resultLimit).ToList();
         }
 
         [Route("LoadRecentEvents/{pageNumber}/{eventLoadLimit?}")]
