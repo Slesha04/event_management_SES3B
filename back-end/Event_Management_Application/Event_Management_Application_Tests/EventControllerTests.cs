@@ -234,9 +234,13 @@ namespace Event_Management_Application_Tests
         {
             var options = new DbContextOptionsBuilder<EventManagementApplicationDbContext>()
                 .UseInMemoryDatabase(databaseName: "Test_Database").Options;
-            var databseContext = new EventManagementApplicationDbContext(options);
-            databseContext.Database.EnsureCreated();
-            databseContext.Users.Add(new User
+            var databaseContext = new EventManagementApplicationDbContext(options);
+            var databaseCreated = databaseContext.Database.EnsureCreated();
+            if(databaseContext.Events.Count() > 0)
+            {
+                return databaseContext;
+            }
+            databaseContext.Users.Add(new User
             {
                 UserName = "SimpKing",
                 UserPassword = _hashingModule.HashString("password"),
@@ -244,7 +248,7 @@ namespace Event_Management_Application_Tests
                 UserDob = DateTime.Now,
                 UserEmail = "test@test.com"
             });
-            databseContext.Users.Add(new User
+            databaseContext.Users.Add(new User
             {
                 UserName = "John Stefanakis",
                 UserPassword = _hashingModule.HashString("password"),
@@ -252,7 +256,7 @@ namespace Event_Management_Application_Tests
                 UserDob = DateTime.Now,
                 UserEmail = "souvlaki@test.com"
             });
-            databseContext.Users.Add(new User
+            databaseContext.Users.Add(new User
             {
                 UserName = "BaysideCouncilOfficial",
                 UserPassword = _hashingModule.HashString("password"),
@@ -260,7 +264,7 @@ namespace Event_Management_Application_Tests
                 UserDob = DateTime.Now,
                 UserEmail = "sys@baysidecouncil.com.au"
             });
-            databseContext.Users.Add(new User
+            databaseContext.Users.Add(new User
             {
                 UserName = "TheRock",
                 UserPassword = _hashingModule.HashString("password"),
@@ -268,41 +272,41 @@ namespace Event_Management_Application_Tests
                 UserDob = DateTime.Now,
                 UserEmail = "rock_johnson@gmail.com"
             });
-            databseContext.Channels.Add(new Channel {
+            databaseContext.Channels.Add(new Channel {
                 ChannelName = "Alinity Meetup - Sydney",
                 IsGlobal = false
             });
-            databseContext.Channels.Add(new Channel
+            databaseContext.Channels.Add(new Channel
             {
                 ChannelName = "Backgammon Tournament 2021",
                 IsGlobal = false
             });
-            databseContext.Channels.Add(new Channel
+            databaseContext.Channels.Add(new Channel
             {
                 ChannelName = "NYE Fireworks - Brighton Le Sands",
                 IsGlobal = false
             });
-            databseContext.FlairTags.Add(new FlairTag {
+            databaseContext.FlairTags.Add(new FlairTag {
                 TagName = "simpnation",
                 UseCount = 1,
                 DateCreated = DateTime.Parse("22-05-2020")
             });
-            databseContext.FlairTags.Add(new FlairTag
+            databaseContext.FlairTags.Add(new FlairTag
             {
                 TagName = "nyebrighton",
                 UseCount = 1,
                 DateCreated = DateTime.Parse("22-05-2020")
             });
-            databseContext.EventFlairs.Add(new EventFlair {
+            databaseContext.EventFlairs.Add(new EventFlair {
                 EventId = 1,
                 TagName = "simpnation"
             });
-            databseContext.EventFlairs.Add(new EventFlair
+            databaseContext.EventFlairs.Add(new EventFlair
             {
                 EventId = 3,
                 TagName = "nyebrighton"
             });
-            databseContext.Events.Add(new Event {
+            databaseContext.Events.Add(new Event {
                 EventTitle = "Alinity Meetup - Sydney",
                 BodyText = "Alinity is coming to Sydney to cosplay and meetup with her fans.",
                 Location = new FormalAddress("Sydney Olympic Park"),
@@ -317,7 +321,7 @@ namespace Event_Management_Application_Tests
                 EventType = EventType.Meetup,
                 ViewCount = 10598
             });
-            databseContext.Events.Add(new Event
+            databaseContext.Events.Add(new Event
             {
                 EventTitle = "Backgammon Tournament 2021",
                 BodyText = "Mid 2021 backgammon tournament. Winner wins $50,000",
@@ -333,7 +337,7 @@ namespace Event_Management_Application_Tests
                 EventType = EventType.Meetup,
                 ViewCount = 4922
             });
-            databseContext.Events.Add(new Event
+            databaseContext.Events.Add(new Event
             {
                 EventTitle = "NYE Fireworks - Brighton Le Sands",
                 BodyText = "Come to Brighton and see some awesome fireworks and eat out" +
@@ -350,7 +354,7 @@ namespace Event_Management_Application_Tests
                 EventType = EventType.Meetup,
                 ViewCount = 3117
             });
-            databseContext.Events.Add(new Event
+            databaseContext.Events.Add(new Event
             {
                 EventTitle = "Kiama Market Festival",
                 BodyText = "Come to the vibrant markets of Kiama selling the freshest and best" +
@@ -367,8 +371,8 @@ namespace Event_Management_Application_Tests
                 EventType = EventType.Meetup,
                 ViewCount = 1000
             });
-            databseContext.SaveChanges();
-            return databseContext;
+            databaseContext.SaveChanges();
+            return databaseContext;
         }
     }
 }
