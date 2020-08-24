@@ -72,7 +72,20 @@ namespace Event_Management_Application.Controllers
         [Authorize]
         public ActionResult DeleteEvent([FromRoute] int eventId)
         {
-            throw new NotImplementedException();
+            var tokenEntry = _tokenManager.ValidateAndReturnTokenEntry(_tokenManager.ExtractToken(Request));
+            if (tokenEntry != null)
+            {
+                var currentEvent = _dbContext.Events.Where(x => x.EventId == eventId).FirstOrDefault();
+
+                if (tokenEntry.UserId == currentEvent.EventOrganiserId)
+                {
+                    _dbContext.Events.Remove(currentEvent);
+                    _dbContext.SaveChanges();
+                    return Ok();
+                }
+            }
+            return StatusCode(401, SystemResources.INVALID_TOKEN_MESSAGE);
+
         }
 
         [Route("GetEventByChannelId/{channelId}")]
