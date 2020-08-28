@@ -16,3 +16,9 @@ Recommended Editor (Frontend) ; VS Studio Code
 
 
 When running npm, if the deployment server has the ports already busy (i had some obsecure error here), try killing the process using pid
+
+Running swagger (for now):
+
+1. Run back-end server by opening Visual Studio and run the application by pressing the button in the top middle that has a green play button that would say (IIS Express).
+2. A web browser should load to a default URL. If it defaults to http://localhost:{port_number}/api/values change the URL to http://localhost:{port_number}/swagger.
+
