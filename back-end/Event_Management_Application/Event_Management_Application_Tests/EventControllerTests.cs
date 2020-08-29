@@ -235,7 +235,7 @@ namespace Event_Management_Application_Tests
             var options = new DbContextOptionsBuilder<EventManagementApplicationDbContext>()
                 .UseInMemoryDatabase(databaseName: "Test_Database").Options;
             var databaseContext = new EventManagementApplicationDbContext(options);
-            var databaseCreated = databaseContext.Database.EnsureCreated();
+            databaseContext.Database.EnsureCreated();
             if(databaseContext.Events.Count() > 0)
             {
                 return databaseContext;
