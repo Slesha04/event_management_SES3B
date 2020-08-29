@@ -106,7 +106,7 @@ namespace Event_Management_Application.Controllers
         [HttpGet]
         public List<Event> LoadRecentEvents([FromRoute] int pageNumber, [FromRoute] int eventLoadLimit = 20)
         {
-            throw new NotImplementedException();
+            return _dbContext.Events.OrderByDescending(x => x.EventCreationDate).ThenBy(x => x.ViewCount).Take(pageNumber * eventLoadLimit).ToList();
         }
 
         [Route("SearchEventsByDate/{date}/{pageNumber}/{resultLimit?}")]
@@ -172,7 +172,7 @@ namespace Event_Management_Application.Controllers
         [HttpGet]
         public Event ViewEvent([FromRoute] int eventId)
         {
-            throw new NotImplementedException();
+            return _dbContext.Events.Where(x => x.EventId == eventId).FirstOrDefault();
         }
     }
 }
