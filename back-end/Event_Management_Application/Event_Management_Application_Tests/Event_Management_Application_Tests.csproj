@@ -208,7 +208,6 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="EventControllerTests.cs" />
-    <Compile Include="TestEnvironmentSetup.cs" />
     <Compile Include="UserControllerTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

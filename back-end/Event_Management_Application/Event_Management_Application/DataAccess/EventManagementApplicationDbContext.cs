@@ -13,6 +13,7 @@ namespace Event_Management_Application.DataAccess
         public DbSet<EventFlair> EventFlairs { get; set; }
         public DbSet<FlairTag> FlairTags { get; set; }
         public DbSet<Medium> Media { get; set; }
+        public DbSet<EventRosterEntry> EventRosterEntries { get; set; }
 
         public EventManagementApplicationDbContext()
         {
@@ -38,6 +39,7 @@ namespace Event_Management_Application.DataAccess
             modelBuilder.Entity<EventFlair>().ToTable("EventFlairs");
             modelBuilder.Entity<FlairTag>().ToTable("FlairTags");
             modelBuilder.Entity<Medium>().ToTable("Media");
+            modelBuilder.Entity<EventRosterEntry>().ToTable("EventRosterEntries");
         }
     }
 }
