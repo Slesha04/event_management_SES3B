@@ -76,7 +76,7 @@ namespace Event_Management_Application_Tests
             bool result = false;
 
             // Login a valid user
-            var loginActResult = _userController.LoginUser("BaysideCouncilOfficial", "password");
+            var loginActResult = _userController.LoginUser("TheRock", "password");
 
             // Cast as an ObjectResult to see value
             var loginObjResult = loginActResult as ObjectResult;
@@ -133,7 +133,7 @@ namespace Event_Management_Application_Tests
 
             var mostRecent = _eventController.LoadRecentEvents(1, 2);
 
-            result = mostRecent.Where(x => x.EventId == 2).FirstOrDefault() != null
+            result = mostRecent.Where(x => x.EventId == 5).FirstOrDefault() != null
                 && mostRecent.Where(x => x.EventId == 3).FirstOrDefault() != null;
 
             Assert.IsTrue(result);
@@ -346,7 +346,7 @@ namespace Event_Management_Application_Tests
                 ChannelId = 3,
                 EventOrganiserId = 3,
                 EventDate = DateTime.Parse("31-12-2020"),
-                EventCreationDate = DateTime.Now,
+                EventCreationDate = DateTime.Parse("04-09-2020"),
                 EventLastModifiedDate = DateTime.Now,
                 EventVisibility = VisibilityLevel.Public,
                 EventStatus = EventStatus.Active,
@@ -363,7 +363,7 @@ namespace Event_Management_Application_Tests
                 ChannelId = 3,
                 EventOrganiserId = 4,
                 EventDate = DateTime.Parse("19-03-2021"),
-                EventCreationDate = DateTime.Now,
+                EventCreationDate = DateTime.Parse("12-03-2020"),
                 EventLastModifiedDate = DateTime.Now,
                 EventVisibility = VisibilityLevel.Public,
                 EventStatus = EventStatus.Active,

@@ -203,18 +203,20 @@ namespace Event_Management_Application_Tests
             // Get the token as a string
             string token = loginObjResult.Value.ToString();
 
+            var userToUpdateId = _dbContext.UserTokenEntries.Where(x => x.TokenId.Equals(token)).FirstOrDefault().UserId;
+
             // Pass token as header
             _userController.Request.Headers.Add(SystemResources.ACCESS_TOKEN_PARAM_NAME, $"Bearer {token}");
 
             // Update user's dob, email and user description
-            _userController.UpdateUser(3, "TestUserToUpdate", "11-01-1974", 0, "update@test.com", 
+            _userController.UpdateUser(userToUpdateId, "TestUserToUpdate", "11-01-1974", 0, "update@test.com", 
                 "password", null, null, null, "Updated.");
 
             // Dispose of header data when task is done
             _userController.Request.Headers.Remove(SystemResources.ACCESS_TOKEN_PARAM_NAME);
 
             // Get user that should be updated
-            var user = _dbContext.Users.Where(x => x.UserId == 3).FirstOrDefault();
+            var user = _dbContext.Users.Where(x => x.UserId == userToUpdateId).FirstOrDefault();
 
             // Check if updates have been applied
             if(user != null)

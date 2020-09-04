@@ -25,6 +25,7 @@ namespace Event_Management_Application.ResourceManagement
                     EventId = eventId
                 });
             }
+            _dbContext.SaveChanges();
         }
 
         private List<string> ProcessTags(string tags)

@@ -36,5 +36,6 @@ namespace Event_Management_Application.Models
         public EventType EventType { get; set; }
         public int ViewCount { get; set; }
         public ICollection<EventFlair> EventFlairs { get; set; }
+        public Guid ChannelCode { get; set; }
     }
 }

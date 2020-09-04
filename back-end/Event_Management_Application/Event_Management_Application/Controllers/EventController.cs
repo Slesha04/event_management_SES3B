@@ -30,17 +30,19 @@ namespace Event_Management_Application.Controllers
             _channelManager = new EventChannelManager(_dbContext);
         }
 
-        [Route("CreateEvent/{eventTitle}/{eventBodyText}/{eventLocation}/{eventDate}/{ticketPrice}/{eventType}/{eventVisibility}/{tags?}/{eventCoverImageId?}/{eventTrailerVideoId?}")]
+        [Route("CreateEvent/{eventTitle}/{eventBodyText}/{eventLocation}/{eventDate}/{ticketPrice}/{eventType}/{eventVisibility}")]
         [HttpPut]
         [Authorize]
-        public ActionResult CreateEvent([FromRoute] string eventTitle, [FromRoute] string eventBodyText, [FromRoute] string eventLocation, [FromRoute] string eventDate, [FromRoute] float ticketPrice, [FromRoute] int eventType, [FromRoute] int eventVisibility, [FromRoute] string tags = null, [FromRoute] int? eventCoverImageId = null, [FromRoute] int? eventTrailerVideoId = null)
+        public ActionResult CreateEvent([FromRoute] string eventTitle, [FromRoute] string eventBodyText, [FromRoute] string eventLocation, [FromRoute] string eventDate, [FromRoute] float ticketPrice, [FromRoute] int eventType, [FromRoute] int eventVisibility, [FromQuery] string tags = null, [FromQuery] int? eventCoverImageId = null, [FromQuery] int? eventTrailerVideoId = null)
         {
             var tokenEntry = _tokenManager.ValidateAndReturnTokenEntry(_tokenManager.ExtractToken(Request));
             if (tokenEntry != null)
             {
                 var currentDate = DateTime.Now;
                 var userId = tokenEntry.User.UserId;
-                _dbContext.Events.Add(new Event {
+                var channelCode = Guid.NewGuid();
+                var newEvent = new Event
+                {
                     EventTitle = eventTitle,
                     BodyText = eventBodyText,
                     Location = new FormalAddress(eventLocation),
@@ -54,14 +56,14 @@ namespace Event_Management_Application.Controllers
                     EventVisibility = (VisibilityLevel)eventVisibility,
                     ViewCount = 0,
                     EventTicketPrice = ticketPrice,
-                    EventStatus = EventStatus.Active
-                });
+                    EventStatus = EventStatus.Active,
+                    ChannelCode = channelCode
+                };
+                _channelManager.AssignChannelToEvent(ref newEvent);
+                _dbContext.Events.Add(newEvent);
                 _dbContext.SaveChanges();
-                var createdEvent = _dbContext.Events.Where(x => x.EventOrganiserId == userId && 
-                x.EventCreationDate.Equals(currentDate) && x.EventTitle.Equals(eventTitle))
-                    .FirstOrDefault();
+                var createdEvent = _dbContext.Events.Where(x => x.ChannelCode.Equals(channelCode)).OrderByDescending(x => x.EventCreationDate).FirstOrDefault();
                 _tagManager.AssignTagsToEvent(tags, createdEvent.EventId);
-                _channelManager.AssignChannelToEvent(createdEvent.EventId);
                 return Ok(createdEvent);
             }
             return StatusCode(401, SystemResources.INVALID_TOKEN_MESSAGE);
@@ -95,38 +97,38 @@ namespace Event_Management_Application.Controllers
             return _dbContext.Events.Where(x => x.ChannelId == channelId).FirstOrDefault();
         }
 
-        [Route("LoadMostPopularEvents/{pageNumber}/{resultLimit?}")]
+        [Route("LoadMostPopularEvents/{pageNumber}")]
         [HttpGet]
-        public List<Event> LoadMostPopularEvents([FromRoute] int pageNumber, [FromRoute] int resultLimit = 10)
+        public List<Event> LoadMostPopularEvents([FromRoute] int pageNumber, [FromQuery] int resultLimit = 10)
         {
             return _dbContext.Events.Where(x => true).OrderByDescending(x => x.ViewCount).Take(pageNumber * resultLimit).ToList();
         }
 
-        [Route("LoadRecentEvents/{pageNumber}/{eventLoadLimit?}")]
+        [Route("LoadRecentEvents/{pageNumber}")]
         [HttpGet]
-        public List<Event> LoadRecentEvents([FromRoute] int pageNumber, [FromRoute] int eventLoadLimit = 20)
+        public List<Event> LoadRecentEvents([FromRoute] int pageNumber, [FromQuery] int eventLoadLimit = 20)
         {
             return _dbContext.Events.OrderByDescending(x => x.EventCreationDate).ThenBy(x => x.ViewCount).Take(pageNumber * eventLoadLimit).ToList();
         }
 
-        [Route("SearchEventsByDate/{date}/{pageNumber}/{resultLimit?}")]
+        [Route("SearchEventsByDate/{date}/{pageNumber}")]
         [HttpGet]
-        public List<Event> SearchEventsByDate([FromRoute] string date, [FromRoute] int pageNumber, [FromRoute] int resultLimit = 20)
+        public List<Event> SearchEventsByDate([FromRoute] string date, [FromRoute] int pageNumber, [FromQuery] int resultLimit = 20)
         {
             return _dbContext.Events.Where(x => x.EventDate.Date == DateTime.Parse(date).Date).OrderByDescending(x => x.EventDate).ThenBy(x => x.ViewCount).Take(pageNumber * resultLimit).ToList();
         }
 
-        [Route("SearchEventsByName/{searchCriteria}/{pageNumber}/{resultLimit?}")]
+        [Route("SearchEventsByName/{searchCriteria}/{pageNumber}")]
         [HttpGet]
-        public List<Event> SearchEventsByName([FromRoute] string searchCriteria, [FromRoute] int pageNumber, [FromRoute] int resultLimit = 20)
+        public List<Event> SearchEventsByName([FromRoute] string searchCriteria, [FromRoute] int pageNumber, [FromQuery] int resultLimit = 20)
         {
             return _dbContext.Events.Where(x => x.EventTitle.Contains(searchCriteria)).OrderBy(x => x).Take(pageNumber * resultLimit).ToList();
         }
 
-        [Route("UpdateEvent/{eventId}/{eventTitle}/{eventBodyText}/{eventLocation}/{eventDate}/{eventStatus}/{ticketPrice}/{eventType}/{eventVisibility}/{newTags?}/{eventCoverImageId?}/{eventTrailerVideoId?}")]
+        [Route("UpdateEvent/{eventId}/{eventTitle}/{eventBodyText}/{eventLocation}/{eventDate}/{eventStatus}/{ticketPrice}/{eventType}/{eventVisibility}")]
         [HttpPut]
         [Authorize]
-        public ActionResult UpdateEvent([FromRoute] int eventId, [FromRoute] string eventTitle, [FromRoute] string eventBodyText, [FromRoute] string eventLocation, [FromRoute] string eventDate, [FromRoute] int eventStatus, [FromRoute] float ticketPrice, [FromRoute] int eventType, [FromRoute] int eventVisibility, [FromRoute] string newTags = null, [FromRoute] int? eventCoverImageId = null, [FromRoute] int? eventTrailerVideoId = null)
+        public ActionResult UpdateEvent([FromRoute] int eventId, [FromRoute] string eventTitle, [FromRoute] string eventBodyText, [FromRoute] string eventLocation, [FromRoute] string eventDate, [FromRoute] int eventStatus, [FromRoute] float ticketPrice, [FromRoute] int eventType, [FromRoute] int eventVisibility, [FromQuery] string newTags = null, [FromQuery] int? eventCoverImageId = null, [FromQuery] int? eventTrailerVideoId = null)
         {
             var tokenEntry = _tokenManager.ValidateAndReturnTokenEntry(_tokenManager.ExtractToken(Request));
             var currentEvent = _dbContext.Events.Where(x => x.EventId == eventId).FirstOrDefault();

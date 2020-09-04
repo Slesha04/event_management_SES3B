@@ -16,22 +16,23 @@ namespace Event_Management_Application.ResourceManagement
             _dbContext = dbContext;
         }
 
-        public void AssignChannelToEvent(int eventId)
+        public void AssignChannelToEvent(ref Event newEvent)
         {
-            var currEvent = _dbContext.Events.Where(x => x.EventId == eventId).FirstOrDefault();
-
-            if(currEvent.ChannelId == 0)
+            if(newEvent.ChannelId == 0)
             {
                 _dbContext.Channels.Add(new Channel
                 {
-                    ChannelName = currEvent.EventTitle,
+                    ChannelName = newEvent.EventTitle,
+                    ChannelCode = newEvent.ChannelCode,
                     IsGlobal = false,
                 });
                 _dbContext.SaveChanges();
 
-                var channel = _dbContext.Channels.Where(x => x.ChannelName.Equals(currEvent.EventTitle)).OrderByDescending(x => x.ChannelId).FirstOrDefault();
+                var channelCode = newEvent.ChannelCode;
+                var channel = _dbContext.Channels.Where(x => x.ChannelCode.Equals(channelCode)).FirstOrDefault();
 
-                currEvent.ChannelId = channel.ChannelId;
+                newEvent.ChannelId = channel.ChannelId;
+                _dbContext.SaveChanges();
             }
         }
     }
