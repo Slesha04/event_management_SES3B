@@ -27,7 +27,7 @@ namespace Event_Management_Application.Controllers
         [Route("AddAttendee/{rosterId}")]
         [HttpPost]
         [Authorize]
-        public ActionResult AddAttendee(int rosterId)
+        public ActionResult AddAttendee([FromRoute] int rosterId)
         {
             throw new NotImplementedException();
         }
@@ -35,7 +35,7 @@ namespace Event_Management_Application.Controllers
         [Route("RemoveAttendee/{rosterId}")]
         [HttpDelete]
         [Authorize]
-        public ActionResult RemoveAttendee(int rosterId)
+        public ActionResult RemoveAttendee([FromRoute] int rosterId)
         {
             throw new NotImplementedException();
         }
@@ -43,7 +43,7 @@ namespace Event_Management_Application.Controllers
         [Route("GetRosterByEvent/{eventId}")]
         [HttpGet]
         [Authorize]
-        public List<EventRosterEntry> GetRosterByEvent(int eventId)
+        public List<EventRosterEntry> GetRosterByEvent([FromRoute] int eventId)
         {
             throw new NotImplementedException();
         }
@@ -59,7 +59,7 @@ namespace Event_Management_Application.Controllers
         [Route("MarkAttendeeSelf/{inputCode}/{eventId}")]
         [HttpPut]
         [Authorize]
-        public ActionResult MarkAttendeeSelf(string inputCode, int eventId)
+        public ActionResult MarkAttendeeSelf([FromRoute] string inputCode, [FromRoute] int eventId)
         {
             throw new NotImplementedException();
         }
