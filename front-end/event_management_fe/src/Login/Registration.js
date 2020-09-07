@@ -12,6 +12,11 @@ import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
 import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
+import InputLabel from '@material-ui/core/InputLabel';
+import MenuItem from '@material-ui/core/MenuItem';
+import FormHelperText from '@material-ui/core/FormHelperText';
+import FormControl from '@material-ui/core/FormControl';
+import Select from '@material-ui/core/Select';
 
 
 
@@ -49,6 +54,11 @@ const useStyles = makeStyles((theme) => ({
   submit: {
     margin: theme.spacing(3, 0, 2),
   },
+  formControl: {
+    margin: theme.spacing(1),
+    minWidth: 120,
+  },
+
 }));
 
 //export default function SignUp() {
@@ -59,6 +69,11 @@ const Registration =(props) =>{
         </div>
     )*/
   const classes = useStyles();
+  const [gender, setGender] = React.useState('');
+
+  const handleChange = (event) => {
+    setGender(event.target.value);
+  };
 
   return (
     <Container component="main" maxWidth="xs">
@@ -72,29 +87,19 @@ const Registration =(props) =>{
         </Typography>
         <form className={classes.form} noValidate>
           <Grid container spacing={2}>
-            <Grid item xs={12} sm={6}>
+            <Grid item xs={12} >
               <TextField
                 autoComplete="fname"
-                name="firstName"
+                name="fullName"
                 variant="outlined"
                 required
                 fullWidth
-                id="firstName"
-                label="First Name"
+                id="fullName"
+                label="Full Name"
                 autoFocus
               />
             </Grid>
-            <Grid item xs={12} sm={6}>
-              <TextField
-                variant="outlined"
-                required
-                fullWidth
-                id="lastName"
-                label="Last Name"
-                name="lastName"
-                autoComplete="lname"
-              />
-            </Grid>
+
             <Grid item xs={12}>
               <TextField
                 variant="outlined"
@@ -118,6 +123,34 @@ const Registration =(props) =>{
                 autoComplete="current-password"
               />
             </Grid>
+
+            <FormControl  variant="outlined" className={classes.formControl}>
+            <InputLabel id="demo-simple-select-label">Gender*</InputLabel>
+                    <Select
+                      labelId="demo-simple-select-label"
+                      id="demo-simple-select"
+                      value={gender}
+                      onChange={handleChange}
+                    >
+                      <MenuItem value={10}>Female</MenuItem>
+                      <MenuItem value={20}>Male</MenuItem>
+                      <MenuItem value={30}>Other</MenuItem>
+                    </Select>
+                    </FormControl>
+
+                <Grid item xs={12} sm={6}>
+                <TextField
+                        id="date"
+                        label="Birthday"
+                        type="date"
+                        defaultValue="2017-05-24"
+
+                        InputLabelProps={{
+                          shrink: true,
+                        }}
+                      />
+                </Grid>
+
             <Grid item xs={12}>
               <FormControlLabel
                 control={<Checkbox value="allowExtraEmails" color="primary" />}
