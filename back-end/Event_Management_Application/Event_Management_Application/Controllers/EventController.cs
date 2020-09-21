@@ -146,7 +146,7 @@ namespace Event_Management_Application.Controllers
             var currEventDate = currentEvent.EventDate;
             var newDate = DateTime.Parse(eventDate);
 
-            if(newDate > currEventDate)
+            if(newDate < currEventDate)
             {
                 return BadRequest("New date must be greater than the current date");
             }

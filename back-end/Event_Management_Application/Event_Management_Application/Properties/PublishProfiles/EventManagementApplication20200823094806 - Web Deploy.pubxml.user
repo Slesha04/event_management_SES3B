@@ -8,4 +8,9 @@ by editing this MSBuild file. In order to learn more about this please visit htt
     <TimeStampOfAssociatedLegacyPublishXmlFile />
     <EncryptedPassword>AQAAANCMnd8BFdERjHoAwE/Cl+sBAAAAt307phiRlkmiq7mFdHVHxwAAAAACAAAAAAAQZgAAAAEAACAAAAD4c0s8Wga3KuQvFVh+Cn7PNJYifA/NOd+2daihLf1GEAAAAAAOgAAAAAIAACAAAAC12F4BJl776S019zhzw1/BxKp10BjEVjvCugihhXPfPoAAAADYBPEqnxYnar6cRAI5WNoLJkV/VGzaMpqIwUIA6tUBeaXJeioRWuM8ArRRCxtg1CcA7ZkWQBTM65arKEDnxrNqe6Ne+E1Mol02wuMjMAiVD4HUKdDD5e3ubjx5cODr8hY14foboXxEAW7UB/ldiAFE1kLhKxSk55EkfgzvYl/AC0AAAABQmVcyN6T20shGRrbf5GX5kMywEJT9MUsqOoHy4JITri1kBCJT4I8nr7c2f86I9wypCB0tZrKMnYrOgp9b9oyz</EncryptedPassword>
   </PropertyGroup>
+  <ItemGroup>
+    <EFMigrations Include="Event_Management_Application.DataAccess.EventManagementApplicationDbContext">
+      <Value>Server=tcp:event-management-applicationdbserver.database.windows.net,1433%3bInitial Catalog=Event_Management_Application_db%3bPersist Security Info=False%3bUser ID=sysadmin%3bPassword=eventmanagement124!%3bMultipleActiveResultSets=False%3bEncrypt=True%3bTrustServerCertificate=False%3bConnection Timeout=30%3b</Value>
+    </EFMigrations>
+  </ItemGroup>
 </Project>
