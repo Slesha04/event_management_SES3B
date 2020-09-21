@@ -97,7 +97,24 @@ namespace Event_Management_Application.Controllers
         [Authorize]
         public ActionResult MarkAttendeeSelf([FromRoute] string inputCode, [FromRoute] int eventId)
         {
-            throw new NotImplementedException();
+            var tokenEntry = _tokenManager.ValidateAndReturnTokenEntry(_tokenManager.ExtractToken(Request));
+            if (tokenEntry != null)
+            {
+                //var entry = _dbContext.EventRosterEntries.Where(x => tokenEntry.User.UserId == x.AttendeeId && x.EventId == eventId && x.InputCode == inputCode).FirstOrDefault();
+                var entry = _dbContext.EventRosterEntries.Where(x => x.EventId == eventId && x.InputCode == inputCode).FirstOrDefault();
+
+                if (entry == null)
+                {
+                    return BadRequest("No event roster entry corresponding to event Id");
+                }
+
+                entry.AttendeeArrived = true;
+
+                _dbContext.SaveChanges();
+
+                return Ok();
+            }
+            return StatusCode(401, SystemResources.INVALID_TOKEN_MESSAGE);
         }
     }
 }
