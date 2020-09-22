@@ -3,7 +3,7 @@ import {Switch, Route, BrowserRouter as Router} from 'react-router-dom';
 
 import './App.css';
 import Login from './Login/Login';
-import Nav from './Shared/SharedComponents';
+import Navbar from './Shared/Navbar';
 import homePage from './HomePage/HomePage';
 import Registration from './Login/Registration';
 import CreateEvent from './Events/CreateEvent';
@@ -19,7 +19,7 @@ function App() {
   return (
     <Router>
       <div className="App">
-      <Nav/>
+        <Navbar/>
         <Switch>
           <Route path = '/login' component={Login}/>
           <Route path='/rego' component={Registration}/>
