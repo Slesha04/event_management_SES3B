@@ -28,20 +28,53 @@ namespace Event_Management_Application.Controllers
             _rosterManager = new EventRosterManager(_dbContext);
         }
 
-        [Route("AddAttendee/{rosterId}")]
+        [Route("AddAttendee/{rosterId}/{eventId}/{attendeeId}")]
         [HttpPost]
         [Authorize]
-        public ActionResult AddAttendee([FromRoute] int rosterId)
+        public ActionResult AddAttendee([FromRoute] int rosterId, [FromRoute] int eventId, [FromRoute] int attendeeId)
         {
-            throw new NotImplementedException();
+            if (IsUserRegisteredForEvent(eventId, attendeeId))
+            {
+                return BadRequest("This user is already registered for this event.");
+			}
+
+            if (!_dbContext.Events.Where(x => x.EventId == eventId).Any())
+            {
+                return BadRequest("This event does not exist.");
+			}
+
+            var newEntry = new EventRosterEntry(eventId, attendeeId);
+            _dbContext.EventRosterEntries.Add(newEntry);
+            _dbContext.SaveChanges();
+
+            return Ok(newEntry);
         }
 
-        [Route("RemoveAttendee/{rosterId}")]
+        [Route("RemoveAttendee/{rosterId}/{eventId}/{attendeeId}")]
         [HttpDelete]
         [Authorize]
-        public ActionResult RemoveAttendee([FromRoute] int rosterId)
+        public ActionResult RemoveAttendee([FromRoute] int rosterId, [FromRoute] int eventId, [FromRoute] int attendeeId)
         {
-            throw new NotImplementedException();
+            if (!IsUserRegisteredForEvent(eventId, attendeeId))
+            {
+                return BadRequest("This user has not been registered for this event.");
+            }
+
+            if (!_dbContext.Events.Where(x => x.EventId == eventId).Any())
+            {
+                return BadRequest("This event does not exist.");
+            }
+
+            var entryToRemove = _dbContext.EventRosterEntries.Where(x => x.EventId == eventId && x.AttendeeId == attendeeId).FirstOrDefault();
+            _dbContext.EventRosterEntries.Remove(entryToRemove);
+            _dbContext.SaveChanges();
+
+            return Ok();
+        }
+
+        bool IsUserRegisteredForEvent(int eventId, int userId)
+        {
+            return _dbContext.EventRosterEntries.Where(x => x.AttendeeId == userId && x.EventId == eventId).Any();
         }
 
         [Route("GetRosterByEvent/{eventId}")]
