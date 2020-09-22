@@ -1,11 +1,15 @@
 import React from 'react';
 
 import './HomePage.css'
+import '../App.css'
+import HeroSection from '../Shared/HeroSection'
+import Cards from '../Shared/Cards';
 
 const homePage = (props) =>{
     return(
         <div>
-            <h1>This is the Home Page</h1>
+            <HeroSection />
+            <Cards />
         </div>
     )
 }
