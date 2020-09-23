@@ -72,7 +72,7 @@ namespace Event_Management_Application.Controllers
             return Ok();
         }
 
-        bool IsUserRegisteredForEvent(int eventId, int userId)
+        private bool IsUserRegisteredForEvent(int eventId, int userId)
         {
             return _dbContext.EventRosterEntries.Where(x => x.AttendeeId == userId && x.EventId == eventId).Any();
         }
