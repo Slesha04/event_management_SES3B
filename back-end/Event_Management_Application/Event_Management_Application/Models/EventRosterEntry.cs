@@ -18,6 +18,13 @@ namespace Event_Management_Application.Models
         public DateTime DateRegistered { get; set; }
         public string InputCode { get; set; }
 
+        public EventRosterEntry(int eventId, int attendeeId)
+        {
+            this.EventId = eventId;
+            this.AttendeeId = attendeeId;
+            this.DateRegistered = DateTime.Now;
+		}
+
         public void CopyFields(EventRosterEntry other)
         {
             EventId = other.EventId;
