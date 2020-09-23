@@ -12,9 +12,8 @@ namespace Event_Management_Application.Models
         [Key]
         public int RosterId { get; set; }
         public int EventId { get; set; }
-        public Event Event { get; set; }
         public int AttendeeId { get; set; }
-        public User User { get; set; }
+        public string AttendeeUsername { get; set; }
         public bool AttendeeArrived { get; set; }
         public DateTime DateRegistered { get; set; }
         public string InputCode { get; set; }
@@ -22,9 +21,8 @@ namespace Event_Management_Application.Models
         public void CopyFields(EventRosterEntry other)
         {
             EventId = other.EventId;
-            Event = other.Event;
+            AttendeeUsername = other.AttendeeUsername;
             AttendeeId = other.AttendeeId;
-            User = other.User;
             AttendeeArrived = other.AttendeeArrived;
             DateRegistered = other.DateRegistered;
             InputCode = other.InputCode;

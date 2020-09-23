@@ -21,8 +21,8 @@ namespace Event_Management_Application.ResourceManagement
             var retreivedEntries = _dbContext.EventRosterEntries.Where(x => x.AttendeeId == userId).ToList();
             foreach(var entry in retreivedEntries)
             {
-                entry.User = _dbContext.Users.Where(x => x.UserId == userId).FirstOrDefault();
-                entry.Event = _dbContext.Events.Where(x => x.EventId == entry.EventId).FirstOrDefault();
+                // entry.User = _dbContext.Users.Where(x => x.UserId == userId).FirstOrDefault();
+                // entry.Event = _dbContext.Events.Where(x => x.EventId == entry.EventId).FirstOrDefault();
                 rosterEntries.Add(entry);
             }
             return rosterEntries;
@@ -34,8 +34,8 @@ namespace Event_Management_Application.ResourceManagement
             var retreivedEntries = _dbContext.EventRosterEntries.Where(x => x.EventId == eventId).ToList();
             foreach (var entry in retreivedEntries)
             {
-                entry.User = _dbContext.Users.Where(x => x.UserId == entry.AttendeeId).FirstOrDefault();
-                entry.Event = _dbContext.Events.Where(x => x.EventId == eventId).FirstOrDefault();
+                // entry.User = _dbContext.Users.Where(x => x.UserId == entry.AttendeeId).FirstOrDefault();
+                // entry.Event = _dbContext.Events.Where(x => x.EventId == eventId).FirstOrDefault();
                 rosterEntries.Add(entry);
             }
             return rosterEntries;
