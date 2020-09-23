@@ -15,5 +15,6 @@
             "To test this on Swagger, type in the 'Authorization' dialog box, 'Bearer [token_contents]'. " +
             "Then click 'Authorize' and 'Close' to continue. ";
         public const string INCORRECT_USER_TOKEN_MESSAGE = "User is not Authroized to perform such an action";
+        public const string INCORRECT_INPUT_CODE = "Incorrect Input Code!";
     }
 }

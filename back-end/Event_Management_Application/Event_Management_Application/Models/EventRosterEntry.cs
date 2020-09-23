@@ -10,7 +10,7 @@ namespace Event_Management_Application.Models
     public class EventRosterEntry
     {
         [Key]
-        public int RosterId { get; set; }
+        public int RosterEntryId { get; set; }
         public int EventId { get; set; }
         public int AttendeeId { get; set; }
         public string AttendeeUsername { get; set; }
@@ -18,11 +18,16 @@ namespace Event_Management_Application.Models
         public DateTime DateRegistered { get; set; }
         public string InputCode { get; set; }
 
+        public EventRosterEntry()
+        {
+
+        }
+
         public EventRosterEntry(int eventId, int attendeeId)
         {
-            this.EventId = eventId;
-            this.AttendeeId = attendeeId;
-            this.DateRegistered = DateTime.Now;
+            EventId = eventId;
+            AttendeeId = attendeeId;
+            DateRegistered = DateTime.Now;
 		}
 
         public void CopyFields(EventRosterEntry other)

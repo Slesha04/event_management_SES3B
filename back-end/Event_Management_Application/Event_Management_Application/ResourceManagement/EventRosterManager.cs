@@ -10,42 +10,41 @@ namespace Event_Management_Application.ResourceManagement
     public class EventRosterManager
     {
         private readonly EventManagementApplicationDbContext _dbContext;
+        private readonly Random _randomGen;
+
         public EventRosterManager(EventManagementApplicationDbContext dbContext)
         {
             _dbContext = dbContext;
+            _randomGen = new Random();
         }
 
         public List<EventRosterEntry> GetEntriesByUser(int userId)
         {
-            List<EventRosterEntry> rosterEntries = new List<EventRosterEntry>();
             var retreivedEntries = _dbContext.EventRosterEntries.Where(x => x.AttendeeId == userId).ToList();
-            foreach(var entry in retreivedEntries)
-            {
-                // entry.User = _dbContext.Users.Where(x => x.UserId == userId).FirstOrDefault();
-                // entry.Event = _dbContext.Events.Where(x => x.EventId == entry.EventId).FirstOrDefault();
-                rosterEntries.Add(entry);
-            }
-            return rosterEntries;
+            return retreivedEntries;
         }
 
         public List<EventRosterEntry> GetEntriesByEvent(int eventId)
         {
-            List<EventRosterEntry> rosterEntries = new List<EventRosterEntry>();
             var retreivedEntries = _dbContext.EventRosterEntries.Where(x => x.EventId == eventId).ToList();
-            foreach (var entry in retreivedEntries)
+            return retreivedEntries;
+        }
+
+        public string GenerateInputCode(int userId)
+        {
+            string inputCode = $"{userId}";
+            for(int i = 0; i < 7; i++)
             {
-                // entry.User = _dbContext.Users.Where(x => x.UserId == entry.AttendeeId).FirstOrDefault();
-                // entry.Event = _dbContext.Events.Where(x => x.EventId == eventId).FirstOrDefault();
-                rosterEntries.Add(entry);
+                inputCode += _randomGen.Next(0,9);
             }
-            return rosterEntries;
+            return inputCode;
         }
 
         public void UpdateEntries(ICollection<EventRosterEntry> rosterEntries)
         {
             foreach(var entry in rosterEntries)
             {
-                var currEntry = _dbContext.EventRosterEntries.Where(x => x.RosterId == entry.RosterId).FirstOrDefault();
+                var currEntry = _dbContext.EventRosterEntries.Where(x => x.RosterEntryId == entry.RosterEntryId).FirstOrDefault();
                 if(currEntry != null)
                 {
                     currEntry.CopyFields(entry);

@@ -28,11 +28,26 @@ namespace Event_Management_Application.Controllers
             _rosterManager = new EventRosterManager(_dbContext);
         }
 
-        [Route("AddAttendee/{rosterId}/{eventId}/{attendeeId}")]
+        [Route("AddAttendee/{eventId}")]
         [HttpPost]
         [Authorize]
-        public ActionResult AddAttendee([FromRoute] int rosterId, [FromRoute] int eventId, [FromRoute] int attendeeId)
+        public ActionResult AddAttendee([FromRoute] int eventId)
         {
+            var tokenEntry = _tokenManager.ValidateAndReturnTokenEntry(_tokenManager.ExtractToken(Request));
+            var attendeeId = tokenEntry.UserId;
+            var currUser = _dbContext.Users.Where(x => x.UserId == attendeeId).FirstOrDefault();
+            var currEvent = _dbContext.Events.Where(x => x.EventId == eventId).FirstOrDefault();
+
+            if(tokenEntry == null)
+            {
+                return StatusCode(401, SystemResources.INVALID_TOKEN_MESSAGE);
+            }
+
+            if(currUser == null)
+            {
+                return BadRequest("User does not exist");
+            }
+
             if (IsUserRegisteredForEvent(eventId, attendeeId))
             {
                 return BadRequest("This user is already registered for this event.");
@@ -43,26 +58,46 @@ namespace Event_Management_Application.Controllers
                 return BadRequest("This event does not exist.");
 			}
 
-            var newEntry = new EventRosterEntry(eventId, attendeeId);
+            var newEntry = new EventRosterEntry {
+                EventId = eventId,
+                AttendeeId = attendeeId,
+                DateRegistered = DateTime.Now,
+                AttendeeArrived = false,
+                InputCode = _rosterManager.GenerateInputCode(attendeeId),
+                AttendeeUsername = currUser.UserName
+            };
             _dbContext.EventRosterEntries.Add(newEntry);
             _dbContext.SaveChanges();
 
             return Ok(newEntry);
         }
 
-        [Route("RemoveAttendee/{rosterId}/{eventId}/{attendeeId}")]
+        [Route("RemoveAttendee/{eventId}/{attendeeId}")]
         [HttpDelete]
         [Authorize]
-        public ActionResult RemoveAttendee([FromRoute] int rosterId, [FromRoute] int eventId, [FromRoute] int attendeeId)
+        public ActionResult RemoveAttendee([FromRoute] int eventId, [FromRoute] int attendeeId)
         {
+            var tokenEntry = _tokenManager.ValidateAndReturnTokenEntry(_tokenManager.ExtractToken(Request));
+            var currEvent = _dbContext.Events.Where(x => x.EventId == eventId).FirstOrDefault();
+
+            if (tokenEntry == null)
+            {
+                return StatusCode(401, SystemResources.INVALID_TOKEN_MESSAGE);
+            }
+
+            if(currEvent == null)
+            {
+                return BadRequest("This event does not exist.");
+            }
+
+            if (tokenEntry.UserId != attendeeId && tokenEntry.UserId != currEvent.EventOrganiserId)
+            {
+                return StatusCode(401, SystemResources.INCORRECT_USER_TOKEN_MESSAGE);
+            }
+
             if (!IsUserRegisteredForEvent(eventId, attendeeId))
             {
                 return BadRequest("This user has not been registered for this event.");
-            }
-
-            if (!_dbContext.Events.Where(x => x.EventId == eventId).Any())
-            {
-                return BadRequest("This event does not exist.");
             }
 
             var entryToRemove = _dbContext.EventRosterEntries.Where(x => x.EventId == eventId && x.AttendeeId == attendeeId).FirstOrDefault();
@@ -90,7 +125,7 @@ namespace Event_Management_Application.Controllers
                 {
                     if(tokenEntry.UserId == currEvent.EventOrganiserId)
                     {
-                        return Ok(_rosterManager.GetEntriesByEvent(eventId));
+                        return Ok(_rosterManager.GetEntriesByEvent(eventId).OrderBy(x => x.AttendeeUsername));
                     }
                     return StatusCode(401, SystemResources.INCORRECT_USER_TOKEN_MESSAGE);
                 }
@@ -134,11 +169,16 @@ namespace Event_Management_Application.Controllers
             if (tokenEntry != null)
             {
                 //var entry = _dbContext.EventRosterEntries.Where(x => tokenEntry.User.UserId == x.AttendeeId && x.EventId == eventId && x.InputCode == inputCode).FirstOrDefault();
-                var entry = _dbContext.EventRosterEntries.Where(x => x.EventId == eventId && x.InputCode == inputCode).FirstOrDefault();
+                var entry = _dbContext.EventRosterEntries.Where(x => x.EventId == eventId && x.AttendeeId == tokenEntry.UserId).FirstOrDefault();
 
                 if (entry == null)
                 {
                     return BadRequest("No event roster entry corresponding to event Id");
+                }
+
+                if(!inputCode.Equals(entry.InputCode))
+                {
+                    return BadRequest(SystemResources.INCORRECT_INPUT_CODE);
                 }
 
                 entry.AttendeeArrived = true;
