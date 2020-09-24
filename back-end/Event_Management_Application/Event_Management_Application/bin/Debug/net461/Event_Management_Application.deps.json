@@ -26,6 +26,7 @@
         "dependencies": {
           "Microsoft.AspNetCore": "2.2.0",
           "Microsoft.AspNetCore.Authentication.JwtBearer": "2.2.0",
+          "Microsoft.AspNetCore.Cors": "2.2.0",
           "Microsoft.AspNetCore.HttpsPolicy": "2.2.0",
           "Microsoft.AspNetCore.Mvc": "2.2.0",
           "Microsoft.EntityFrameworkCore.Design": "2.2.0",
@@ -2309,6 +2310,7 @@
         "dependencies": {
           "Microsoft.AspNetCore": "2.2.0",
           "Microsoft.AspNetCore.Authentication.JwtBearer": "2.2.0",
+          "Microsoft.AspNetCore.Cors": "2.2.0",
           "Microsoft.AspNetCore.HttpsPolicy": "2.2.0",
           "Microsoft.AspNetCore.Mvc": "2.2.0",
           "Microsoft.EntityFrameworkCore.Design": "2.2.0",

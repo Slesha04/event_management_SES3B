@@ -10,6 +10,7 @@ using Microsoft.IdentityModel.Tokens;
 using Event_Management_Application.ResourceManagement;
 using System.Text;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Cors;
 
 namespace Event_Management_Application
 {
@@ -55,7 +56,7 @@ namespace Event_Management_Application
             });
 
             services.AddDbContext<EventManagementApplicationDbContext>(options =>
-                options.UseSqlServer(SystemResources.DATABASE_CONNECTION_STRING));
+                options.UseSqlServer(SystemResources.PROD_DATABASE_STRING));
 
             string securityKey = SystemResources.TOKEN_SECURITY_KEY;
 
@@ -81,6 +82,8 @@ namespace Event_Management_Application
                     options.SaveToken = true;
                 });
 
+            services.AddCors();
+
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
         }
 
@@ -98,6 +101,15 @@ namespace Event_Management_Application
             }
 
             app.UseHttpsRedirection();
+
+            app.UseCors(builder =>
+            {
+                builder
+                .AllowAnyOrigin()
+                .AllowAnyMethod()
+                .AllowAnyHeader();
+            });
+
             app.UseAuthentication();
             app.UseMvc();
 

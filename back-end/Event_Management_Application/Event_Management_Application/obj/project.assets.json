@@ -10848,6 +10848,7 @@
     ".NETFramework,Version=v4.6.1": [
       "Microsoft.AspNetCore >= 2.2.0",
       "Microsoft.AspNetCore.Authentication.JwtBearer >= 2.2.0",
+      "Microsoft.AspNetCore.Cors >= 2.2.0",
       "Microsoft.AspNetCore.HttpsPolicy >= 2.2.0",
       "Microsoft.AspNetCore.Mvc >= 2.2.0",
       "Microsoft.EntityFrameworkCore.Design >= 2.2.0",
@@ -10907,6 +10908,10 @@
             "version": "[2.2.0, )"
           },
           "Microsoft.AspNetCore.Authentication.JwtBearer": {
+            "target": "Package",
+            "version": "[2.2.0, )"
+          },
+          "Microsoft.AspNetCore.Cors": {
             "target": "Package",
             "version": "[2.2.0, )"
           },
