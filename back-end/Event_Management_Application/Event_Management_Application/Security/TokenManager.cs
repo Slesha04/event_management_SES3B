@@ -22,7 +22,7 @@ namespace Event_Management_Application.Security
             _dbContext = dbContext;
         }
 
-        public string IssueToken(User user)
+        public JwtSecurityToken IssueToken(User user)
         {
             var securityKey = SystemResources.TOKEN_SECURITY_KEY;
             var symmetricSecurityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(securityKey));
@@ -33,10 +33,12 @@ namespace Event_Management_Application.Security
 
             var jwtId = Guid.NewGuid().ToString();
             var utcDate = EpochTime.GetIntDate(DateTime.Now);
+            var loggedIn = UserLoggedIn(user);
 
             claims.Add(new Claim("iat", $"{utcDate}", ClaimValueTypes.Integer64));
             claims.Add(new Claim("jti", jwtId));
             claims.Add(new Claim("user_id", $"{user.UserId}", ClaimValueTypes.Integer32));
+            claims.Add(new Claim("logged_in", $"{loggedIn}", ClaimValueTypes.Boolean));
 
             var token = new JwtSecurityToken(
                     issuer: SystemResources.VALID_ISSUER,
@@ -48,6 +50,9 @@ namespace Event_Management_Application.Security
 
             var writtenToken = new JwtSecurityTokenHandler().WriteToken(token);
 
+            var eventToken = (EventManagementJwtToken)token;
+            eventToken.EncodedForm = writtenToken;
+
             _dbContext.UserTokenEntries.Add(new UserTokenEntry() {
                 TokenId = writtenToken,
                 UserId = user.UserId,
@@ -58,7 +63,7 @@ namespace Event_Management_Application.Security
 
             _dbContext.SaveChanges();
 
-            return writtenToken;
+            return eventToken;
         }
 
         public bool DestroyUserTokens(string token)
@@ -109,6 +114,11 @@ namespace Event_Management_Application.Security
         public User GetUserByTokenEntry(UserTokenEntry entry)
         {
             return _dbContext.Users.Where(x => x.UserId == entry.UserId).FirstOrDefault();
+        }
+
+        private bool UserLoggedIn(User user)
+        {
+            return _dbContext.UserTokenEntries.Where(x => x.UserId == user.UserId && x.TokenExpiryDate > DateTime.Now).FirstOrDefault() != null;
         }
     }
 }
