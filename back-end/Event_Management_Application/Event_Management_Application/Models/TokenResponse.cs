@@ -8,8 +8,9 @@ using System.Threading.Tasks;
 namespace Event_Management_Application.Models
 {
     [NotMapped]
-    public class EventManagementJwtToken : JwtSecurityToken
+    public class TokenResponse
     {
+        public JwtSecurityToken JwtToken { get; set; }
         public string EncodedForm { get; set; }
     }
 }

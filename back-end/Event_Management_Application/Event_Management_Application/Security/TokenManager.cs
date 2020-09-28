@@ -22,7 +22,7 @@ namespace Event_Management_Application.Security
             _dbContext = dbContext;
         }
 
-        public JwtSecurityToken IssueToken(User user)
+        public TokenResponse IssueToken(User user)
         {
             var securityKey = SystemResources.TOKEN_SECURITY_KEY;
             var symmetricSecurityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(securityKey));
@@ -33,12 +33,10 @@ namespace Event_Management_Application.Security
 
             var jwtId = Guid.NewGuid().ToString();
             var utcDate = EpochTime.GetIntDate(DateTime.Now);
-            var loggedIn = UserLoggedIn(user);
 
             claims.Add(new Claim("iat", $"{utcDate}", ClaimValueTypes.Integer64));
             claims.Add(new Claim("jti", jwtId));
             claims.Add(new Claim("user_id", $"{user.UserId}", ClaimValueTypes.Integer32));
-            claims.Add(new Claim("logged_in", $"{loggedIn}", ClaimValueTypes.Boolean));
 
             var token = new JwtSecurityToken(
                     issuer: SystemResources.VALID_ISSUER,
@@ -50,8 +48,11 @@ namespace Event_Management_Application.Security
 
             var writtenToken = new JwtSecurityTokenHandler().WriteToken(token);
 
-            var eventToken = (EventManagementJwtToken)token;
-            eventToken.EncodedForm = writtenToken;
+            var tokenResponse = new TokenResponse()
+            {
+                JwtToken = token,
+                EncodedForm = writtenToken
+            };
 
             _dbContext.UserTokenEntries.Add(new UserTokenEntry() {
                 TokenId = writtenToken,
@@ -63,7 +64,7 @@ namespace Event_Management_Application.Security
 
             _dbContext.SaveChanges();
 
-            return eventToken;
+            return tokenResponse;
         }
 
         public bool DestroyUserTokens(string token)
