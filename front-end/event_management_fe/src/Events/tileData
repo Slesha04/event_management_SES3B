@@ -1,0 +1,8 @@
+
+const tileData = [
+  {
+     title: 'Image',
+     author: 'author',
+   },
+
+ ];
