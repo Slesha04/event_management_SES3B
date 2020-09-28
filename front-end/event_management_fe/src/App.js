@@ -1,11 +1,13 @@
 import React from 'react';
 import {Switch, Route, BrowserRouter as Router} from 'react-router-dom';
+import AuthenticationGuard from "./Login/AuthenticationGuard";
 
 import './App.css';
 import Login from './Login/Login';
 import Navbar from './Shared/Navbar';
 import homePage from './HomePage/HomePage';
-import Registration from './Login/Registration';
+
+import Register from './Login/Registration';
 import CreateEvent from './Events/CreateEvent';
 import EditEvent from './Events/EditEvent';
 import Ticket from './Events/Ticket';
@@ -21,9 +23,10 @@ function App() {
       <div className="App">
         <Navbar/>
         <Switch>
-          <Route path = '/login' component={Login}/>
-          <Route path='/rego' component={Registration}/>
-          <Route path='/' exact component={homePage}/>
+        <Route path={"/login"} component={Login} />
+          <Route path={"/Register"} component={Register} />
+          <AuthenticationGuard>
+          <Route path='/homePage' exact component={homePage}/>
           <Route path='/create-event' component={CreateEvent}/>
           <Route path='/edit-event' component={EditEvent}/>
           <Route path='/ticket' component={Ticket}/>
@@ -32,6 +35,7 @@ function App() {
           <Route path='/event-chat' component={EventChat}/>
           <Route path='/profile' component={Profile}/>
           <Route path='/all-events' component={AllEvents}/>
+          </AuthenticationGuard>
         </Switch>
       </div>
     </Router>
