@@ -1,199 +1,236 @@
-import React, { Component } from "react";
+import React from 'react';
+import Avatar from '@material-ui/core/Avatar';
+import Button from '@material-ui/core/Button';
+import CssBaseline from '@material-ui/core/CssBaseline';
+import TextField from '@material-ui/core/TextField';
+import FormControlLabel from '@material-ui/core/FormControlLabel';
+import Checkbox from '@material-ui/core/Checkbox';
+import Link from '@material-ui/core/Link';
+import Grid from '@material-ui/core/Grid';
+import Box from '@material-ui/core/Box';
+import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
+import Typography from '@material-ui/core/Typography';
+import { makeStyles } from '@material-ui/core/styles';
+import Container from '@material-ui/core/Container';
+import InputLabel from '@material-ui/core/InputLabel';
+import MenuItem from '@material-ui/core/MenuItem';
+import FormHelperText from '@material-ui/core/FormHelperText';
+import FormControl from '@material-ui/core/FormControl';
+import Select from '@material-ui/core/Select';
 import Cookies from "js-cookie";
+import { useHistory } from 'react-router-dom';
 import { withRouter } from "react-router-dom";
-import { getToken } from "./JwtConfig";
-import { Button, Header, Grid, Form } from "semantic-ui-react";
-import axios from "axios";
+ import axios from "axios";
 
-class Register extends Component {
-  constructor(props) {
-    super(props);
 
-    this.state = {
-      name: "",
-      dob: "",
-      email: "",
-      password: "",
-      RegistrationSuccessful: Boolean,
-      userType: 0,
-      registrationMessage: "",
-    };
 
-    this.handleInputChange = this.handleInputChange.bind(this);
-    this.handleRegister = this.handleRegister.bind(this);
-    this.onRadioChange = this.onRadioChange.bind(this);
-  }
+/* https://github.com/mui-org/material-ui/blob/master/docs/src/pages/getting-started/templates/sign-up/SignUp.js*/
 
-  componentDidMount() {
-    const jwt = getToken();
-    if (jwt) {
-      this.props.history.push("/Home");
-    }
-  }
+function Copyright() {
+  return (
+    <Typography variant="body2" color="textSecondary" align="center">
+      {'Copyright © '}
+      <Link color="inherit" href="https://material-ui.com/">
+        Your Website
+      </Link>{' '}
+      {new Date().getFullYear()}
+      {'.'}
+    </Typography>
+  );
+}
 
-  form = {
-    width: "40%",
-    margin: "0 auto",
-    marginTop: "2%",
+const useStyles = makeStyles((theme) => ({
+  paper: {
+    marginTop: theme.spacing(8),
+    display: 'flex',
+    flexDirection: 'column',
+    alignItems: 'center',
+  },
+  avatar: {
+    margin: theme.spacing(1),
+    backgroundColor: theme.palette.secondary.main,
+  },
+  form: {
+    width: '100%', // Fix IE 11 issue.
+    marginTop: theme.spacing(3),
+  },
+  submit: {
+    margin: theme.spacing(3, 0, 2),
+  },
+  formControl: {
+    margin: theme.spacing(1),
+    minWidth: 120,
+  },
+
+}));
+
+//export default function SignUp() {
+const Registration =(props) =>{
+    /*return(
+        <div>
+            <h1>This is the Registration page</h1>
+        </div>
+    )*/
+  const classes = useStyles();
+  const [gender, setGender] = React.useState('');
+  const [email, setEmail] = React.useState('');
+  const [password, setPassword] = React.useState('');
+  const [username, setUsername] = React.useState('');
+  const [birthDate, setBirthDate] = React.useState('');
+
+  const handleUsernameChange = (event) => {
+    setUsername(event.target.value);
   };
-
-  formContainer = {
-    width: "100%",
-    textAlign: "center",
+  const handleGenderChange = (event) => {
+    setGender(event.target.value);
   };
-
-  submitButton = {
-    marginTop: "1%",
+  const handleEmailChange = (event) => {
+    setEmail(event.target.value);
   };
+  const handlePasswordChange = (event) => {
+    setPassword(event.target.value);
+  }; 
+  const handleBirthDateChange = (event) => {
+    setBirthDate(event.target.value);
+  };
+  const history = useHistory();
 
-  handleInputChange(event) {
-    this.setState({
-      [event.target.name]: event.target.value,
-    });
-  }
+  const handleRegister  = (event) => {
+    event.preventDefault()
 
-  handleRegister() {
+    console.log(`http://localhost:5000/api/UserController/RegisterUser/${username}/${birthDate}/${gender}/${email}/${password}`);
     axios
-      .get(`http://localhost:5000/api/UserController/RegisterUser/${this.state.name}/${this.state.dob}/${this.state.userType}/${this.state.email}/${this.state.password}` )
+      .get(`http://localhost:5000/api/UserController/RegisterUser/${username}/${birthDate}/${gender}/${email}/${password}` )
       .then(
         (res) => {
           Cookies.set("auth-cookie", res.data.access_token);
-          this.props.history.push("/homepage");
+          history.push("/homepage");
+          alert("Successfully registered!");
         },
         (error) => {
-          this.setState({ registrationMessage: error.response.data.msg, RegistrationSuccessful: false });
+          //this.setState({ registrationMessage: error.response.data.msg, RegistrationSuccessful: false });
         }
       );
   }
 
-  emptyFields() {
-    return (
-      this.state.name == "" ||
-      this.state.email == "" ||
-      this.state.password == ""
-    );
-  }
+  return (
+    <Container component="main" maxWidth="xs">
+      <CssBaseline />
+      <div className={classes.paper}>
+        <Avatar className={classes.avatar}>
+          <LockOutlinedIcon />
+        </Avatar>
+        <Typography component="h1" variant="h5">
+          Sign up
+        </Typography>
+        <form className={classes.form} onSubmit={handleRegister} noValidate>
+          <Grid container spacing={2}>
+            <Grid item xs={12} >
+              <TextField
+                autoComplete="fname"
+                name="fullName"
+                variant="outlined"
+                required
+                fullWidth
+                id="fullName"
+                label="Full Name"
+                value={username}
 
-  onRadioChange = (e) => {
-    this.setState({
-      userType: parseInt(e.target.value),
-    });
-  };
+                onChange={handleUsernameChange}
+                autoFocus
+              />
+            </Grid>
 
-  render() {
-    return (
-      <div class="backgroundimg">
-        <div className="container">
-          <Grid className="card" style={{ width: "50%" }}>
-            <Grid.Column width={16}>
-              <Grid stackable style={{ justifyContent: "center" }}>
-                <Grid.Row>
-                  <Grid.Column>
-                    <Header className="htn">Register</Header>
-                    <Form onSubmit={this.handleRegister}>
-                      <Form.Field>
-                        <input
-                          className="regis_input_type2"
-                          name="name"
-                          type="text"
-                          placeholder="Name"
-                          style={{ width: "100%" }}
-                          value={this.state.name}
-                          onChange={this.handleInputChange}
-                        />
-                      </Form.Field>
-                      <Form.Field>
-                        <input
-                          className="regis_input_type2"
-                          name="dob"
-                          type="text"
-                          placeholder="Date of birth"
-                          style={{ width: "100%" }}
-                          value={this.state.dob}
-                          onChange={this.handleInputChange}
-                        />
-                      </Form.Field>
-                      <Form.Field>
-                        <input
-                          name="email"
-                          className="regis_input_type2"
-                          placeholder="Email"
-                          style={{ width: "100%" }}
-                          type="email"
-                          value={this.state.email}
-                          onChange={this.handleInputChange}
-                        />
-                      </Form.Field>
-                      <Form.Field>
-                        <input
-                          name="password"
-                          className="regis_input_type2"
-                          placeholder="Password"
-                          style={{ width: "100%" }}
-                          type="password"
-                          value={this.state.password}
-                          onChange={this.handleInputChange}
-                        />
-                      </Form.Field>
-                      <Form.Field>
-                        <label class="radio">
-                          <input
-                            type="radio"
-                            checked={this.state.userType === 0}
-                            onChange={this.onRadioChange}
-                            value="0"
-                          />
-                          Male
-                        </label>
-                        <label class="radio">
-                          <input
-                            type="radio"
-                            checked={this.state.userType === 1}
-                            onChange={this.onRadioChange}
-                            value="1"
-                          />
-                          Female
-                        </label>
-                      </Form.Field>
-                      <Form.Field>
-                        <Button
-                          className="btn_submit"
-                          type="submit"
-                          disabled={this.emptyFields()}
-                        >
-                          Sign Up
-                        </Button>
-                      </Form.Field>
-                      <Form.Field>
-                        <p
-                          className="font-sm"
-                          style={{ float: "right" }}
-                          onClick={() => {
-                            this.props.history.push({
-                              pathname: `/Login`,
-                            });
-                          }}
-                        >
-                          Login
-                        </p>
-                      </Form.Field>
-                      <Form.Field>
-                        <div class="has-text-danger">
-                          {this.state.RegistrationSuccessful == false && (
-                            <h1>{this.state.registrationMessage}</h1>
-                          )}
-                        </div>
-                      </Form.Field>
-                    </Form>
-                  </Grid.Column>
-                </Grid.Row>
-              </Grid>
-            </Grid.Column>
+            <Grid item xs={12}>
+              <TextField
+                variant="outlined"
+                required
+                fullWidth
+                id="email"
+                label="Email Address"
+                name="email"
+                autoComplete="email"
+                value={email}
+
+                onChange={handleEmailChange}
+
+              />
+            </Grid>
+            <Grid item xs={12}>
+              <TextField
+                variant="outlined"
+                required
+                fullWidth
+                name="password"
+                label="Password"
+                type="password"
+                id="password"
+                autoComplete="current-password"
+                value={password}
+                onChange={handlePasswordChange}
+              />
+            </Grid>
+
+            <FormControl  variant="outlined" className={classes.formControl}>
+            <InputLabel id="demo-simple-select-label">Gender*</InputLabel>
+                    <Select
+                      labelId="demo-simple-select-label"
+                      id="demo-simple-select"
+                      value={gender}
+                      onChange={handleGenderChange}
+                    >
+                      <MenuItem value={10}>Female</MenuItem>
+                      <MenuItem value={20}>Male</MenuItem>
+                      <MenuItem value={30}>Other</MenuItem>
+                    </Select>
+                    </FormControl>
+
+                <Grid item xs={12} sm={6}>
+                <TextField
+                        id="date"
+                        label="Birthday"
+                        type="date"
+                        defaultValue="2017-05-24"
+                        value={birthDate}
+
+                        onChange={handleBirthDateChange}
+                        InputLabelProps={{
+                          shrink: true,
+                        }}
+                      />
+                </Grid>
+
+            <Grid item xs={12}>
+              <FormControlLabel
+                control={<Checkbox value="allowExtraEmails" color="primary" />}
+                label="I want to receive inspiration, marketing promotions and updates via email."
+              />
+            </Grid>
           </Grid>
-        </div>
+          <Button
+            type="submit"
+            fullWidth
+            variant="contained"
+            color="primary"
+            className={classes.submit}
+            
+          >
+            Sign Up
+          </Button>
+          <Grid container justify="flex-end">
+            <Grid item>
+              <Link href="#" variant="body2">
+                Already have an account? Sign in
+              </Link>
+            </Grid>
+          </Grid>
+        </form>
       </div>
-    );
-  }
+      <Box mt={5}>
+        <Copyright />
+      </Box>
+    </Container>
+  );
 }
 
-export default withRouter(Register);
+export default Registration;
