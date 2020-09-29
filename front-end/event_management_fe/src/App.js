@@ -27,7 +27,7 @@ function App() {
           <Route path={"/Register"} component={Register} />
           <AuthenticationGuard>
           <Route path='/homePage' exact component={homePage}/>
-          <Route path='/create-event' component={CreateEvent}/>
+          <Route path='/CreateEvent' component={CreateEvent}/>
           <Route path='/edit-event' component={EditEvent}/>
           <Route path='/ticket' component={Ticket}/>
           <Route path='/event-confirmation' component={EventConfirmation}/>

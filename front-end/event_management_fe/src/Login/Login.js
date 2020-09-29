@@ -34,7 +34,7 @@ class Login extends Component {
     axios.get(`http://localhost:5000/api/UserController/LoginUser/${this.state.email}/${this.state.password}`)
       .then(
         (res) => {
-          Cookies.set("auth-cookie", res.data.access_token);
+           Cookies.set("auth-cookie", res.data);
           this.props.history.push("/homePage");
         },
         (error) => {

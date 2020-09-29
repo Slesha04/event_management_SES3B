@@ -11,6 +11,7 @@ class Register extends Component {
 
     this.state = {
       name: "",
+      dob: "",
       email: "",
       password: "",
       RegistrationSuccessful: Boolean,
@@ -53,12 +54,7 @@ class Register extends Component {
 
   handleRegister() {
     axios
-      .get("/registration", {
-        name: this.state.name,
-        email: this.state.email,
-        password: this.state.password,
-        userType: this.state.userType,
-      })
+      .get(`http://localhost:5000/api/UserController/RegisterUser/${this.state.name}/${this.state.dob}/${this.state.userType}/${this.state.email}/${this.state.password}` )
       .then(
         (res) => {
           Cookies.set("auth-cookie", res.data.access_token);
@@ -108,6 +104,17 @@ class Register extends Component {
                       </Form.Field>
                       <Form.Field>
                         <input
+                          className="regis_input_type2"
+                          name="dob"
+                          type="text"
+                          placeholder="Date of birth"
+                          style={{ width: "100%" }}
+                          value={this.state.dob}
+                          onChange={this.handleInputChange}
+                        />
+                      </Form.Field>
+                      <Form.Field>
+                        <input
                           name="email"
                           className="regis_input_type2"
                           placeholder="Email"
@@ -136,7 +143,7 @@ class Register extends Component {
                             onChange={this.onRadioChange}
                             value="0"
                           />
-                          Employee
+                          Male
                         </label>
                         <label class="radio">
                           <input
@@ -145,7 +152,7 @@ class Register extends Component {
                             onChange={this.onRadioChange}
                             value="1"
                           />
-                          Manager
+                          Female
                         </label>
                       </Form.Field>
                       <Form.Field>

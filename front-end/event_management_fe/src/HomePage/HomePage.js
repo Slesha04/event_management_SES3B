@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import axios from "axios";
-import { getHeaderToken } from "../Login/JwtConfig";
+import { getHeaderToken, getToken } from "../Login/JwtConfig";
 import Cookies from "js-cookie";
 
 import './HomePage.css'
@@ -12,6 +12,7 @@ import Footer from '../Shared/Footer';
 
 export default class homePage extends Component{
     componentDidMount() {
+  
         axios
           .get("/protected", { headers: { Authorization: getHeaderToken() } })
           .then((res) => {

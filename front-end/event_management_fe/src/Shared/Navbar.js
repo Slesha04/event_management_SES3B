@@ -62,7 +62,7 @@ import { useHistory } from 'react-router-dom';
                 </div>
                 <ul className={click ? 'nav-menu active' : 'nav-menu'}>
                     <li className='nav-item'>
-                        <Link to='/' className='nav-links' onClick={closeMobileMenu}>
+                        <Link to='/homePage' className='nav-links' onClick={closeMobileMenu}>
                         <i class="fas fa-home"></i>
                         </Link>
                     </li>
@@ -72,7 +72,7 @@ import { useHistory } from 'react-router-dom';
                         </Link>
                     </li>
                     <li className='nav-item'>
-                        <Link to='/profile' className='nav-links' onClick={closeMobileMenu}>
+                        <Link to='/createEvent' className='nav-links' onClick={closeMobileMenu}>
                         <i class="fas fa-user-alt"></i>
                         </Link>
                     </li>
