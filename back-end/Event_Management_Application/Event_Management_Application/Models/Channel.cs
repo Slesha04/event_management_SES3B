@@ -12,6 +12,7 @@ namespace Event_Management_Application.Models
         public byte[] ChannelImage { get; set; }
         public bool IsGlobal { get; set; }
         public Guid ChannelCode { get; set; }
+        public int CurrentSequenceNumber { get; set; }
         public ICollection<Medium> Media { get; set; }
     }
 }

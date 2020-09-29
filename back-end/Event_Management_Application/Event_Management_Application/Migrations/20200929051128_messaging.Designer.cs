@@ -4,14 +4,16 @@ using Event_Management_Application.DataAccess;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace Event_Management_Application.Migrations
 {
     [DbContext(typeof(EventManagementApplicationDbContext))]
-    partial class EventManagementApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20200929051128_messaging")]
+    partial class messaging
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -168,27 +170,6 @@ namespace Event_Management_Application.Migrations
                     b.ToTable("Media");
                 });
 
-            modelBuilder.Entity("Event_Management_Application.Models.Message", b =>
-                {
-                    b.Property<int>("MessageId")
-                        .ValueGeneratedOnAdd()
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<int>("ChannelId");
-
-                    b.Property<DateTime>("DatePosted");
-
-                    b.Property<string>("MessageText");
-
-                    b.Property<int>("SequenceNumber");
-
-                    b.HasKey("MessageId");
-
-                    b.HasIndex("ChannelId");
-
-                    b.ToTable("Messages");
-                });
-
             modelBuilder.Entity("Event_Management_Application.Models.User", b =>
                 {
                     b.Property<int>("UserId")
@@ -318,14 +299,6 @@ namespace Event_Management_Application.Migrations
                 {
                     b.HasOne("Event_Management_Application.Models.Channel", "Channel")
                         .WithMany("Media")
-                        .HasForeignKey("ChannelId")
-                        .OnDelete(DeleteBehavior.Cascade);
-                });
-
-            modelBuilder.Entity("Event_Management_Application.Models.Message", b =>
-                {
-                    b.HasOne("Event_Management_Application.Models.Channel", "Channel")
-                        .WithMany()
                         .HasForeignKey("ChannelId")
                         .OnDelete(DeleteBehavior.Cascade);
                 });

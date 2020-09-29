@@ -25,6 +25,7 @@ namespace Event_Management_Application.ResourceManagement
                     ChannelName = newEvent.EventTitle,
                     ChannelCode = newEvent.ChannelCode,
                     IsGlobal = false,
+                    CurrentSequenceNumber = 0
                 });
                 _dbContext.SaveChanges();
 
