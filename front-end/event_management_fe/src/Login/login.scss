@@ -1,0 +1,119 @@
+@import "./mixins";
+@import "./variables";
+
+.regisContainer {
+  display: block;
+  height: 73vh !important;
+  width: 85% !important;
+  max-width: 100% !important;
+  justify-content: center !important;
+  align-items: center !important;
+  align-content: center !important;
+  flex-wrap: wrap !important;
+}
+
+.ui.htn.header {
+  font-size: 1.71428571em;
+  font-weight: 500;
+  color: $font_dark_color;
+  margin-bottom: 40px !important;
+  margin-left: 0 !important;
+}
+
+.btn_submit {
+  background-color: $UI_main_color !important;
+  color: #fff !important;
+  border: 2px solid $UI_main_color !important;
+  border-radius: 5px;
+  width: 100%;
+  margin-top: 35px !important;
+  margin-bottom: 10px !important;
+}
+
+.btn_submit:hover {
+  background-color: #fff !important;
+  color: $UI_main_color !important;
+  border: 2px solid $UI_main_color !important;
+  border-radius: 5px;
+  width: 100%;
+  margin-top: 35px !important;
+  margin-bottom: 10px !important;
+}
+
+.font-sm {
+  font-size: small;
+}
+
+.font-center {
+  align-self: center !important;
+  align-content: center !important;
+  text-align: center !important;
+  padding-top: 15px !important;
+}
+
+button.ui.button.LogBtn {
+  background-color: #fff;
+  color: $UI_main_color;
+  border: 2px solid $UI_main_color;
+  width: 27%;
+  padding-left: 0 !important;
+  padding-right: 0 !important;
+}
+
+button.ui.button.LogBtn:hover {
+  background-color: $UI_main_color;
+  color: #fff;
+  border: 2px solid $UI_main_color;
+}
+
+button.ui.button.LogBtn:focus {
+  background-color: $UI_main_color;
+  color: #fff;
+  border: 2px solid $UI_main_color;
+}
+
+.phone_input2 {
+  border: none !important;
+  float: left;
+  width: 100% !important;
+  background-color: $form_background !important;
+  border-radius: 0 !important;
+  border-bottom: 1px solid $font_shallow_color !important;
+  padding-left: 0;
+  margin-left: 0 !important;
+}
+
+input.regis_input_type2 {
+  border: none !important;
+  background-color: $form_background !important;
+  border-radius: 0 !important;
+  border-bottom: 1px solid $font_shallow_color !important;
+  width: 100% !important;
+  outline-width: 0;
+}
+
+input.middle:focus {
+  outline-width: 0;
+}
+
+.backgroundimg {
+   width: 100%;
+  height: 100%;
+  position: fixed;
+}
+
+.container {
+  width: 100%;
+  height: 100%;
+  display: flex;
+
+  justify-content: center !important;
+  align-items: center !important;
+  align-content: center !important;
+  flex-wrap: wrap !important;
+}
+
+.card {
+  padding: 20px;
+  background-color: white;
+}
