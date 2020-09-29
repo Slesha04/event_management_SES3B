@@ -1,13 +1,13 @@
 import React, { Component } from "react";
 import Cookies from "js-cookie";
 import { withRouter } from "react-router-dom";
-import { getHeaderToken, getToken } from "../Login/JwtConfig";
+import { getHeaderToken, getToken, getUserID } from "../Login/JwtConfig";
 import { Button, Header, Grid, Form } from "semantic-ui-react";
 import axios from "axios";
 
 class CreateEvent extends Component {
     componentDidMount() {
-        console.log(getHeaderToken() );
+console.log(getUserID())       
         axios
           .get("/protected", { headers: { Authorization: getHeaderToken() } })
           .then((res) => {
