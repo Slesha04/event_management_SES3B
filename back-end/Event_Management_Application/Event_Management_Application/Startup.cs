@@ -107,7 +107,8 @@ namespace Event_Management_Application
                 builder
                 .AllowAnyOrigin()
                 .AllowAnyMethod()
-                .AllowAnyHeader();
+                .AllowAnyHeader()
+                .AllowCredentials();
             });
 
             app.UseAuthentication();

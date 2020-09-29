@@ -176,5 +176,11 @@ namespace Event_Management_Application.Controllers
         {
             return _dbContext.Events.Where(x => x.EventId == eventId).FirstOrDefault();
         }
+
+        [Route("ViewUserEvents/{userId}")]
+        public List<Event> ViewUserEvents(int userId)
+        {
+            return _dbContext.Events.Where(x => x.EventOrganiserId == userId).ToList();
+        }
     }
 }
