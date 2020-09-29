@@ -2,8 +2,13 @@ import React, {useState, useEffect} from 'react'
 import {Link} from 'react-router-dom'
 import { Button } from './Button';
 import './Navbar.css'
+ import Cookies from "js-cookie";
+import { withRouter } from "react-router-dom";
+ import axios from "axios";
+import { getHeaderToken } from "../Login/JwtConfig";
+import { useHistory } from 'react-router-dom';
 
-function Navbar() {
+ function Navbar() {
     const [click, setClick]= useState(false);
     const [button,setButton] = useState(true)
 
@@ -16,6 +21,28 @@ function Navbar() {
         }else{
             setButton(true)}
     };
+   //avis code
+   const history = useHistory();
+
+    useEffect(() => {
+        // Update the document title using the browser API
+        axios
+        .get("/protected", { headers: { Authorization: getHeaderToken() } })
+        .then((res) => {
+          this.setState({
+            user: res.data,
+            userType: res.data["userType"],
+          });
+          console.log("NAVBAR", res.data["userType"]);
+        });
+      });
+      
+    const logout = () => {
+        Cookies.remove("auth-cookie");
+        history.push('/login')   
+       };
+    
+  //------------------------------------------------------------
 
     useEffect(()=>{
         showButton();
@@ -35,7 +62,7 @@ function Navbar() {
                 </div>
                 <ul className={click ? 'nav-menu active' : 'nav-menu'}>
                     <li className='nav-item'>
-                        <Link to='/' className='nav-links' onClick={closeMobileMenu}>
+                        <Link to='/homePage' className='nav-links' onClick={closeMobileMenu}>
                         <i class="fas fa-home"></i>
                         </Link>
                     </li>
@@ -45,14 +72,16 @@ function Navbar() {
                         </Link>
                     </li>
                     <li className='nav-item'>
-                        <Link to='/profile' className='nav-links' onClick={closeMobileMenu}>
+                        <Link to='/createEvent' className='nav-links' onClick={closeMobileMenu}>
                         <i class="fas fa-user-alt"></i>
                         </Link>
                     </li>
                     <li className='nav-item'>
-                        <Link to='/login' className='nav-links-mobile' onClick={closeMobileMenu}>
-                            Sign In
-                        </Link>
+                        <button className='nav-links-mobile'  onClick={logout}
+                  class="button"
+                  type="submit">
+                            logout
+                        </button>
                     </li>
                 </ul>
                 {button && <Button buttonStyle='btn--outline'><i class="fas fa-sign-in-alt"></i></Button>}
