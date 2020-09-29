@@ -35,4 +35,8 @@
     <Reference Include="System.IdentityModel" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Controllers\RequestModels\" />
+  </ItemGroup>
+
 </Project>

@@ -11,6 +11,7 @@ using Event_Management_Application.ResourceManagement;
 using System.Text;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Cors;
+using Microsoft.Net.Http.Headers;
 
 namespace Event_Management_Application
 {
@@ -107,8 +108,7 @@ namespace Event_Management_Application
                 builder
                 .AllowAnyOrigin()
                 .AllowAnyMethod()
-                .AllowAnyHeader()
-                .AllowCredentials();
+                .AllowAnyHeader();
             });
 
             app.UseAuthentication();

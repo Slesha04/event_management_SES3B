@@ -10,6 +10,7 @@ logs
 
 node_modules
 bower_components
+../../back-end
 
 *.sublime*
 

@@ -31,7 +31,7 @@ class Login extends Component {
   }
 
   handleLogin() {
-    axios.get(`http://localhost:5000/api/UserController/LoginUser/${this.state.email}/${this.state.password}`)
+    axios.get(`https://localhost:5001/api/UserController/LoginUser/${this.state.email}/${this.state.password}`)
       .then(
         (res) => {
           // user id - console.log(res.data.jwtToken.payload.user_id);
