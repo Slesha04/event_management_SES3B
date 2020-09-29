@@ -34,7 +34,11 @@ class Login extends Component {
     axios.get(`http://localhost:5000/api/UserController/LoginUser/${this.state.email}/${this.state.password}`)
       .then(
         (res) => {
-           Cookies.set("auth-cookie", res.data);
+          // user id - console.log(res.data.jwtToken.payload.user_id);
+
+            Cookies.set("auth-cookie", res.data.encodedForm);
+            const userId =  res.data.jwtToken.payload.user_id;
+            Cookies.set('userID', userId)
           this.props.history.push("/homePage");
         },
         (error) => {
