@@ -178,6 +178,7 @@ namespace Event_Management_Application.Controllers
         }
 
         [Route("ViewUserEvents/{userId}")]
+        [HttpGet]
         public List<Event> ViewUserEvents(int userId)
         {
             return _dbContext.Events.Where(x => x.EventOrganiserId == userId).ToList();
