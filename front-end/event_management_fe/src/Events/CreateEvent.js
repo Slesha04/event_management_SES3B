@@ -66,7 +66,9 @@ console.log(getUserID())
 
   handleRegister() {
     const body = {};
-    const res =  axios.put(`http://localhost:5000/api/EventController/CreateEvent/${this.state.eventTitle}/${this.state.eventDetails}/${this.state.eventLocation}/${this.state.eventDate}/${this.state.ticketPrice}/${this.state.eventType}/${this.state.eventVisibility}`, body, {
+    console.log(`https://localhost:5001/api/EventController/CreateEvent/${this.state.eventTitle}/${this.state.eventDetails}/${this.state.eventLocation}/${this.state.eventDate}/${this.state.ticketPrice}/${this.state.eventType}/${this.state.eventVisibility}`)
+    console.log(getHeaderToken()  )
+    const res =  axios.put(`https://localhost:5001/api/EventController/CreateEvent/${this.state.eventTitle}/${this.state.eventDetails}/${this.state.eventLocation}/${this.state.eventDate}/${this.state.ticketPrice}/${this.state.eventType}/${this.state.eventVisibility}`, body, {
       headers: {
         'Authorization':  getHeaderToken()  
       }
