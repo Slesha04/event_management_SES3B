@@ -25,33 +25,54 @@ namespace Event_Management_Application.Controllers
         }
 
         [Route("PostMessage/{messageText}")]
+        [HttpPost]
         [Authorize]
-        public ActionResult PostMessage(string messageText)
+        public ActionResult PostMessage([FromRoute] string messageText)
         {
             throw new NotImplementedException();
         }
 
-        [Route("AddFile/{fileContent}/{fileName}/{fileSize}/{channelId}")]
+        [Route("RemoveMessage/{messageId}")]
+        [HttpDelete]
         [Authorize]
-        public ActionResult AddFile(byte[] fileContent, string fileName, float fileSize, int channelId)
+        public ActionResult RemoveMessage([FromRoute] int messageId)
+        {
+            throw new NotImplementedException();
+        }
+
+        [Route("AddFiles")]
+        [HttpPut]
+        [Authorize]
+        public ActionResult AddFiles([FromBody] ICollection<Medium> files)
+        {
+            throw new NotImplementedException();
+        }
+
+        [Route("RemoveFiles")]
+        [HttpDelete]
+        [Authorize]
+        public ActionResult RemoveFiles([FromBody] ICollection<int> fileIds)
         {
             throw new NotImplementedException();
         }
         
         [Route("GetChannelByEvent/{eventId}")]
-        public Channel GetChannelByEvent(int eventId)
+        [HttpGet]
+        public Channel GetChannelByEvent([FromRoute] int eventId)
         {
             throw new NotImplementedException();
         }
 
         [Route("LoadChannelMessages/{messageSequenceNumber}/{channelId}")]
-        public List<Message> LoadChannelMessages(int messageSequenceNumber, int channelId, int messageLoadLimit = 30)
+        [HttpGet]
+        public List<Message> LoadChannelMessages([FromRoute] int messageSequenceNumber, [FromRoute] int channelId, [FromQuery] int messageLoadLimit = 30)
         {
             throw new NotImplementedException();
         }
 
         [Route("LoadChannelFiles/{channelId}")]
-        public List<Medium> LoadChannelFiles(int channelId)
+        [HttpGet]
+        public List<Medium> LoadChannelFiles([FromRoute] int channelId)
         {
             throw new NotImplementedException();
         } 
