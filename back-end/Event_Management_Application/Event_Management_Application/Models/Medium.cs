@@ -19,5 +19,6 @@ namespace Event_Management_Application.Models
 
         [ForeignKey("ChannelId")]
         public Channel Channel { get; set; }
+        public int UploaderId { get; set; }
     }
 }
