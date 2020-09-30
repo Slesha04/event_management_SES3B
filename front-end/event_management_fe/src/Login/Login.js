@@ -89,6 +89,7 @@ const Login = (props) => {
           Cookies.set("auth-cookie", res.data.encodedForm);
           const userId = res.data.jwtToken.payload.user_id;
           Cookies.set("userID", userId);
+          Cookies.set("userName", username);
           history.push("/homePage");
            
         },
