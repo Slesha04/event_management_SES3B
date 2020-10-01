@@ -30,6 +30,7 @@ import { useEffect, useState } from "react";
 import { getHeaderToken, getToken, getUserID } from "../Login/JwtConfig";
 import SimpleCard from "./card";
 import { getUserName } from "../Login/JwtConfig";
+
 const useStyles = makeStyles((theme) => ({
   paper: {
     marginTop: theme.spacing(8),
@@ -91,6 +92,7 @@ const MyEvents = (props) => {
         }
       );
   }, []);
+  
 
   return (
     <div>
@@ -99,13 +101,15 @@ const MyEvents = (props) => {
         <div key={item} >
           <Paper elevation={5}>
             <SimpleCard
+              eventId={item.eventId}
               eventTitle={item.eventTitle}
-              eventDate={item.eventDate}
+              
+              eventDate={item.eventDate.slice(0, 10)}
               eventVenue={item.location.locationName}
               eventDescription={item.bodyText}
               eventOrgainser={getUserName()}
               eventPrice={item.eventTicketPrice}
-            />
+             />
           </Paper>
           
         </div>

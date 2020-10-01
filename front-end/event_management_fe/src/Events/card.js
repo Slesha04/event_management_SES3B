@@ -8,6 +8,7 @@ import Typography from "@material-ui/core/Typography";
 import Grid from "@material-ui/core/Grid";
 import CardMedia from "@material-ui/core/CardMedia";
 import upcomingEvent from "./Events.jpg";
+import { useHistory } from "react-router-dom";
 
 const useStyles = makeStyles({
   root: {
@@ -32,7 +33,14 @@ const useStyles = makeStyles({
 
 export default function SimpleCard(props) {
   const classes = useStyles();
-  const bull = <span className={classes.bullet}>•</span>;
+  const cardId = props.eventId;
+  const history = useHistory();
+
+  const handleEditEvent  = (event) =>{
+    history.push("/edit-event");
+    console.log(cardId);
+    localStorage.setItem("selectedCard", cardId);
+ }
 
   return (
     <Card className={classes.root}>
@@ -134,7 +142,7 @@ export default function SimpleCard(props) {
         </Grid>
       </CardContent>
       <CardActions>
-        <Button color="primary" size="medium"> Edit</Button>
+        <Button color="primary" size="medium" onClick={handleEditEvent} > Edit</Button>
         <Button color="primary" size="medium"> Guest View/list</Button>
       </CardActions>
     </Card>
