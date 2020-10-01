@@ -91,13 +91,22 @@ function Navbar() {
             </li>
             <li className="nav-item">
               <Link
+                to="/myEvents"
+                className="nav-links"
+                onClick={closeMobileMenu}
+              >
+                <i class="fas fa-mail-bulk"></i>
+              </Link>
+            </li>
+            {/* <li className="nav-item">
+              <Link
                 to="/profile"
                 className="nav-links"
                 onClick={closeMobileMenu}
               >
                 <i class="far fa-user-circle"></i>
               </Link>
-            </li>
+            </li> */}
           </ul>
           {button && (
             <Button onClick={logout} buttonStyle="btn--outline">
