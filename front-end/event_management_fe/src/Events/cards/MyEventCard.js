@@ -7,7 +7,7 @@ import Button from "@material-ui/core/Button";
 import Typography from "@material-ui/core/Typography";
 import Grid from "@material-ui/core/Grid";
 import CardMedia from "@material-ui/core/CardMedia";
-import upcomingEvent from "./Events.jpg";
+import upcomingEvent from "../Events.jpg";
 import { useHistory } from "react-router-dom";
 
 const useStyles = makeStyles({
@@ -31,7 +31,7 @@ const useStyles = makeStyles({
   },
 });
 
-export default function SimpleCard(props) {
+export default function MyEventCard(props) {
   const classes = useStyles();
   const cardId = props.eventId;
   const history = useHistory();
@@ -41,7 +41,11 @@ export default function SimpleCard(props) {
     console.log(cardId);
     localStorage.setItem("selectedCard", cardId);
  }
-
+ const handleViewGuestList  = (event) =>{
+  history.push("/guestList-event");
+  console.log(cardId);
+  localStorage.setItem("selectedCard", cardId);
+}
   return (
     <Card className={classes.root}>
       <CardContent>
@@ -143,7 +147,7 @@ export default function SimpleCard(props) {
       </CardContent>
       <CardActions>
         <Button color="primary" size="medium" onClick={handleEditEvent} > Edit</Button>
-        <Button color="primary" size="medium"> Guest View/list</Button>
+        <Button color="primary" size="medium" onClick={handleViewGuestList}> Guest View/list</Button>
       </CardActions>
     </Card>
   );

@@ -28,7 +28,7 @@ import axios from "axios";
 import AccountCircleIcon from "@material-ui/icons/AccountCircle";
 import { useEffect, useState } from "react";
 import { getHeaderToken, getToken, getUserID } from "../Login/JwtConfig";
-import SimpleCard from "./card";
+import MyEventCard from "./cards/MyEventCard";
 import { getUserName } from "../Login/JwtConfig";
 
 const useStyles = makeStyles((theme) => ({
@@ -96,14 +96,14 @@ const MyEvents = (props) => {
 
   return (
     <div>
+      <Typography variant={'h4'}>My Events</Typography>
       {console.log(post)}
       {post.map((item) => (
         <div key={item} >
           <Paper elevation={5}>
-            <SimpleCard
+            <MyEventCard
               eventId={item.eventId}
-              eventTitle={item.eventTitle}
-              
+              eventTitle={item.eventTitle}        
               eventDate={item.eventDate.slice(0, 10)}
               eventVenue={item.location.locationName}
               eventDescription={item.bodyText}
