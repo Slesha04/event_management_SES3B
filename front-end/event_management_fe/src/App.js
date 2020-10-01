@@ -16,7 +16,7 @@ import GlobalChat from './Chats/GlobalChat';
 import EventChat from './Chats/EventChat';
 import Profile from './Profile/Profile';
 import AllEvents from './Events/Allevents';
-
+import MyEvents from './Events/myEvents';
 function App() {
   return (
     <Router>
@@ -34,6 +34,7 @@ function App() {
           <Route path='/global-chat' component={GlobalChat}/>
           <Route path='/event-chat' component={EventChat}/>
           <Route path='/profile' component={Profile}/>
+          <Route path='/myEvents' component={MyEvents}/>
           <Route path='/all-events' component={AllEvents}/>
           </AuthenticationGuard>
         </Switch>
