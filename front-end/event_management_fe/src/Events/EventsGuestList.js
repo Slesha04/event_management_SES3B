@@ -78,7 +78,8 @@ const EventsGuestList = (props) => {
     const userId = getUserID();
     console.log(userId);
     const body = {};
-
+   console.log(`https://localhost:5001/api/EventRosterController/GetRosterByEvent/${selectedCardId}`)
+   console.log(getHeaderToken())
     axios.get(`https://localhost:5001/api/EventRosterController/GetRosterByEvent/${selectedCardId}`, body, {
       headers: {
         'Authorization':  getHeaderToken()
@@ -86,7 +87,7 @@ const EventsGuestList = (props) => {
     }).then(
         (res) => {
             if(res.status === 200){
-                console.log(res)
+                console.log("res for updateRoster" + res)
                 alert("Create Event Success");
             }
            
