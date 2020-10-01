@@ -1,4 +1,5 @@
 ﻿using Event_Management_Application.Controllers.Interfaces;
+using Event_Management_Application.Controllers.RequestModels;
 using Event_Management_Application.DataAccess;
 using Event_Management_Application.Enums;
 using Event_Management_Application.Models;
@@ -21,6 +22,7 @@ namespace Event_Management_Application.Controllers
         private readonly TokenManager _tokenManager;
         private readonly EventTagManager _tagManager;
         private readonly EventChannelManager _channelManager;
+        private readonly FileManager _fileManager;
 
         public EventController(EventManagementApplicationDbContext dbContext)
         {
@@ -28,6 +30,7 @@ namespace Event_Management_Application.Controllers
             _tokenManager = new TokenManager(_dbContext);
             _tagManager = new EventTagManager(_dbContext);
             _channelManager = new EventChannelManager(_dbContext);
+            _fileManager = new FileManager(_dbContext);
         }
 
         [Route("CreateEvent/{eventTitle}/{eventBodyText}/{eventLocation}/{eventDate}/{ticketPrice}/{eventType}/{eventVisibility}")]
@@ -133,12 +136,17 @@ namespace Event_Management_Application.Controllers
             var tokenEntry = _tokenManager.ValidateAndReturnTokenEntry(_tokenManager.ExtractToken(Request));
             var currentEvent = _dbContext.Events.Where(x => x.EventId == eventId).FirstOrDefault();
 
-            if(currentEvent == null)
+            if(tokenEntry == null)
             {
-                BadRequest("No event corresponding to event Id");
+                return StatusCode(401, SystemResources.INVALID_TOKEN_MESSAGE);
             }
 
-            if(tokenEntry.UserId != currentEvent.EventOrganiserId)
+            if (currentEvent == null)
+            {
+                return BadRequest("No event corresponding to event Id");
+            }
+
+            if (tokenEntry.UserId != currentEvent.EventOrganiserId)
             {
                 return StatusCode(401, SystemResources.INCORRECT_USER_TOKEN_MESSAGE);
             }
@@ -146,7 +154,7 @@ namespace Event_Management_Application.Controllers
             var currEventDate = currentEvent.EventDate;
             var newDate = DateTime.Parse(eventDate);
 
-            if(newDate < currEventDate)
+            if (newDate < currEventDate)
             {
                 return BadRequest("New date must be greater than the current date");
             }
@@ -182,6 +190,23 @@ namespace Event_Management_Application.Controllers
         public List<Event> ViewUserEvents(int userId)
         {
             return _dbContext.Events.Where(x => x.EventOrganiserId == userId).ToList();
+        }
+
+        [Route("AssignFilesToEvent")]
+        [HttpPut]
+        public ActionResult AssignFilesToEvent([FromBody] EventFileUploadRequest request)
+        {
+            var currEvent = _dbContext.Events.Where(x => x.EventId == request.EventCoverImage.EventId).FirstOrDefault();
+            if(currEvent != null)
+            {
+                if(request.EventCoverImage.UploaderId == currEvent.EventOrganiserId && request.EventVideoTrailer.UploaderId == currEvent.EventOrganiserId)
+                {
+                    _fileManager.AssignFilesToEvent(request);
+                    return Ok();
+                }
+                return StatusCode(401, SystemResources.INCORRECT_USER_TOKEN_MESSAGE);
+            }
+            return BadRequest("No event corresponding to event Id");
         }
     }
 }

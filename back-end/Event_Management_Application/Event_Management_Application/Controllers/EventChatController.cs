@@ -104,7 +104,7 @@ namespace Event_Management_Application.Controllers
         [HttpGet]
         public List<Message> LoadChannelMessages([FromRoute] int messageSequenceNumber, [FromRoute] int channelId, [FromQuery] int messageLoadLimit = 30)
         {
-            throw new NotImplementedException();
+            return _dbContext.Messages.Where(x => x.ChannelId == channelId && x.SequenceNumber >= messageSequenceNumber).Take(messageLoadLimit).ToList();
         }
 
         [Route("LoadChannelFiles/{channelId}")]
