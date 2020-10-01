@@ -15,11 +15,11 @@ namespace Event_Management_Application
     {
         public static void Main(string[] args)
         {
-            CreateWebHostBuilder(args).Build().Run();
-
             // Runs tasks that need to be ran before performing any operations
             StartupTasksManager manager = new StartupTasksManager();
             manager.Run();
+
+            CreateWebHostBuilder(args).Build().Run();
         }
 
         public static IWebHostBuilder CreateWebHostBuilder(string[] args) =>
