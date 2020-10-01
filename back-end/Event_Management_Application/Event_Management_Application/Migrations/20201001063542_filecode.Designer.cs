@@ -4,14 +4,16 @@ using Event_Management_Application.DataAccess;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace Event_Management_Application.Migrations
 {
     [DbContext(typeof(EventManagementApplicationDbContext))]
-    partial class EventManagementApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20201001063542_filecode")]
+    partial class filecode
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -151,11 +153,11 @@ namespace Event_Management_Application.Migrations
                         .ValueGeneratedOnAdd()
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<int?>("ChannelId");
-
-                    b.Property<DateTime>("DateUploaded");
+                    b.Property<int>("ChannelId");
 
                     b.Property<int>("EventId");
+
+                    b.Property<Guid>("FileCode");
 
                     b.Property<byte[]>("FileContent");
 
@@ -326,7 +328,8 @@ namespace Event_Management_Application.Migrations
                 {
                     b.HasOne("Event_Management_Application.Models.Channel", "Channel")
                         .WithMany("Media")
-                        .HasForeignKey("ChannelId");
+                        .HasForeignKey("ChannelId")
+                        .OnDelete(DeleteBehavior.Cascade);
                 });
 
             modelBuilder.Entity("Event_Management_Application.Models.Message", b =>

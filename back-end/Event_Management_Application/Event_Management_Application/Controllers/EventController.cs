@@ -53,6 +53,7 @@ namespace Event_Management_Application.Controllers
                     EventCoverImageFileId = eventCoverImageId,
                     EventVideoTrailerFileId = eventTrailerVideoId,
                     EventOrganiserId = userId,
+                    EventOrganiser = tokenEntry.User,
                     EventCreationDate = currentDate,
                     EventLastModifiedDate = currentDate,
                     EventType = (EventType)eventType,
