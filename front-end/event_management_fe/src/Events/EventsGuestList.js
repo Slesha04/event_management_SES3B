@@ -28,7 +28,7 @@ import axios from "axios";
 import AccountCircleIcon from "@material-ui/icons/AccountCircle";
 import { useEffect, useState } from "react";
 import { getHeaderToken, getToken, getUserID } from "../Login/JwtConfig";
-import ViewEventCard from "./cards/ViewEventCard";
+import MyEventCard from "./cards/MyEventCard";
 import { getUserName } from "../Login/JwtConfig";
 
 const useStyles = makeStyles((theme) => ({
@@ -66,111 +66,48 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const MyEvents = (props) => {
+const EventsGuestList = (props) => {
+ 
   const classes = useStyles();
-  let selectedEvent = localStorage.getItem("viewEventId");
-
   const [post, setPostArray] = useState([]);
-
-  const history = useHistory();
   let selectedCardId = localStorage.getItem("selectedCard");
 
-  const [eventTitle, setEventTitle] = React.useState("");
-  const [eventBodyText, setEventBodyText] = React.useState("");
-  const [eventLocation, setEventLocation] = React.useState("");
-  const [eventDate, setEventDate] = React.useState("");
-
-  const [eventType, setEventType] = React.useState(0);
-  const [eventStatus, setEventStatus] = React.useState(0);
-
-  const [ticketPrice, setTicketPrice] = React.useState(0);
-
-  const [eventVisibility, setEventVisibility] = React.useState(0);
-  const [open, setOpen] = React.useState(false);
-
-  const handleClickOpen = (event) => {
-    event.preventDefault();
-
-    setOpen(true);
-  };
-
-  const handleClose = () => {
-    setOpen(false);
-  };
-
-  const handleEventTitleChange = (event) => {
-    setEventTitle(event.target.value);
-  };
-
-  const handleEventBodyText = (event) => {
-    setEventBodyText(event.target.value);
-  };
-
-  const handleEventLocationChange = (event) => {
-    setEventLocation(event.target.value);
-  };
-
-  const handleEventDateChange = (event) => {
-    setEventDate(event.target.value);
-  };
-
-  const handleTicketPriceChange = (event) => {
-    setTicketPrice(event.target.value);
-  };
-  const handleEventStatusChange = (event) => {
-    setEventStatus(event.target.value);
-  };
-
-  const handleEventTypeChange = (event) => {
-    setEventType(event.target.value);
-  };
-
-  const handleEventVisibility = (event) => {
-    setEventVisibility(event.target.value);
-  };
+  const history = useHistory();
 
   useEffect(() => {
     const userId = getUserID();
+    console.log(userId);
+    const body = {};
 
-    axios
-      .get(
-        `https://localhost:5001/api/EventController/ViewEvent/${selectedEvent}`
-      )
-
-      .then(
+    axios.get(`https://localhost:5001/api/EventRosterController/GetRosterByEvent/${selectedCardId}`, body, {
+      headers: {
+        'Authorization':  getHeaderToken()
+      }
+    }).then(
         (res) => {
-          if (res.status === 200) {
-            // console.log(res)
-            setEventTitle(res.data.eventTitle);
-            console.log(res.data.eventTitle);
-            setEventBodyText(res.data.bodyText);
-            setEventLocation(res.data.location.locationName);
-            setEventDate(res.data.eventDate.slice(0, 10));
-            setEventType(res.data.eventType);
-            setTicketPrice(res.data.eventTicketPrice);
-            setEventVisibility(res.data.eventVisibility);
-          }
+            if(res.status === 200){
+                console.log(res)
+                alert("Create Event Success");
+            }
+           
         },
         (error) => {
-          alert("something Went Wrong");
+          alert("no", error);
         }
       );
   }, []);
+
   return (
     <div>
-      <Paper elevation={5}>
-        <ViewEventCard
-          eventId={selectedEvent}
-          eventTitle={eventTitle}
-          eventDate={eventDate}
-          eventVenue={eventLocation}
-          eventDescription={eventBodyText}
-          eventOrgainser={getUserName()}
-          eventPrice={ticketPrice}
-        />
-      </Paper>
+      <Typography variant={"h4"}>My Events</Typography>
+      {console.log(post)}
+      {post.map((item) => (
+        <div key={item}>
+          <Paper elevation={5}>dada</Paper>
+        </div>
+      ))}
     </div>
   );
 };
 
-export default MyEvents;
+export default EventsGuestList;
