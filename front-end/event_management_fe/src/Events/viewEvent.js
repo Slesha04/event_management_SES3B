@@ -30,6 +30,7 @@ import { useEffect, useState } from "react";
 import { getHeaderToken, getToken, getUserID } from "../Login/JwtConfig";
 import ViewEventCard from "./cards/ViewEventCard";
 import { getUserName } from "../Login/JwtConfig";
+import EventMap from "./map/map"
 
 const useStyles = makeStyles((theme) => ({
   paper: {
@@ -168,6 +169,7 @@ const MyEvents = (props) => {
           eventOrgainser={getUserName()}
           eventPrice={ticketPrice}
         />
+        <EventMap/>
       </Paper>
     </div>
   );
