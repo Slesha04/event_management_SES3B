@@ -1,4 +1,3 @@
- 
 import Radio from "@material-ui/core/Radio";
 import RadioGroup from "@material-ui/core/RadioGroup";
 import FormControlLabel from "@material-ui/core/FormControlLabel";
@@ -30,22 +29,22 @@ import IconButton from "@material-ui/core/IconButton";
 import InfoIcon from "@material-ui/icons/Info";
 //import { tileData } from  '../Data/titleData';
 import { borders } from "@material-ui/system";
- import Cookies from "js-cookie";
+import Cookies from "js-cookie";
 import { useHistory } from "react-router-dom";
 import { withRouter } from "react-router-dom";
 import axios from "axios";
 import { getHeaderToken, getToken, getUserID } from "../Login/JwtConfig";
-import  utsBackground  from "./utsBackground.jpg"
- import { useEffect, useState } from "react";
+import utsBackground from "./utsBackground.jpg";
+import { useEffect, useState } from "react";
 import upcomingEvent from "./Events.jpg";
-
+import UploadFiles from "./UploadFiles";
 
 const useStyles = makeStyles((theme) => ({
   root: {
     display: "flex",
     height: theme.spacing(150),
-width:    theme.spacing(300),
-backgroundImage: `url(${utsBackground})`
+    width: theme.spacing(300),
+    backgroundImage: `url(${utsBackground})`,
   },
   formtwo: {
     margin: theme.spacing(5, 40, 40, 40),
@@ -167,11 +166,15 @@ const eventVisibilityTypes = [
 const CreateEvent = (props) => {
   const classes = useStyles();
   const [post, setPostArray] = useState([]);
- 
+  //event media state variables
+  const [mediaName,setMediaName] = useState("");
+  const [mediaSize,setMediaSize] = useState("");
+  const [mediaType,setMediaType] = useState("");
+  const [mediaModifiedDate,setMediaModifiedDate] = useState("");
 
-  const [eventTitle , setEventTitle ] = React.useState("");
-  const [eventBodyText , setEventBodyText ] = React.useState("");
-  const [eventLocation , setEventLocation ] = React.useState("");
+  const [eventTitle, setEventTitle] = React.useState("");
+  const [eventBodyText, setEventBodyText] = React.useState("");
+  const [eventLocation, setEventLocation] = React.useState("");
 
   const [eventDate, setEventDate] = React.useState("");
 
@@ -182,7 +185,6 @@ const CreateEvent = (props) => {
   const [eventVisibility, setEventVisibility] = React.useState(0);
   const history = useHistory();
 
- 
   const handleEventTitleChange = (event) => {
     setEventTitle(event.target.value);
   };
@@ -198,7 +200,7 @@ const CreateEvent = (props) => {
   const handleEventDateChange = (event) => {
     setEventDate(event.target.value);
   };
-  
+
   const handleTicketPriceChange = (event) => {
     setTicketPrice(event.target.value);
   };
@@ -206,25 +208,23 @@ const CreateEvent = (props) => {
   const handleEventTypeChange = (event) => {
     setEventType(event.target.value);
   };
-  
+
   const handleEventVisibility = (event) => {
     setEventVisibility(event.target.value);
   };
 
-  const  showEvent = (eventId) => {
-   //store eveent id to local storage
-   console.log("at the grid- " + eventId)
-  localStorage.setItem("viewEventId", eventId);
-  history.push("/view-event");
- }
+  const showEvent = (eventId) => {
+    //store eveent id to local storage
+    console.log("at the grid- " + eventId);
+    localStorage.setItem("viewEventId", eventId);
+    history.push("/view-event");
+  };
 
   useEffect(() => {
     const userId = getUserID();
     console.log("called");
     axios
-      .get(
-        `https://localhost:5001/api/EventController/LoadRecentEvents/1`
-      )
+      .get(`https://localhost:5001/api/EventController/LoadRecentEvents/1`)
       .then(
         (res) => {
           if (res.status === 200) {
@@ -237,32 +237,118 @@ const CreateEvent = (props) => {
         }
       );
   }, []);
-  
-  
+  const handleMediaUpload = (event) => {
+    event.preventDefault();
+
+    const body = {
+      EventCoverImage: {
+        FileId: 1,
+        FileName: mediaName,
+        FileContent: "string",
+        FileSize: mediaSize,
+        EventId: 0,
+        ChannelId: 0,
+        Channel: {
+          ChannelId: 0,
+          ChannelName: "string",
+          ChannelImage: "string",
+          IsGlobal: true,
+          ChannelCode: "3fa85f64-5717-4562-b3fc-2c963f66afa6",
+          CurrentSequenceNumber: 0,
+          Media: [null],
+        },
+        UploaderId: 0,
+        DateUploaded: "2020-10-02T05:29:13.074Z",
+      },
+      EventVideoTrailer: {
+        FileId: 0,
+        FileName: "string",
+        FileContent: "string",
+        FileSize: 0,
+        EventId: 0,
+        ChannelId: 0,
+        Channel: {
+          ChannelId: 0,
+          ChannelName: "string",
+          ChannelImage: "string",
+          IsGlobal: true,
+          ChannelCode: "3fa85f64-5717-4562-b3fc-2c963f66afa6",
+          CurrentSequenceNumber: 0,
+          Media: [null],
+        },
+        UploaderId: 0,
+        DateUploaded: "2020-10-02T05:29:13.074Z",
+      },
+    };
+
+    console.log();
+    console.log(getHeaderToken());
+    const res = axios
+      .put(
+        `https://localhost:5001/api/EventController/AssignFilesToEvent`,
+        body
+      )
+      .then(
+        (res) => {
+          console.log(res);
+          if (res.status === 200) alert("update Event Success");
+        },
+        (error) => {
+          alert("something went wrong,  please try again", error);
+        }
+      );
+   };
 
   const handleRegister = (event) => {
     event.preventDefault();
     const body = {};
-        console.log(`https://localhost:5001/api/EventController/CreateEvent/${eventTitle}/${eventBodyText}/${eventLocation}/${eventDate}/${ticketPrice}/${eventType}/${eventVisibility}`)
-        console.log(getHeaderToken()  )
-        const res =  axios.put(`https://localhost:5001/api/EventController/CreateEvent/${eventTitle}/${eventBodyText}/${eventLocation}/${eventDate}/${ticketPrice}/${eventType}/${eventVisibility}`, body, {
+    console.log(
+      `https://localhost:5001/api/EventController/CreateEvent/${eventTitle}/${eventBodyText}/${eventLocation}/${eventDate}/${ticketPrice}/${eventType}/${eventVisibility}`
+    );
+    console.log(getHeaderToken());
+    const res = axios
+      .put(
+        `https://localhost:5001/api/EventController/CreateEvent/${eventTitle}/${eventBodyText}/${eventLocation}/${eventDate}/${ticketPrice}/${eventType}/${eventVisibility}`,
+        body,
+        {
           headers: {
-            'Authorization':  getHeaderToken()
-          }
-        }).then(
-            (res) => {
-                if(res.status === 200)
-                    alert("Create Event Success");
-            },
-            (error) => {
-              alert("Create Event Success", error);
-            }
-          );
+            Authorization: getHeaderToken(),
+          },
+        }
+      )
+      .then(
+        (res) => {
+          if (res.status === 200) alert("Create Event Success");
+        },
+        (error) => {
+          alert("Create Event Success", error);
+        }
+      );
+  };
+
+  let getMediaData = (e) => {
+    var files = e.target.files;
+    var filesArray = [].slice.call(files);
+    filesArray.forEach((e) => {
+      console.log(e.name);
+      setMediaName(e.name);
+      console.log(e.size);
+      setMediaSize(e.size);
+      console.log(e.type);
+      setMediaType(e.type);
+      console.log(e.lastModifiedDate);
+      setMediaModifiedDate(e.lastModifiedDate);
+    });
   };
 
   return (
-    <div className={classes.root}  >
-      <form noValidate autoComplete="off" onSubmit={handleRegister}  className={classes.formtwo}>
+    <div className={classes.root}>
+      <form
+        noValidate
+        autoComplete="off"
+        onSubmit={handleRegister}
+        className={classes.formtwo}
+      >
         <Paper variant="outlined" elevation={6}>
           <h1> Create Event </h1>
           <React.Fragment>
@@ -395,6 +481,20 @@ const CreateEvent = (props) => {
                   ))}
                 </TextField>
               </Grid>
+              {/* file upload */}
+              <Grid
+                container
+                direction="row"
+                justify="flex-start"
+                alignItems="stretch"
+                >
+                <Grid item xs >
+                  <Typography variant={"h6"}>Upload Event Cover </Typography>
+                </Grid>
+                <Grid item xs >
+                  <input type="file" onChange={(e) => getMediaData(e)} />
+                </Grid>
+              </Grid>
 
               <Grid item xs={12}>
                 <FormControlLabel
@@ -417,13 +517,12 @@ const CreateEvent = (props) => {
               color="primary"
               size="small"
               type="submit"
-               className={classes.button}
+              className={classes.button}
               startIcon={<SaveIcon />}
             >
               Create Event
             </Button>
           </Grid>
-
         </Paper>
       </form>
 
@@ -435,8 +534,8 @@ const CreateEvent = (props) => {
               <ListSubheader component="div">September</ListSubheader>
             </GridListTile>
             {post.map((item) => (
-              <GridListTile key={item} onClick={() => showEvent(item.eventId)} >
-                 <img src={upcomingEvent} alt={item.eventTitle} />
+              <GridListTile key={item} onClick={() => showEvent(item.eventId)}>
+                <img src={upcomingEvent} alt={item.eventTitle} />
                 <GridListTileBar
                   title={item.eventTitle}
                   subtitle={<span>by: {item.bodyText}</span>}
