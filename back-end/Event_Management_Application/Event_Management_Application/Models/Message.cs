@@ -18,5 +18,7 @@ namespace Event_Management_Application.Models
         public Channel Channel { get; set; }
         public DateTime DatePosted { get; set; }
         public int SequenceNumber { get; set; }
+        public string AuthorUsername { get; set; }
+        public int AuthorId { get; set; }
     }
 }

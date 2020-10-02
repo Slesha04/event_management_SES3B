@@ -15,9 +15,11 @@ namespace Event_Management_Application.Models
         public byte[] FileContent { get; set; }
         public float FileSize { get; set; }
         public int EventId { get; set; }
-        public int ChannelId { get; set; }
+        public int? ChannelId { get; set; }
 
         [ForeignKey("ChannelId")]
         public Channel Channel { get; set; }
+        public int UploaderId { get; set; }
+        public DateTime DateUploaded { get; set; }
     }
 }

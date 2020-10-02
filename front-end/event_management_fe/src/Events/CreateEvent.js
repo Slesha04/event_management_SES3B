@@ -36,7 +36,8 @@ import { withRouter } from "react-router-dom";
 import axios from "axios";
 import { getHeaderToken, getToken, getUserID } from "../Login/JwtConfig";
 import  utsBackground  from "./utsBackground.jpg"
-import {tileData} from "./dummyData"
+ import { useEffect, useState } from "react";
+import upcomingEvent from "./Events.jpg";
 
 
 const useStyles = makeStyles((theme) => ({
@@ -165,6 +166,9 @@ const eventVisibilityTypes = [
 
 const CreateEvent = (props) => {
   const classes = useStyles();
+  const [post, setPostArray] = useState([]);
+ 
+
   const [eventTitle , setEventTitle ] = React.useState("");
   const [eventBodyText , setEventBodyText ] = React.useState("");
   const [eventLocation , setEventLocation ] = React.useState("");
@@ -176,6 +180,7 @@ const CreateEvent = (props) => {
   const [ticketPrice, setTicketPrice] = React.useState(0);
 
   const [eventVisibility, setEventVisibility] = React.useState(0);
+  const history = useHistory();
 
  
   const handleEventTitleChange = (event) => {
@@ -206,7 +211,33 @@ const CreateEvent = (props) => {
     setEventVisibility(event.target.value);
   };
 
- 
+  const  showEvent = (eventId) => {
+   //store eveent id to local storage
+   console.log("at the grid- " + eventId)
+  localStorage.setItem("viewEventId", eventId);
+  history.push("/view-event");
+ }
+
+  useEffect(() => {
+    const userId = getUserID();
+    console.log("called");
+    axios
+      .get(
+        `https://localhost:5001/api/EventController/LoadRecentEvents/1`
+      )
+      .then(
+        (res) => {
+          if (res.status === 200) {
+            setPostArray(res.data);
+            // console.log(res.data[0].eventTitle);
+          }
+        },
+        (error) => {
+          alert("something Went Wrong");
+        }
+      );
+  }, []);
+  
   
 
   const handleRegister = (event) => {
@@ -403,15 +434,15 @@ const CreateEvent = (props) => {
             <GridListTile key="Subheader" cols={2} style={{ height: "auto" }}>
               <ListSubheader component="div">September</ListSubheader>
             </GridListTile>
-            {tileData.map((tile) => (
-              <GridListTile key={tile.img}>
-                <img src={tile.img} alt={tile.title} />
+            {post.map((item) => (
+              <GridListTile key={item} onClick={() => showEvent(item.eventId)} >
+                 <img src={upcomingEvent} alt={item.eventTitle} />
                 <GridListTileBar
-                  title={tile.title}
-                  subtitle={<span>by: {tile.author}</span>}
+                  title={item.eventTitle}
+                  subtitle={<span>by: {item.bodyText}</span>}
                   actionIcon={
                     <IconButton
-                      aria-label={`info about ${tile.title}`}
+                      aria-label={`info about ${item.title}`}
                       className={classes.icon}
                     >
                       <InfoIcon />
