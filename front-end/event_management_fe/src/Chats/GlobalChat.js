@@ -1,12 +1,19 @@
 import React from 'react'
 import "./GlobalChat.css"
 
+//fix imports to be from one line
+
 import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemText from '@material-ui/core/ListItemText';
 import { makeStyles } from '@material-ui/core/styles';
 import Paper from '@material-ui/core/Paper';
 import Typography from '@material-ui/core/Typography'
+import Chip from '@material-ui/core/Chip';
+import Button from '@material-ui/core/Button';
+import TextField from '@material-ui/core/TextField';
+
+import {CTX} from './ChatStore'
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -15,15 +22,17 @@ const useStyles = makeStyles((theme) => ({
     },
     flex: {
         display: 'flex',
-        height:'500px'
+        alignItems: "center"
     },
     topicsWindow: {
         width: '30%',
-        height: '500px',
+        height: '450px',
         borderRight: '1px ridge navy'
     },
     chatWindow: {
-        width: '70%'
+        width: '70%',
+        height:'450px',
+        padding:'20px'
     },
     chatBox: {
         width: '85%'
@@ -36,18 +45,24 @@ const useStyles = makeStyles((theme) => ({
 export default function GlobalChat(){
     
     const classes = useStyles();
+    const [allChats] = React.useContext(CTX)
+    const topic = Object.keys(allChats)
+
+    //local state
+    const[activeTopic, changeActiveTopic] = React.useState(topic[0])
+    const [textValue, changeTextValue] = React.useState(' ')
 
     return (
         <div className={classes.root}>
         <Paper>
             <Typography variant="h4">Global Chat</Typography>
-            <Typography component="h3">Topic Placeholder</Typography>
+            <Typography component="h3">{activeTopic}</Typography>
             <div className={classes.flex}>
             <div className={classes.topicsWindow}>
                 <List>
                     {
-                        ["#general"].map(topic =>(
-                            <ListItem key={topic} button>
+                        topic.map(topic =>(
+                            <ListItem onClick={e =>changeActiveTopic(e.target.innerText)}key={topic} button>
                                 <ListItemText primary={topic}></ListItemText>
                             </ListItem>
                         ))
@@ -56,8 +71,29 @@ export default function GlobalChat(){
                 </List>
             </div>
             <div className={classes.chatWindow}>
-            <h5>Yo</h5>
+            <List>
+                    {
+                        allChats[activeTopic].map((chat,i) =>(
+                            <div className={classes.flex} key={i}>
+                                <Typography variant='caption'>{chat.from}</Typography>
+                                <Chip label={chat.msg} className={classes.Chip}></Chip>
+
+                            </div>
+                           
+                        ))
+                    }       
+                </List>
             </div>
+        </div>
+        <div className={classes.flex}>
+            <TextField id="standard-basic" 
+            label="Type your text here" 
+            className={classes.chatBox}
+            value={textValue}
+            onChange={(e => changeTextValue(e.target.value))}/>
+            <Button variant="contained" color="secondary" >
+                Send
+            </Button>
         </div>
         </Paper>
         

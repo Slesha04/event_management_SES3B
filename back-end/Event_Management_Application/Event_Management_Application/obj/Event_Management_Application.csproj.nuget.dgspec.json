@@ -1,30 +1,25 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\Andre Bella\\event_management_SES3B\\back-end\\Event_Management_Application\\Event_Management_Application\\Event_Management_Application.csproj": {}
+    "/Users/slesh/Documents/event_management_SES3B/back-end/Event_Management_Application/Event_Management_Application/Event_Management_Application.csproj": {}
   },
   "projects": {
-    "C:\\Users\\Andre Bella\\event_management_SES3B\\back-end\\Event_Management_Application\\Event_Management_Application\\Event_Management_Application.csproj": {
+    "/Users/slesh/Documents/event_management_SES3B/back-end/Event_Management_Application/Event_Management_Application/Event_Management_Application.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\Andre Bella\\event_management_SES3B\\back-end\\Event_Management_Application\\Event_Management_Application\\Event_Management_Application.csproj",
+        "projectUniqueName": "/Users/slesh/Documents/event_management_SES3B/back-end/Event_Management_Application/Event_Management_Application/Event_Management_Application.csproj",
         "projectName": "Event_Management_Application",
-        "projectPath": "C:\\Users\\Andre Bella\\event_management_SES3B\\back-end\\Event_Management_Application\\Event_Management_Application\\Event_Management_Application.csproj",
-        "packagesPath": "C:\\Users\\Andre Bella\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\Andre Bella\\event_management_SES3B\\back-end\\Event_Management_Application\\Event_Management_Application\\obj\\",
+        "projectPath": "/Users/slesh/Documents/event_management_SES3B/back-end/Event_Management_Application/Event_Management_Application/Event_Management_Application.csproj",
+        "packagesPath": "/Users/slesh/.nuget/packages/",
+        "outputPath": "/Users/slesh/Documents/event_management_SES3B/back-end/Event_Management_Application/Event_Management_Application/obj/",
         "projectStyle": "PackageReference",
-        "fallbackFolders": [
-          "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder"
-        ],
         "configFilePaths": [
-          "C:\\Users\\Andre Bella\\AppData\\Roaming\\NuGet\\NuGet.Config",
-          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
+          "/Users/slesh/.config/NuGet/NuGet.Config"
         ],
         "originalTargetFrameworks": [
           "net461"
         ],
         "sources": {
-          "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
           "https://api.nuget.org/v3/index.json": {}
         },
         "frameworks": {
@@ -99,12 +94,8 @@
               "target": "Package",
               "version": "[6.7.1, )"
             }
-          }
-        }
-      },
-      "runtimes": {
-        "win7-x86": {
-          "#import": []
+          },
+          "runtimeIdentifierGraphPath": "/usr/local/share/dotnet/sdk/3.1.402/RuntimeIdentifierGraph.json"
         }
       }
     }
