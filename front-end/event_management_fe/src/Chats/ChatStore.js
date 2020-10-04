@@ -7,15 +7,16 @@ export const CTX = React.createContext();
 
 const initState ={
     '#general':[
-        {from : 'Slesh',msg : 'How are you?'},
-        {from : 'Andre',msg : 'Grapee'},
-        {from : 'Slesh',msg : 'Okay'}
+        // {from : 'Slesh',msg : 'How are you?'},
+        // {from : 'Andre',msg : 'Grapee'},
+        // {from : 'Slesh',msg : 'Okay'}
     ],
     '#photography':[
-        {from : 'Slesh',msg : 'How are you?'},
-        {from : 'meow',msg : 'yesh ok'},
-        {from : 'Slesh',msg : 'Okay'}
-    ]
+        // {from : 'Slesh',msg : 'How are you?'},
+        // {from : 'meow',msg : 'yesh ok'},
+        // {from : 'Slesh',msg : 'Okay'}
+    ],
+    '#exam_prep':[]
 }
 
 //help remember previous state given that the current state is displaying well
@@ -36,21 +37,33 @@ function reducer(state, action){
     }
 }
 
-function sendChatAction(socket , value){
+let socket;
+
+function sendChatAction(value){
     socket.emit('chat message', value);
 }
 
-let socket;
-
 export default function ChatStore(props) {
         
+    const [allChats,dispatch] = React.useReducer(reducer,initState)
+
+    React.useEffect(() => {
         if(!socket){
-            socket = io(':3005')
+            socket = io(':3008')
+            socket.on('chat message', function(msg){
+                console.log(msg)
+                dispatch({type: 'RECEIVE_MESSAGE', payload: msg});
+              });    
         }
-        const reducerHook = React.useReducer(reducer,initState)
+    })
+
+        //make users, connect with user whos logged in 
+
+        const user = `andre${Math.random(100).toFixed(2)}`;
+
 
         return (
-            <CTX.Provider value={reducerHook}>
+            <CTX.Provider value={{allChats,sendChatAction,user}}>
                 {props.children}
             </CTX.Provider>
         )

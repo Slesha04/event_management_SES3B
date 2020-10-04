@@ -11,10 +11,11 @@ app.get('/', (req, res) => {
 io.on('connection', (socket) => {
     console.log('a user connected');
     socket.on('chat message', (msg) => {
-        console.log('message: ' + msg);
+        console.log('message: ' + JSON.stringify(msg));
+        io.emit('chat message', msg);
       });
   });
 
-http.listen(3005, () => {
-  console.log('listening on *:3005');
+http.listen(3008, () => {
+  console.log('listening on *:3008');
 });

@@ -45,7 +45,7 @@ const useStyles = makeStyles((theme) => ({
 export default function GlobalChat(){
     
     const classes = useStyles();
-    const [allChats] = React.useContext(CTX)
+    const {allChats, sendChatAction,user} = React.useContext(CTX)
     const topic = Object.keys(allChats)
 
     //local state
@@ -91,7 +91,13 @@ export default function GlobalChat(){
             className={classes.chatBox}
             value={textValue}
             onChange={(e => changeTextValue(e.target.value))}/>
-            <Button variant="contained" color="secondary" >
+            <Button variant="contained" color="secondary"
+            onClick={
+                () => {
+                    sendChatAction({from : user ,msg: textValue, topic: activeTopic});
+                    changeTextValue('')
+                
+            }}>
                 Send
             </Button>
         </div>
