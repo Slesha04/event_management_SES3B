@@ -38,12 +38,12 @@ namespace Event_Management_Application.Controllers
             var currUser = _dbContext.Users.Where(x => x.UserId == attendeeId).FirstOrDefault();
             var currEvent = _dbContext.Events.Where(x => x.EventId == eventId).FirstOrDefault();
 
-            if(tokenEntry == null)
+            if (tokenEntry == null)
             {
                 return StatusCode(401, SystemResources.INVALID_TOKEN_MESSAGE);
             }
 
-            if(currUser == null)
+            if (currUser == null)
             {
                 return BadRequest("User does not exist");
             }
@@ -51,14 +51,15 @@ namespace Event_Management_Application.Controllers
             if (IsUserRegisteredForEvent(eventId, attendeeId))
             {
                 return BadRequest("This user is already registered for this event.");
-			}
+            }
 
             if (!_dbContext.Events.Where(x => x.EventId == eventId).Any())
             {
                 return BadRequest("This event does not exist.");
-			}
+            }
 
-            var newEntry = new EventRosterEntry {
+            var newEntry = new EventRosterEntry
+            {
                 EventId = eventId,
                 AttendeeId = attendeeId,
                 DateRegistered = DateTime.Now,
@@ -85,7 +86,7 @@ namespace Event_Management_Application.Controllers
                 return StatusCode(401, SystemResources.INVALID_TOKEN_MESSAGE);
             }
 
-            if(currEvent == null)
+            if (currEvent == null)
             {
                 return BadRequest("This event does not exist.");
             }
@@ -118,11 +119,11 @@ namespace Event_Management_Application.Controllers
         {
             var tokenEntry = _tokenManager.ValidateAndReturnTokenEntry(_tokenManager.ExtractToken(Request));
             var currEvent = _dbContext.Events.Where(x => x.EventId == eventId).FirstOrDefault();
-            if(tokenEntry != null)
+            if (tokenEntry != null)
             {
-                if(currEvent != null)
+                if (currEvent != null)
                 {
-                    if(tokenEntry.UserId == currEvent.EventOrganiserId)
+                    if (tokenEntry.UserId == currEvent.EventOrganiserId)
                     {
                         return Ok(_rosterManager.GetEntriesByEvent(eventId).OrderBy(x => x.AttendeeUsername));
                     }
@@ -145,9 +146,9 @@ namespace Event_Management_Application.Controllers
             var currEvent = _dbContext.Events.Where(x => x.EventId == roster.ElementAt(0).EventId).FirstOrDefault();
             if (tokenEntry != null)
             {
-                if(tokenEntry.UserId == currEvent.EventOrganiserId)
+                if (tokenEntry.UserId == currEvent.EventOrganiserId)
                 {
-                    if(currEvent != null)
+                    if (currEvent != null)
                     {
                         _rosterManager.UpdateEntries(roster);
                         return Ok();
@@ -175,7 +176,7 @@ namespace Event_Management_Application.Controllers
                     return BadRequest("No event roster entry corresponding to event Id");
                 }
 
-                if(!inputCode.Equals(entry.InputCode))
+                if (!inputCode.Equals(entry.InputCode))
                 {
                     return BadRequest(SystemResources.INCORRECT_INPUT_CODE);
                 }
@@ -187,6 +188,19 @@ namespace Event_Management_Application.Controllers
                 return Ok();
             }
             return StatusCode(401, SystemResources.INVALID_TOKEN_MESSAGE);
+        }
+
+        [Route("GetRosterEntriesByUser")]
+        [HttpGet]
+        [Authorize]
+        public List<EventRosterEntry> GetRosterEntriesByUser()
+        {
+            var tokenEntry = _tokenManager.ValidateAndReturnTokenEntry(_tokenManager.ExtractToken(Request));
+            if (tokenEntry != null)
+            {
+                return _dbContext.EventRosterEntries.Where(x => x.AttendeeId == tokenEntry.UserId).OrderByDescending(x => x.DateRegistered).ToList();
+            }
+            return null;
         }
     }
 }
