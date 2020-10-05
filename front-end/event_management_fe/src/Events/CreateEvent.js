@@ -38,7 +38,9 @@ import utsBackground from "./utsBackground.jpg";
 import { useEffect, useState } from "react";
 import upcomingEvent from "./Events.jpg";
 import UploadFiles from "./UploadFiles";
+import { SignalCellularNullRounded } from "@material-ui/icons";
 
+// https://medium.com/@yahone.chow/file-blob-arraybuffer-576a8e99de0d
 const useStyles = makeStyles((theme) => ({
   root: {
     display: "flex",
@@ -242,43 +244,20 @@ const CreateEvent = (props) => {
 
     const body = {
       EventCoverImage: {
+        // required
         FileId: 1,
         FileName: mediaName,
-        FileContent: "string",
+        FileContent: mediaType,
         FileSize: mediaSize,
         EventId: 0,
+        //not required (null)
         ChannelId: 0,
-        Channel: {
-          ChannelId: 0,
-          ChannelName: "string",
-          ChannelImage: "string",
-          IsGlobal: true,
-          ChannelCode: "3fa85f64-5717-4562-b3fc-2c963f66afa6",
-          CurrentSequenceNumber: 0,
-          Media: [null],
-        },
+        Channel: null,
+        //required
         UploaderId: 0,
-        DateUploaded: "2020-10-02T05:29:13.074Z",
+        DateUploaded: "",
       },
-      EventVideoTrailer: {
-        FileId: 0,
-        FileName: "string",
-        FileContent: "string",
-        FileSize: 0,
-        EventId: 0,
-        ChannelId: 0,
-        Channel: {
-          ChannelId: 0,
-          ChannelName: "string",
-          ChannelImage: "string",
-          IsGlobal: true,
-          ChannelCode: "3fa85f64-5717-4562-b3fc-2c963f66afa6",
-          CurrentSequenceNumber: 0,
-          Media: [null],
-        },
-        UploaderId: 0,
-        DateUploaded: "2020-10-02T05:29:13.074Z",
-      },
+      EventVideoTrailer: null
     };
 
     console.log();
