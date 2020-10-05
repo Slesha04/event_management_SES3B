@@ -114,7 +114,6 @@ namespace Event_Management_Application.Controllers
 
         [Route("GetRosterByEvent/{eventId}")]
         [HttpGet]
-        [Authorize]
         public ActionResult GetRosterByEvent([FromRoute] int eventId)
         {
             var tokenEntry = _tokenManager.ValidateAndReturnTokenEntry(_tokenManager.ExtractToken(Request));
