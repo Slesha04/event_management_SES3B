@@ -76,6 +76,9 @@ const MyEvents = (props) => {
   let selectedCardId = localStorage.getItem("selectedCard");
 
   const [eventTitle, setEventTitle] = React.useState("");
+
+  const [eventOrganiser, setEventOrganiser] = React.useState("");
+
   const [eventBodyText, setEventBodyText] = React.useState("");
   const [eventLocation, setEventLocation] = React.useState("");
   const [eventDate, setEventDate] = React.useState("");
@@ -128,6 +131,26 @@ const MyEvents = (props) => {
   const handleEventVisibility = (event) => {
     setEventVisibility(event.target.value);
   };
+  const handleEventOrganiserChange = (event) => {
+    setEventOrganiser(event.target.value);
+  };
+  function getUserName(userId){
+    axios
+    .get(
+      `https://localhost:5001/api/UserController/GetUserById/${userId}`
+    )
+    .then(
+      (res) => {
+        if (res.status === 200) {
+        console.log(res)
+          setEventOrganiser(res.data.userName);
+        }
+      },
+      (error) => {
+        alert("something Went Wrong");
+      }
+    );
+  }
 
   useEffect(() => {
     const userId = getUserID();
@@ -140,7 +163,7 @@ const MyEvents = (props) => {
       .then(
         (res) => {
           if (res.status === 200) {
-            // console.log(res)
+          console.log(res)
             setEventTitle(res.data.eventTitle);
             console.log(res.data.eventTitle);
             setEventBodyText(res.data.bodyText);
@@ -149,12 +172,16 @@ const MyEvents = (props) => {
             setEventType(res.data.eventType);
             setTicketPrice(res.data.eventTicketPrice);
             setEventVisibility(res.data.eventVisibility);
+            setEventOrganiser(getUserName(res.data.eventOrganiserId));
           }
         },
         (error) => {
           alert("something Went Wrong");
         }
       );
+
+     
+
   }, []);
   return (
     <div>
@@ -165,7 +192,7 @@ const MyEvents = (props) => {
           eventDate={eventDate}
           eventVenue={eventLocation}
           eventDescription={eventBodyText}
-          eventOrgainser={getUserName()}
+          eventOrgainser={eventOrganiser}
           eventPrice={ticketPrice}
         />
       </Paper>

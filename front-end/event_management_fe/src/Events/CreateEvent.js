@@ -168,6 +168,7 @@ const CreateEvent = (props) => {
   const classes = useStyles();
   const [post, setPostArray] = useState([]);
  
+  const [eventOrganiser, setEventOrganiser] = React.useState("");
 
   const [eventTitle , setEventTitle ] = React.useState("");
   const [eventBodyText , setEventBodyText ] = React.useState("");
@@ -238,7 +239,22 @@ const CreateEvent = (props) => {
       );
   }, []);
   
-  
+  function getUserName(userId){
+    axios
+    .get(
+      `https://localhost:5001/api/UserController/GetUserById/${userId}`
+    )
+    .then(
+      (res) => {
+        if (res.status === 200) {
+        console.log("this is" + res.data.userName)
+          return res.data.userName;
+        }
+      },
+      (error) => {
+      }
+    );
+  }
 
   const handleRegister = (event) => {
     event.preventDefault();
@@ -439,7 +455,7 @@ const CreateEvent = (props) => {
                  <img src={upcomingEvent} alt={item.eventTitle} />
                 <GridListTileBar
                   title={item.eventTitle}
-                  subtitle={<span>by: {item.bodyText}</span>}
+                  subtitle={<span>about: {item.bodyText}</span>}
                   actionIcon={
                     <IconButton
                       aria-label={`info about ${item.title}`}
