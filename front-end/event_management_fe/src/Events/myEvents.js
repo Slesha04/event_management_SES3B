@@ -91,7 +91,7 @@ const MyEvents = (props) => {
           alert("something Went Wrong");
         }
       );
-  }, []);
+  });
   
 
   return (

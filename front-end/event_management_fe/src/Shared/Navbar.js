@@ -40,6 +40,7 @@ function Navbar() {
 
   const logout = () => {
     Cookies.remove("auth-cookie");
+    Cookies.remove("userID");
     history.push("/login");
   };
 
