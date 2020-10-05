@@ -715,3 +715,5 @@ C:/Users/Andre Bella/event_management_SES3B/back-end/Event_Management_Applicatio
 /Users/slesh/Documents/event_management_SES3B/back-end/Event_Management_Application/Event_Management_Application/obj/Debug/net461/Event_Management_Application.csproj.CopyComplete
 /Users/slesh/Documents/event_management_SES3B/back-end/Event_Management_Application/Event_Management_Application/obj/Debug/net461/Event_Management_Application.exe
 /Users/slesh/Documents/event_management_SES3B/back-end/Event_Management_Application/Event_Management_Application/obj/Debug/net461/Event_Management_Application.pdb
+C:\Users\avira\Desktop\event_management_SES3B\back-end\Event_Management_Application\Event_Management_Application\obj\Debug\net461\Event_Management_Application.exe
+C:\Users\avira\Desktop\event_management_SES3B\back-end\Event_Management_Application\Event_Management_Application\obj\Debug\net461\Event_Management_Application.pdb

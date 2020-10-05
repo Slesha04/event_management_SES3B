@@ -87,6 +87,8 @@ const Login = (props) => {
           // user id - console.log(res.data.jwtToken.payload.user_id);
           console.log(res.data.encodedForm);
           Cookies.set("auth-cookie", res.data.encodedForm);
+          Cookies.set("auth-full-cookie", res.data);
+
           const userId = res.data.jwtToken.payload.user_id;
           Cookies.set("userID", userId);
           Cookies.set("userName", username);
