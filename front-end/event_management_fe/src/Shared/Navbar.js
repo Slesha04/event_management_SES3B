@@ -98,15 +98,7 @@ function Navbar() {
                 <i class="fas fa-mail-bulk"></i>
               </Link>
             </li>
-            <li className="nav-item">
-              <Link
-                to="/all-events"
-                className="nav-links"
-                onClick={closeMobileMenu}
-              >
-                <i class="far fa-user-circle"></i>
-              </Link>
-            </li>
+            
           </ul>
           {button && (
             <Button onClick={logout} buttonStyle="btn--outline">

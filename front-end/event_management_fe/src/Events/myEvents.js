@@ -77,7 +77,7 @@ const MyEvents = (props) => {
     console.log("called");
     axios
       .get(
-        `http://localhost:5000/api/EventController/ViewUserEvents/${userId}`
+        `https://localhost:5001/api/EventController/ViewUserEvents/${userId}`
       )
 
       .then(
