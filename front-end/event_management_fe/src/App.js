@@ -19,6 +19,7 @@ import AllEvents from './Events/Allevents';
 import MyEvents from './Events/myEvents';
 import viewEvent from './Events/viewEvent';
 import EventsGuestList from './Events/EventsGuestList'
+import ChatStore from './Chats/ChatStore';
 function App() {
   return (
     <Router>
@@ -34,7 +35,9 @@ function App() {
           <Route path='/view-event' component={viewEvent}/>
           <Route path='/ticket' component={Ticket}/>
           <Route path='/event-confirmation' component={EventConfirmation}/>
+          <ChatStore>
           <Route path='/global-chat' component={GlobalChat}/>
+          </ChatStore>
           <Route path='/event-chat' component={EventChat}/>
           <Route path='/profile' component={Profile}/>
           <Route path='/myEvents' component={MyEvents}/>
