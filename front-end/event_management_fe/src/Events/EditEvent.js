@@ -257,7 +257,7 @@ const EditEvent = (props) => {
 
     axios
       .get(
-        `http://localhost:5000/api/EventController/ViewEvent/${selectedCardId}`
+        `https://localhost:5001/api/EventController/ViewEvent/${selectedCardId}`
       )
 
       .then(
