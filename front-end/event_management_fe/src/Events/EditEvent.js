@@ -257,7 +257,7 @@ const EditEvent = (props) => {
 
     axios
       .get(
-        `https://localhost:5001/api/EventController/ViewEvent/${selectedCardId}`
+        `http://localhost:5000/api/EventController/ViewEvent/${selectedCardId}`
       )
 
       .then(
@@ -284,12 +284,12 @@ const EditEvent = (props) => {
     event.preventDefault();
     const body = {};
     console.log(
-      `https://localhost:5001/api/EventController/UpdateEvent/${selectedCardId}/${eventTitle}/${eventBodyText}/${eventLocation}/${eventDate}/${eventStatus}/${ticketPrice}/${eventType}/${eventVisibility}`
+      `http://localhost:5000/api/EventController/UpdateEvent/${selectedCardId}/${eventTitle}/${eventBodyText}/${eventLocation}/${eventDate}/${eventStatus}/${ticketPrice}/${eventType}/${eventVisibility}`
     );
     console.log(getHeaderToken());
     const res = axios
       .put(
-        `https://localhost:5001/api/EventController/UpdateEvent/${selectedCardId}/${eventTitle}/${eventBodyText}/${eventLocation}/${eventDate}/${eventStatus}/${ticketPrice}/${eventType}/${eventVisibility}`,
+        `http://localhost:5000/api/EventController/UpdateEvent/${selectedCardId}/${eventTitle}/${eventBodyText}/${eventLocation}/${eventDate}/${eventStatus}/${ticketPrice}/${eventType}/${eventVisibility}`,
         body,
         {
           headers: {

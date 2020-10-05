@@ -1,5 +1,6 @@
 import React from 'react'
 import io from 'socket.io-client'
+import {getUserName } from "../Login/JwtConfig";
 
 export const CTX = React.createContext();
 
@@ -59,7 +60,8 @@ export default function ChatStore(props) {
 
         //make users, connect with user whos logged in 
 
-        const user = `andre${Math.random(100).toFixed(2)}`;
+        // const user = `andre${Math.random(100).toFixed(2)}`;
+        const user = getUserName()
 
 
         return (

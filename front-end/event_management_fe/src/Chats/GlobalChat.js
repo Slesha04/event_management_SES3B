@@ -12,6 +12,7 @@ import Typography from '@material-ui/core/Typography'
 import Chip from '@material-ui/core/Chip';
 import Button from '@material-ui/core/Button';
 import TextField from '@material-ui/core/TextField';
+import { getHeaderToken, getToken, getUserID } from "../Login/JwtConfig";
 
 import {CTX} from './ChatStore'
 

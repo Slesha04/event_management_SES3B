@@ -223,7 +223,7 @@ const CreateEvent = (props) => {
     console.log("called");
     axios
       .get(
-        `https://localhost:5001/api/EventController/LoadRecentEvents/1`
+        `http://localhost:5000/api/EventController/LoadRecentEvents/1`
       )
       .then(
         (res) => {
@@ -243,9 +243,9 @@ const CreateEvent = (props) => {
   const handleRegister = (event) => {
     event.preventDefault();
     const body = {};
-        console.log(`https://localhost:5001/api/EventController/CreateEvent/${eventTitle}/${eventBodyText}/${eventLocation}/${eventDate}/${ticketPrice}/${eventType}/${eventVisibility}`)
+        console.log(`http://localhost:5000/api/EventController/CreateEvent/${eventTitle}/${eventBodyText}/${eventLocation}/${eventDate}/${ticketPrice}/${eventType}/${eventVisibility}`)
         console.log(getHeaderToken()  )
-        const res =  axios.put(`https://localhost:5001/api/EventController/CreateEvent/${eventTitle}/${eventBodyText}/${eventLocation}/${eventDate}/${ticketPrice}/${eventType}/${eventVisibility}`, body, {
+        const res =  axios.put(`http://localhost:5000/api/EventController/CreateEvent/${eventTitle}/${eventBodyText}/${eventLocation}/${eventDate}/${ticketPrice}/${eventType}/${eventVisibility}`, body, {
           headers: {
             'Authorization':  getHeaderToken()
           }
