@@ -65,7 +65,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const MyEvents = (props) => {
+const MyEventRoster = (props) => {
   const classes = useStyles();
   const [post, setPostArray] = useState([]);
 
@@ -76,14 +76,14 @@ const MyEvents = (props) => {
     console.log("called");
     axios
       .get(
-        `https://localhost:5001/api/EventController/ViewUserEvents/${userId}`
-      )
-
-      .then(
+        `https://localhost:5001/api/EventRosterController/GetRosterEntriesByUser`,  {
+            headers: {
+              Authorization:  getHeaderToken()
+            }}).then(
         (res) => {
           if (res.status === 200) {
             setPostArray(res.data);
-            // console.log(res.data[0].eventTitle);
+            console.log(res);
           }
         },
         (error) => {
@@ -95,7 +95,7 @@ const MyEvents = (props) => {
 
   return (
     <div>
-      <Typography variant={'h4'}>My Created Events</Typography>
+      <Typography variant={'h4'}>Joined Events</Typography>
       {console.log(post)}
       {post.map((item) => (
         <div key={item} >
@@ -117,4 +117,4 @@ const MyEvents = (props) => {
   );
 };
 
-export default MyEvents;
+export default MyEventRoster;

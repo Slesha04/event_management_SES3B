@@ -67,8 +67,6 @@ export default function MyEventCard(props) {
     localStorage.setItem("selectedCard", cardId);
   };
   const handleDeleteEvent = (event) => {
-   
-
     axios
     .delete(
       `https://localhost:5001/api/EventController/DeleteEvent/${cardId}`,  {

@@ -23,6 +23,8 @@ import { useHistory } from "react-router-dom";
 import { withRouter } from "react-router-dom";
 import axios from "axios";
 import AccountCircleIcon from "@material-ui/icons/AccountCircle";
+import Snackbar from '@material-ui/core/Snackbar';
+import MuiAlert from '@material-ui/lab/Alert';
 
 const useStyles = makeStyles((theme) => ({
   paper: {
@@ -59,12 +61,27 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
+function Alert(props) {
+  return <MuiAlert elevation={6} variant="filled" {...props} />;
+}
+
 //export default function SignUp() {
 const Login = (props) => {
   const classes = useStyles();
   const [username, setUsername] = React.useState("");
   const [password, setPassword] = React.useState("");
+  // const [open, setOpen] = React.useState(false);
+  // const handleClick = () => {
+  //   setOpen(true);
+  // };
 
+  // const handleClose = (event, reason) => {
+  //   if (reason === 'clickaway') {
+  //     return;
+  //   }
+
+  //   setOpen(false);
+  // };
   const handleUsernameChange = (event) => {
     setUsername(event.target.value);
   };
@@ -74,11 +91,13 @@ const Login = (props) => {
   };
 
   const history = useHistory();
-
+function changeView(){
+  history.push("/homePage")
+}
   const handleRegister = (event) => {
     event.preventDefault();
-
-    axios
+    
+        axios
       .get(
         `https://localhost:5001/api/UserController/LoginUser/${username}/${password}`
       )
@@ -92,8 +111,8 @@ const Login = (props) => {
           const userId = res.data.jwtToken.payload.user_id;
           Cookies.set("userID", userId);
           Cookies.set("userName", username);
-          history.push("/homePage");
-           
+          // setOpen(true);
+          // setTimeout(changeView(), 15000);
         },
         (error) => {
           alert("something Went Wrong");
@@ -171,6 +190,12 @@ const Login = (props) => {
           </form>
         </div>
       </Container>
+      {/* <Snackbar open={open} autoHideDuration={9000} onClose={handleClose}>
+        <Alert onClose={handleClose} severity="success">
+          LogIn success!
+        </Alert>
+      </Snackbar>
+      */}
     </Paper>
   );
 };

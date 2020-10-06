@@ -19,6 +19,8 @@ import AllEvents from './Events/Allevents';
 import MyEvents from './Events/myEvents';
 import viewEvent from './Events/viewEvent';
 import EventsGuestList from './Events/EventsGuestList'
+import MyEventRoster from './Events/MyEventRoster'
+
 import ChatStore from './Chats/ChatStore';
 function App() {
   return (
@@ -43,6 +45,7 @@ function App() {
           <Route path='/myEvents' component={MyEvents}/>
           <Route path='/all-events' component={AllEvents}/>
           <Route path='/guestList-event' component={EventsGuestList}/>
+          <Route path='/myEventRoster' component={MyEventRoster}/>
           </AuthenticationGuard>
         </Switch>
       </div>

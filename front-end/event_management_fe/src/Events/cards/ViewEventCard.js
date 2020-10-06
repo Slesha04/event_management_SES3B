@@ -50,6 +50,8 @@ export default function ViewEventCard(props) {
   const joinEvent = (event) => {
     const body = {};
     console.log(selectedCardId)
+
+    
     const res = axios
     .post(
       `https://localhost:5001/api/EventRosterController/AddAttendee/${selectedCardId}`,

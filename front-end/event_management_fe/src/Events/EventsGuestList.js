@@ -1,113 +1,169 @@
 import React from "react";
-import Avatar from "@material-ui/core/Avatar";
-import Button from "@material-ui/core/Button";
-import CssBaseline from "@material-ui/core/CssBaseline";
-import TextField from "@material-ui/core/TextField";
-import FormControlLabel from "@material-ui/core/FormControlLabel";
-import Checkbox from "@material-ui/core/Checkbox";
-import Link from "@material-ui/core/Link";
-import Grid from "@material-ui/core/Grid";
-import Box from "@material-ui/core/Box";
-import Paper from "@material-ui/core/Paper";
-import LockOutlinedIcon from "@material-ui/icons/LockOutlined";
-import Typography from "@material-ui/core/Typography";
 import { makeStyles } from "@material-ui/core/styles";
-import Container from "@material-ui/core/Container";
-import Card from "@material-ui/core/Card";
-import CardContent from "@material-ui/core/CardContent";
 import Table from "@material-ui/core/Table";
-import InputLabel from "@material-ui/core/InputLabel";
-import MenuItem from "@material-ui/core/MenuItem";
-import FormHelperText from "@material-ui/core/FormHelperText";
-import FormControl from "@material-ui/core/FormControl";
-import Select from "@material-ui/core/Select";
-import Cookies from "js-cookie";
-import { useHistory } from "react-router-dom";
-import { withRouter } from "react-router-dom";
-import axios from "axios";
-import AccountCircleIcon from "@material-ui/icons/AccountCircle";
+import TableBody from "@material-ui/core/TableBody";
+import TableCell from "@material-ui/core/TableCell";
+import TableContainer from "@material-ui/core/TableContainer";
+import TableHead from "@material-ui/core/TableHead";
+import TableRow from "@material-ui/core/TableRow";
+import Paper from "@material-ui/core/Paper";
 import { useEffect, useState } from "react";
 import { getHeaderToken, getToken, getUserID } from "../Login/JwtConfig";
-import MyEventCard from "./cards/MyEventCard";
-import { getUserName } from "../Login/JwtConfig";
+import axios from "axios";
+import { withStyles } from "@material-ui/core/styles";
+import { Checkbox } from "semantic-ui-react";
+import Button from "@material-ui/core/Button";
 
-const useStyles = makeStyles((theme) => ({
-  paper: {
-    marginTop: theme.spacing(8),
-    marginBottom: theme.spacing(8),
+const StyledTableCell = withStyles((theme) => ({
+  head: {
+    backgroundColor: theme.palette.common.black,
+    color: theme.palette.common.white,
+  },
+  body: {
+    fontSize: 14,
+  },
+}))(TableCell);
 
-    display: "flex",
-    flexDirection: "column",
-    alignItems: "center",
+const StyledTableRow = withStyles((theme) => ({
+  root: {
+    "&:nth-of-type(odd)": {
+      backgroundColor: theme.palette.action.hover,
+    },
   },
-  outsidePaper: {
-    marginTop: theme.spacing(8),
-    marginBottom: theme.spacing(8),
-    marginLeft: theme.spacing(30),
-    marginRight: theme.spacing(30),
-    flexDirection: "column",
-    alignItems: "center",
-    backgroundColor: theme.palette.background.paper,
-  },
-  avatar: {
-    margin: theme.spacing(1),
-    backgroundColor: theme.palette.secondary.main,
-  },
-  form: {
-    width: "100%", // Fix IE 11 issue.
-    marginTop: theme.spacing(3),
-  },
-  submit: {
-    margin: theme.spacing(3, 0, 2),
-  },
-  formControl: {
-    margin: theme.spacing(1),
-    minWidth: 120,
-  },
-}));
+}))(TableRow);
 
-const EventsGuestList = (props) => {
- 
+const useStyles = makeStyles({
+  table: {
+    minWidth: 700,
+  },
+});
+
+function createData(
+  attendeeId,
+  attendeeUsername,
+  dateRegistered,
+  inputCode,
+  attendeeArrived
+) {
+  return {
+    attendeeId,
+    attendeeUsername,
+    dateRegistered,
+    inputCode,
+    attendeeArrived,
+  };
+}
+
+export default function EventsGuestList() {
   const classes = useStyles();
   const [post, setPostArray] = useState([]);
+
   let selectedCardId = localStorage.getItem("selectedCard");
 
-  const history = useHistory();
+
+
+  // function handleMarkAttende(inputCode){
+  //   const body = {};
+  //   console.log(getHeaderToken())
+  //   const res =  axios.put(`https://localhost:5001/api/EventRosterController/MarkAttendeeSelf/${inputCode}/${selectedCardId}`, body, {
+  //     headers: {
+  //       Authorization:  getHeaderToken()
+  //     }
+  //   }).then(
+  //       (res) => {
+  //           if(res.status === 200)
+  //               alert("Attendee Marked");
+  //       },
+  //       (error) => {
+  //         alert("something went wrong", error);
+  //         console.log(error)
+  //       }
+  //     );
+  // };
 
   useEffect(() => {
-    const userId = getUserID();
-    console.log(userId);
-    const body = {};
-   console.log(`https://localhost:5001/api/EventRosterController/GetRosterByEvent/${selectedCardId}`)
-   console.log(getHeaderToken())
-    axios.get(`https://localhost:5001/api/EventRosterController/GetRosterByEvent/${selectedCardId}`, {
-      headers: {
-        'Authorization':  getHeaderToken()
-      }
-    }).then(
+    const rows = [];
+
+    axios
+      .get(
+        `https://localhost:5001/api/EventRosterController/GetRosterByEvent/${selectedCardId}`,
+        {
+          headers: {
+            Authorization: getHeaderToken(),
+          },
+        }
+      )
+      .then(
         (res) => {
-            if(res.status === 200){
-                console.log( res)
-            }
-           
+          if (res.status === 200) {
+            res.data.map(
+              (item) =>
+                rows.push(
+                  createData(
+                    item.attendeeId,
+                    item.attendeeUsername,
+                    item.dateRegistered,
+                    item.inputCode,
+                    item.attendeeArrived
+                  )
+                )
+              //console.log(createData(item.attendeeId, item.attendeeUsername, item.dateRegistered, item.inputCode))
+            );
+            setPostArray(rows);
+          }
         },
         (error) => {
-          alert("no", error);
+          alert("something Went Wrong");
         }
       );
   }, []);
 
   return (
-    <div>
-      <Typography variant={"h4"}>My Events</Typography>
-      {console.log(post)}
-      {post.map((item) => (
-        <div key={item}>
-          <Paper elevation={5}>dada</Paper>
-        </div>
-      ))}
-    </div>
-  );
-};
+    <TableContainer component={Paper}>
+      <Table className={classes.table} aria-label="customized table">
+        <TableHead>
+          <TableRow>
+            <StyledTableCell align="right">AttendeeId</StyledTableCell>
+            <StyledTableCell align="right">Attendee Name</StyledTableCell>
+            <StyledTableCell align="right">Date Registered</StyledTableCell>
+            <StyledTableCell align="right">Input Code</StyledTableCell>
+            <StyledTableCell align="right">Attende Arrived</StyledTableCell>
+            <StyledTableCell align="right"> Mark Attende</StyledTableCell>
+          </TableRow>
+        </TableHead>
+        <TableBody>
+          {post.map((row) => (
+            <StyledTableRow key={row.attendeeId}>
+              <StyledTableCell align="right">{row.attendeeId}</StyledTableCell>
+              <StyledTableCell align="right">
+                {row.attendeeUsername}
+              </StyledTableCell>
+              <StyledTableCell align="right">
+                {row.dateRegistered}
+              </StyledTableCell>
+              <StyledTableCell align="right">{row.inputCode}</StyledTableCell>
+              <StyledTableCell align="right">
+                {row.attendeeArrived ? "Yes" : "No"}
+              </StyledTableCell>
+              {/* <StyledTableCell>
+              <Button color="primary" size="medium" onClick={() => handleMarkAttende(row.inputCode)}>
+                {" "}
+                Mark Attende
+              </Button>
+              </StyledTableCell> */}
+            </StyledTableRow>
+          ))}
+        </TableBody>
+      </Table>
+      {/* <Button color="primary" size="medium" onClick={handleRemoveAttende}>
+        {" "}
+        Remove Attende
+      </Button>
 
-export default EventsGuestList;
+      <Button color="primary" size="medium" onClick={handleAddAttende}>
+        {" "}
+        Add Attende
+      </Button> */}
+    </TableContainer>
+  );
+}
