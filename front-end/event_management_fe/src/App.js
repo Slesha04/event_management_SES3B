@@ -28,7 +28,7 @@ function App() {
         <Switch>
         <Route path={"/login"} component={Login} />
           <Route path={"/Register"} component={Register} />
-          <AuthenticationGuard>
+          {/* <AuthenticationGuard> */}
           <Route path='/homePage' exact component={homePage}/>
           <Route path='/CreateEvent' component={CreateEvent}/>
           <Route path='/edit-event' component={EditEvent}/>
@@ -43,7 +43,7 @@ function App() {
           <Route path='/myEvents' component={MyEvents}/>
           <Route path='/all-events' component={AllEvents}/>
           <Route path='/guestList-event' component={EventsGuestList}/>
-          </AuthenticationGuard>
+          {/* </AuthenticationGuard> */}
         </Switch>
       </div>
     </Router>
