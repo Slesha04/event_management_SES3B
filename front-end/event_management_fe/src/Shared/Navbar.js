@@ -56,8 +56,8 @@ function Navbar() {
     <>
       <nav className="navbar">
         <div className="navbar-container">
-          <Link to="/" className="navbar-logo" onClick={closeMobileMenu}>
-            UTS:EVENTS <i class="fas fa-glass-cheers" />
+          <Link to="/homePage" className="navbar-logo"  onClick={closeMobileMenu}>
+           UTS:EVENTS  <i class="fas fa-glass-cheers" />
           </Link>
           <div className="menu-icon" onClick={handleClick}>
             <i className={click ? "fas fa-times" : "fas fa-bars"} />
@@ -79,6 +79,7 @@ function Navbar() {
                 onClick={closeMobileMenu}
               >
                 <i class="fas fa-comment-alt"></i>
+                
               </Link>
             </li>
             <li className="nav-item">

@@ -45,7 +45,6 @@ function App() {
           <Route path='/myEvents' component={MyEvents}/>
           <Route path='/all-events' component={AllEvents}/>
           <Route path='/guestList-event' component={EventsGuestList}/>
-          <Route path='/myEventRoster' component={MyEventRoster}/>
           </AuthenticationGuard>
         </Switch>
       </div>
