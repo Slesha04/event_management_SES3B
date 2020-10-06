@@ -157,7 +157,7 @@ const MyEvents = (props) => {
 
     axios
       .get(
-        `http://localhost:5000/api/EventController/ViewEvent/${selectedEvent}`
+        `https://localhost:5001/api/EventController/ViewEvent/${selectedEvent}`
       )
 
       .then(

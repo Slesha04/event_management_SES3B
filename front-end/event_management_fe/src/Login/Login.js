@@ -80,7 +80,7 @@ const Login = (props) => {
 
     axios
       .get(
-        `http://localhost:5000/api/UserController/LoginUser/${username}/${password}`
+        `https://localhost:5001/api/UserController/LoginUser/${username}/${password}`
       )
       .then(
         (res) => {
