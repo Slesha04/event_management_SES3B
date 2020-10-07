@@ -43,6 +43,7 @@ function App() {
           <Route path='/event-chat' component={EventChat}/>
           <Route path='/profile' component={Profile}/>
           <Route path='/myEvents' component={MyEvents}/>
+          <Route path='/MyEventRoster' component={MyEventRoster}/>
           <Route path='/all-events' component={AllEvents}/>
           <Route path='/guestList-event' component={EventsGuestList}/>
           </AuthenticationGuard>
