@@ -30,6 +30,7 @@ import { useEffect, useState } from "react";
 import { getHeaderToken, getToken, getUserID } from "../Login/JwtConfig";
 import ViewEventCard from "./cards/ViewEventCard";
 import { getUserName } from "../Login/JwtConfig";
+import Map from "./map/map";
 
 const useStyles = makeStyles((theme) => ({
   paper: {
@@ -74,6 +75,9 @@ const MyEvents = (props) => {
 
   const history = useHistory();
   let selectedCardId = localStorage.getItem("selectedCard");
+
+  const [latitude, setLatitude] = React.useState("");
+  const [longitude, setLongtitude] = React.useState("");
 
   const [eventTitle, setEventTitle] = React.useState("");
 
@@ -135,22 +139,20 @@ const MyEvents = (props) => {
   const handleEventOrganiserChange = (event) => {
     setEventOrganiser(event.target.value);
   };
-  function getUserName(userId){
+  function getUserName(userId) {
     axios
-    .get(
-      `https://localhost:5001/api/UserController/GetUserById/${userId}`
-    )
-    .then(
-      (res) => {
-        if (res.status === 200) {
-        console.log(res)
-          setEventOrganiser(res.data.userName);
+      .get(`https://localhost:5001/api/UserController/GetUserById/${userId}`)
+      .then(
+        (res) => {
+          if (res.status === 200) {
+            console.log(res);
+            setEventOrganiser(res.data.userName);
+          }
+        },
+        (error) => {
+          alert("something Went Wrong");
         }
-      },
-      (error) => {
-        alert("something Went Wrong");
-      }
-    );
+      );
   }
 
   useEffect(() => {
@@ -164,7 +166,7 @@ const MyEvents = (props) => {
       .then(
         (res) => {
           if (res.status === 200) {
-          console.log(res)
+            console.log(res);
             setEventTitle(res.data.eventTitle);
             console.log(res.data.eventTitle);
             setEventBodyText(res.data.bodyText);
@@ -181,9 +183,49 @@ const MyEvents = (props) => {
         }
       );
 
-     
-
+    //map
+    axios
+      .get(
+        `https://localhost:5001/api/EventController/GetEventCoordinates/${selectedEvent}`
+      )
+      .then(
+        (res) => {
+          if (res.status === 200) {
+            setLatitude(res.data.latitude);
+            setLongtitude(res.data.longitude);
+          }
+        },
+        (error) => {
+          console.log(error);
+        }
+      );
   }, []);
+  function addMarkers(map, links) {
+    const marker = new window.google.maps.Marker({
+      map,
+      position: link.coords,
+      label: `${0 + 1}`,
+      title: link.title,
+    });
+    marker.addListener(`click`, () => {
+      window.location.href = link.url;
+    });
+  }
+  const link = {
+    coords: { lat: latitude, lng: longitude }, // required: latitude & longitude at which to display the marker
+    title: `Life, the Universe and Everything`, // optional
+    url: `https://wikipedia.org/wiki/Life,_the_Universe_and_Everything`, // optional
+  };
+
+  let mapProps = {
+    options: {
+      center: { lat: latitude, lng: longitude },
+      zoom: 15,
+    },
+    onMount: addMarkers,
+    onMountProps: link,
+  };
+
   return (
     <div>
       <Paper elevation={5}>
@@ -197,6 +239,7 @@ const MyEvents = (props) => {
           eventPrice={ticketPrice}
           JoinOrLeave={props.location.state.AttendeeStatus}
         />
+        <Map {...mapProps} />
       </Paper>
     </div>
   );
