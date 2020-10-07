@@ -204,14 +204,17 @@ namespace Event_Management_Application.Controllers
                 foreach(var entry in rosterEntries)
                 {
                     var currEvent = _dbContext.Events.Where(x => x.EventId == entry.EventId).FirstOrDefault();
-                    var eventOrganiser = _dbContext.Users.Where(x => x.UserId == currEvent.EventOrganiserId).FirstOrDefault();
-                    RosterEntryResponse entryResponse = new RosterEntryResponse
+                    var eventOrganiser = (currEvent != null) ? _dbContext.Users.Where(x => x.UserId == currEvent.EventOrganiserId).FirstOrDefault() : null;
+                    if(currEvent != null && eventOrganiser != null)
                     {
-                        RosterEntry = entry,
-                        EventOrganiserUsername = eventOrganiser.UserName,
-                        EventTitle = currEvent.EventTitle
-                    };
-                    response.Add(entryResponse);
+                        RosterEntryResponse entryResponse = new RosterEntryResponse
+                        {
+                            RosterEntry = entry,
+                            EventOrganiserUsername = eventOrganiser.UserName,
+                            EventTitle = currEvent.EventTitle
+                        };
+                        response.Add(entryResponse);
+                    }
                 }
                 return response;
             }
