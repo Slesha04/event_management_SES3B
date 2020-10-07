@@ -20,9 +20,8 @@ export default class Schedule extends Component {
 
     axios
       .get(
-        `https://localhost:5001/api/EventController/SearchEventsByDate/${"04-10-2020"}/1?resultLimit=20`
+        `https://localhost:5001/api/EventController/SearchEventsByDate/${"06-10-2020"}/1?resultLimit=20`
       )
-
       .then(
         (res) => {
           if (res.status === 200) {
@@ -34,6 +33,9 @@ export default class Schedule extends Component {
               myObject["start"] = item.eventDate.slice(0, 10);
               apiData.push(myObject);
             });
+            this.setState({
+              events: apiData
+            });
           }
         },
         (error) => {
@@ -42,9 +44,7 @@ export default class Schedule extends Component {
       );
 
     console.log(apiData);
-    this.setState({
-        events: apiData
-      });
+   
 
   }
 
@@ -85,7 +85,6 @@ export default class Schedule extends Component {
   };
 
   render() {
-    let events = [{ title: this.state.events.title, start: this.state.events.start }];
     console.log(this.state.events);
  
     return (
@@ -95,7 +94,7 @@ export default class Schedule extends Component {
         editable={true}
         eventDrop={this.handleEventDrop}
         eventClick={this.handleEventClick}
-        events={events}
+        events={this.state.events}
       />
     );
   }
