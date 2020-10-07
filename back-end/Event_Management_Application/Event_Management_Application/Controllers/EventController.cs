@@ -4,6 +4,7 @@ using Event_Management_Application.DataAccess;
 using Event_Management_Application.Enums;
 using Event_Management_Application.Models;
 using Event_Management_Application.ResourceManagement;
+using Event_Management_Application.ResourceManagement.Models;
 using Event_Management_Application.Security;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -23,6 +24,7 @@ namespace Event_Management_Application.Controllers
         private readonly EventTagManager _tagManager;
         private readonly EventChannelManager _channelManager;
         private readonly FileManager _fileManager;
+        private readonly LocationalManager _locationManager;
 
         public EventController(EventManagementApplicationDbContext dbContext)
         {
@@ -31,6 +33,7 @@ namespace Event_Management_Application.Controllers
             _tagManager = new EventTagManager(_dbContext);
             _channelManager = new EventChannelManager(_dbContext);
             _fileManager = new FileManager(_dbContext);
+            _locationManager = new LocationalManager();
         }
 
         [Route("CreateEvent/{eventTitle}/{eventBodyText}/{eventLocation}/{eventDate}/{ticketPrice}/{eventType}/{eventVisibility}")]
@@ -198,7 +201,7 @@ namespace Event_Management_Application.Controllers
 
         [Route("ViewUserEvents/{userId}")]
         [HttpGet]
-        public List<Event> ViewUserEvents(int userId)
+        public List<Event> ViewUserEvents([FromRoute] int userId)
         {
             return _dbContext.Events.Where(x => x.EventOrganiserId == userId).ToList();
         }
@@ -218,6 +221,18 @@ namespace Event_Management_Application.Controllers
                 return StatusCode(401, SystemResources.INCORRECT_USER_TOKEN_MESSAGE);
             }
             return BadRequest("No event corresponding to event Id");
+        }
+
+        [Route("GetEventCoordinates/{eventId}")]
+        [HttpGet]
+        public LocationCoordinates GetEventCoordinates([FromRoute] int eventId)
+        {
+            var currEvent = _dbContext.Events.Where(x => x.EventId == eventId).FirstOrDefault();
+            if(currEvent != null)
+            {
+                return _locationManager.GetGeocodedLocation(currEvent.Location.LocationName);
+            }
+            return null;
         }
     }
 }
