@@ -14,7 +14,11 @@ import Container from "@material-ui/core/Container";
 import axios from "axios";
 import { getHeaderToken, getToken, getUserID } from "../../Login/JwtConfig";
 import Paper from "@material-ui/core/Paper";
-
+import Dialog from "@material-ui/core/Dialog";
+import DialogActions from "@material-ui/core/DialogActions";
+import DialogContent from "@material-ui/core/DialogContent";
+import DialogContentText from "@material-ui/core/DialogContentText";
+import DialogTitle from "@material-ui/core/DialogTitle";
 const useStyles = makeStyles((theme) => ({
   root: {
     minWidth: 275,
@@ -60,11 +64,18 @@ export default function ViewEventCard(props) {
   const cardId = props.eventId;
   const history = useHistory();
   let selectedCardId = localStorage.getItem("viewEventId");
-  
+  const [open, setOpen] = React.useState(false);
+  const handleClickOpen = (event) => {
+    event.preventDefault();
+    setOpen(true);
+  };
   const handleEditEvent = (event) => {
     history.push("/edit-event");
     console.log(cardId);
     localStorage.setItem("selectedCard", cardId);
+  };
+  const handleClose = () => {
+    setOpen(false);
   };
 
   const joinEvent = (event) => {
@@ -90,6 +101,7 @@ export default function ViewEventCard(props) {
           alert("You are already added to the event!", error);
         }
       );
+    setOpen(false);
   };
   const leaveEvent = (event) => {
     const body = {};
@@ -98,7 +110,7 @@ export default function ViewEventCard(props) {
     const res = axios
       .delete(
         `https://localhost:5001/api/EventRosterController/RemoveAttendee/${selectedCardId}/${getUserID()}`,
-       
+
         {
           headers: {
             Authorization: getHeaderToken(),
@@ -109,12 +121,13 @@ export default function ViewEventCard(props) {
         (res) => {
           console.log(res);
           if (res.status === 200) alert("You left the event!");
-          history.push("/MyEventRoster")
+          history.push("/MyEventRoster");
         },
         (error) => {
           alert("try again!", error);
         }
       );
+    setOpen(false);
   };
   return (
     <Card className={classes.root}>
@@ -218,20 +231,19 @@ export default function ViewEventCard(props) {
                   </Grid>
                 </Grid>
               </Grid>
-              <Grid item sm={6} >
-              <Paper elevation={7} className={classes.paper2}>
-                <Grid item xs={12}>
-                  <Typography variant="h5" component="h2">
-                    {props.JoinOrLeave}
-                  </Typography>
-                </Grid>
-                <CardActions>
-                 
+              <Grid item sm={6}>
+                <Paper elevation={7} className={classes.paper2}>
+                  <Grid item xs={12}>
+                    <Typography variant="h5" component="h2">
+                      {props.JoinOrLeave}
+                    </Typography>
+                  </Grid>
+                  <CardActions>
                     {/* button1 */}
-                    <Grid item xs={6} >
+                    <Grid item xs={6}>
                       <Button
                         variant="contained"
-                        onClick={(props.JoinOrLeave) == "Leave the event?" ? leaveEvent : joinEvent}
+                        onClick={handleClickOpen}
                         color="primary"
                         size="medium"
                       >
@@ -244,11 +256,42 @@ export default function ViewEventCard(props) {
                         Cancel
                       </Button>
                     </Grid>
-                </CardActions>
-              </Paper>
+                    <Dialog
+                      open={open}
+                      onClose={handleClose}
+                      aria-labelledby="alert-dialog-title"
+                      aria-describedby="alert-dialog-description"
+                    >
+                      <DialogTitle id="alert-dialog-title">
+                        {"Confirmation"}
+                      </DialogTitle>
+                      <DialogContent>
+                        <DialogContentText id="alert-dialog-description">
+                          {props.JoinOrLeave == "Leave the event?"
+                            ? "You are going to leave this event. Are you sure?"
+                            : "You are going to join this event. Are you sure?"}
+                        </DialogContentText>
+                      </DialogContent>
+                      <DialogActions>
+                        <Button
+                          onClick={
+                            props.JoinOrLeave == "Leave the event?"
+                              ? leaveEvent
+                              : joinEvent
+                          }
+                          color="primary"
+                        >
+                          Ok
+                        </Button>
+                        <Button onClick={handleClose} color="primary" autoFocus>
+                          Cancel
+                        </Button>
+                      </DialogActions>
+                    </Dialog>
+                  </CardActions>
+                </Paper>
+              </Grid>
             </Grid>
-            </Grid>
-           
           </Grid>
 
           {/* Main Grid -2nd Item */}

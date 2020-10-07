@@ -14,6 +14,7 @@ import { withStyles } from "@material-ui/core/styles";
 import { Checkbox } from "semantic-ui-react";
 import Button from "@material-ui/core/Button";
 import { useHistory } from "react-router-dom";
+import Typography from "@material-ui/core/Typography";
 
 const StyledTableCell = withStyles((theme) => ({
   head: {
@@ -61,6 +62,15 @@ export default function MyEventsRoster() {
   const classes = useStyles();
   const [post, setPostArray] = useState([]);
   const history = useHistory();
+  const handleClickOpen = (event) => {
+    event.preventDefault();
+    setOpen(true);
+  };
+  const [open, setOpen] = React.useState(false);
+
+  const handleClose = () => {
+    setOpen(false);
+  };
 
   let selectedCardId = localStorage.getItem("selectedCard");
 
@@ -130,7 +140,7 @@ export default function MyEventsRoster() {
 
   return (
     <>
-      Events I am following
+            <Typography variant={'h4'}>Events I am following</Typography>
       <TableContainer component={Paper}>
         <Table className={classes.table} aria-label="customized table">
           <TableHead>

@@ -272,7 +272,6 @@ const CreateEvent = (props) => {
             (res) => {
                 if(res.status === 200){
                   alert("Create Event Success");
-
                 }
             },
             (error) => {

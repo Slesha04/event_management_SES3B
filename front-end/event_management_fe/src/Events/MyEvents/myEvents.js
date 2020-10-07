@@ -95,7 +95,7 @@ const MyEvents = (props) => {
 
   return (
     <div>
-      <Typography variant={'h4'}>My Created Events</Typography>
+      <Typography variant={'h4'}>My Events</Typography>
       {console.log(post)}
       {post.map((item) => (
         <div key={item} >
