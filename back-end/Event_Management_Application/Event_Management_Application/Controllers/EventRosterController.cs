@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Event_Management_Application.Controllers.ResponseModels;
 using Event_Management_Application.DataAccess;
 using Event_Management_Application.Models;
 using Event_Management_Application.ResourceManagement;
@@ -193,12 +194,29 @@ namespace Event_Management_Application.Controllers
         [Route("GetRosterEntriesByUser")]
         [HttpGet]
         [Authorize]
-        public List<EventRosterEntry> GetRosterEntriesByUser()
+        public List<RosterEntryResponse> GetRosterEntriesByUser()
         {
             var tokenEntry = _tokenManager.ValidateAndReturnTokenEntry(_tokenManager.ExtractToken(Request));
             if (tokenEntry != null)
             {
-                return _dbContext.EventRosterEntries.Where(x => x.AttendeeId == tokenEntry.UserId).OrderByDescending(x => x.DateRegistered).ToList();
+                var response = new List<RosterEntryResponse>();
+                var rosterEntries = _dbContext.EventRosterEntries.Where(x => x.AttendeeId == tokenEntry.UserId).OrderByDescending(x => x.DateRegistered).ToList();
+                foreach(var entry in rosterEntries)
+                {
+                    var currEvent = _dbContext.Events.Where(x => x.EventId == entry.EventId).FirstOrDefault();
+                    var eventOrganiser = (currEvent != null) ? _dbContext.Users.Where(x => x.UserId == currEvent.EventOrganiserId).FirstOrDefault() : null;
+                    if(currEvent != null && eventOrganiser != null)
+                    {
+                        RosterEntryResponse entryResponse = new RosterEntryResponse
+                        {
+                            RosterEntry = entry,
+                            EventOrganiserUsername = eventOrganiser.UserName,
+                            EventTitle = currEvent.EventTitle
+                        };
+                        response.Add(entryResponse);
+                    }
+                }
+                return response;
             }
             return null;
         }

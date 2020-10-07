@@ -9,16 +9,18 @@ import homePage from './HomePage/HomePage';
 
 import Register from './Login/Registration';
 import CreateEvent from './Events/CreateEvent';
-import EditEvent from './Events/EditEvent';
+import EditEvent from './Events/MyEvents/EditEvent';
 import Ticket from './Events/Ticket';
 import EventConfirmation from './Events/EventConformation';
 import GlobalChat from './Chats/GlobalChat';
 import EventChat from './Chats/EventChat';
 import Profile from './Profile/Profile';
 import AllEvents from './Events/Allevents';
-import MyEvents from './Events/myEvents';
+import MyEvents from './Events/MyEvents/myEvents';
 import viewEvent from './Events/viewEvent';
-import EventsGuestList from './Events/EventsGuestList'
+import EventsGuestList from './Events/MyEvents/EventsGuestList'
+import MyEventRoster from './Events/MyEventRoster/MyEventRoster'
+
 import ChatStore from './Chats/ChatStore';
 function App() {
   return (
@@ -41,6 +43,7 @@ function App() {
           <Route path='/event-chat' component={EventChat}/>
           <Route path='/profile' component={Profile}/>
           <Route path='/myEvents' component={MyEvents}/>
+          <Route path='/MyEventRoster' component={MyEventRoster}/>
           <Route path='/all-events' component={AllEvents}/>
           <Route path='/guestList-event' component={EventsGuestList}/>
           </AuthenticationGuard>

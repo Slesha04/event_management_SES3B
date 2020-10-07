@@ -90,6 +90,7 @@ const MyEvents = (props) => {
 
   const [eventVisibility, setEventVisibility] = React.useState(0);
   const [open, setOpen] = React.useState(false);
+  const [AttendeeStatus, setAttendeeStatus] = React.useState("Join Event?");
 
   const handleClickOpen = (event) => {
     event.preventDefault();
@@ -194,6 +195,7 @@ const MyEvents = (props) => {
           eventDescription={eventBodyText}
           eventOrgainser={eventOrganiser}
           eventPrice={ticketPrice}
+          JoinOrLeave={props.location.state.AttendeeStatus}
         />
       </Paper>
     </div>

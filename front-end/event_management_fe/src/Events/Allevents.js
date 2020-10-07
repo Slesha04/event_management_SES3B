@@ -43,7 +43,6 @@ const AllEvents = () => {
                   text={item.eventTitle}
                   bodyText={item.bodyText}
                   label="Adventure"
-                  path={"/view-event"}
                   evenetId={item.eventId}
                 />
               </ul>

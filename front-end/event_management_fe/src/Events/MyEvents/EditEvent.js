@@ -32,7 +32,7 @@ import Cookies from "js-cookie";
 import { useHistory } from "react-router-dom";
 import { withRouter } from "react-router-dom";
 import axios from "axios";
-import { getHeaderToken, getToken, getUserID } from "../Login/JwtConfig";
+import { getHeaderToken, getToken, getUserID } from "../../Login/JwtConfig";
 import { useEffect } from "react";
 import Dialog from "@material-ui/core/Dialog";
 import DialogActions from "@material-ui/core/DialogActions";
@@ -289,7 +289,7 @@ const EditEvent = (props) => {
     console.log(getHeaderToken());
     const res = axios
       .put(
-        `http://localhost:5000/api/EventController/UpdateEvent/${selectedCardId}/${eventTitle}/${eventBodyText}/${eventLocation}/${eventDate}/${eventStatus}/${ticketPrice}/${eventType}/${eventVisibility}`,
+        `https://localhost:5001/api/EventController/UpdateEvent/${selectedCardId}/${eventTitle}/${eventBodyText}/${eventLocation}/${eventDate}/${eventStatus}/${ticketPrice}/${eventType}/${eventVisibility}`,
         body,
         {
           headers: {
