@@ -25,11 +25,10 @@ import Cookies from "js-cookie";
 import { useHistory } from "react-router-dom";
 import { withRouter } from "react-router-dom";
 import axios from "axios";
-import AccountCircleIcon from "@material-ui/icons/AccountCircle";
 import { useEffect, useState } from "react";
-import { getHeaderToken, getToken, getUserID } from "../Login/JwtConfig";
-import MyEventCard from "./cards/MyEventCard";
-import { getUserName } from "../Login/JwtConfig";
+import { getHeaderToken, getToken, getUserID } from "../../Login/JwtConfig";
+import MyEventCard from "../cards/MyEventCard";
+import { getUserName } from "../../Login/JwtConfig";
 
 const useStyles = makeStyles((theme) => ({
   paper: {
@@ -66,49 +65,56 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const EventsGuestList = (props) => {
- 
+const MyEvents = (props) => {
   const classes = useStyles();
   const [post, setPostArray] = useState([]);
-  let selectedCardId = localStorage.getItem("selectedCard");
 
   const history = useHistory();
 
   useEffect(() => {
     const userId = getUserID();
-    console.log(userId);
-    const body = {};
-   console.log(`https://localhost:5001/api/EventRosterController/GetRosterByEvent/${selectedCardId}`)
-   console.log(getHeaderToken())
-    axios.get(`https://localhost:5001/api/EventRosterController/GetRosterByEvent/${selectedCardId}`, body, {
-      headers: {
-        'Authorization':  getHeaderToken()
-      }
-    }).then(
+    console.log("called");
+    axios
+      .get(
+        `https://localhost:5001/api/EventController/ViewUserEvents/${userId}`
+      )
+
+      .then(
         (res) => {
-            if(res.status === 200){
-                console.log("res for updateRoster" + res)
-                alert("Create Event Success");
-            }
-           
+          if (res.status === 200) {
+            setPostArray(res.data);
+            // console.log(res.data[0].eventTitle);
+          }
         },
         (error) => {
-          alert("no", error);
+          alert("something Went Wrong");
         }
       );
-  }, []);
+  });
+  
 
   return (
     <div>
-      <Typography variant={"h4"}>My Events</Typography>
+      <Typography variant={'h4'}>My Events</Typography>
       {console.log(post)}
       {post.map((item) => (
-        <div key={item}>
-          <Paper elevation={5}>dada</Paper>
+        <div key={item} >
+          <Paper elevation={5}>
+            <MyEventCard
+              eventId={item.eventId}
+              eventTitle={item.eventTitle}        
+              eventDate={item.eventDate.slice(0, 10)}
+              eventVenue={item.location.locationName}
+              eventDescription={item.bodyText}
+              eventOrgainser={getUserName()}
+              eventPrice={item.eventTicketPrice}
+             />
+          </Paper>
+          
         </div>
       ))}
     </div>
   );
 };
 
-export default EventsGuestList;
+export default MyEvents;
