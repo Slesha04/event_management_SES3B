@@ -23,6 +23,7 @@ import { useHistory } from "react-router-dom";
 import { withRouter } from "react-router-dom";
 import axios from "axios";
 import AccountCircleIcon from "@material-ui/icons/AccountCircle";
+import Snackbar from '@material-ui/core/Snackbar';
 
 const useStyles = makeStyles((theme) => ({
   paper: {
@@ -64,7 +65,18 @@ const Login = (props) => {
   const classes = useStyles();
   const [username, setUsername] = React.useState("");
   const [password, setPassword] = React.useState("");
+  // const [open, setOpen] = React.useState(false);
+  // const handleClick = () => {
+  //   setOpen(true);
+  // };
 
+  // const handleClose = (event, reason) => {
+  //   if (reason === 'clickaway') {
+  //     return;
+  //   }
+
+  //   setOpen(false);
+  // };
   const handleUsernameChange = (event) => {
     setUsername(event.target.value);
   };
@@ -74,11 +86,11 @@ const Login = (props) => {
   };
 
   const history = useHistory();
-
+ 
   const handleRegister = (event) => {
     event.preventDefault();
-
-    axios
+    
+        axios
       .get(
         `https://localhost:5001/api/UserController/LoginUser/${username}/${password}`
       )
@@ -87,11 +99,15 @@ const Login = (props) => {
           // user id - console.log(res.data.jwtToken.payload.user_id);
           console.log(res.data.encodedForm);
           Cookies.set("auth-cookie", res.data.encodedForm);
+          Cookies.set("auth-full-cookie", res.data);
+
           const userId = res.data.jwtToken.payload.user_id;
           Cookies.set("userID", userId);
           Cookies.set("userName", username);
-          history.push("/homePage");
-           
+          history.push("/homePage")
+
+          // setOpen(true);
+          // setTimeout(changeView(), 15000);
         },
         (error) => {
           alert("something Went Wrong");
@@ -169,6 +185,12 @@ const Login = (props) => {
           </form>
         </div>
       </Container>
+      {/* <Snackbar open={open} autoHideDuration={9000} onClose={handleClose}>
+        <Alert onClose={handleClose} severity="success">
+          LogIn success!
+        </Alert>
+      </Snackbar>
+      */}
     </Paper>
   );
 };

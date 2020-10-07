@@ -16,5 +16,6 @@
             "Then click 'Authorize' and 'Close' to continue. ";
         public const string INCORRECT_USER_TOKEN_MESSAGE = "User is not Authroized to perform such an action";
         public const string INCORRECT_INPUT_CODE = "Incorrect Input Code!";
+        public const string BING_API_KEY = "Ak9Z37VUNwEmz-30m87aWBSjg5Hu8S02QPN65WZXdLyC6c_NqJOh0lZ4yo6neWiz";
     }
 }

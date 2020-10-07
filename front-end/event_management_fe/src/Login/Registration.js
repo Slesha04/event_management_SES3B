@@ -22,6 +22,7 @@ import { useHistory } from "react-router-dom";
 import { withRouter } from "react-router-dom";
 import axios from "axios";
 import Paper from "@material-ui/core/Paper";
+import { getHeaderToken, getToken, getUserID } from "../Login/JwtConfig";
 
 /* https://github.com/mui-org/material-ui/blob/master/docs/src/pages/getting-started/templates/sign-up/SignUp.js*/
 
@@ -104,7 +105,26 @@ const Registration = (props) => {
 
   const handleRegister = (event) => {
     event.preventDefault();
+    
+    //logout user
+    axios
+      .put(
+        `https://localhost:5001/api/UserController/LogoutUser`,  {
+          headers: {
+            'Authorization':  getHeaderToken()
+          }}
+      )
+      .then(
+        (res) => {
+          console.log("Successfully logged out!");
+        },
+        (error) => {
+          console.log(" log out dosent work!");
+        }
+      );
 
+
+      //register user
     axios
       .get(
         `https://localhost:5001/api/UserController/RegisterUser/${username}/${birthDate}/${gender}/${email}/${password}`

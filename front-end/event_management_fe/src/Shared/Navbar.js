@@ -7,6 +7,7 @@ import { withRouter } from "react-router-dom";
 import axios from "axios";
 import { getHeaderToken } from "../Login/JwtConfig";
 import { useHistory } from "react-router-dom";
+import DynamicFeedSharpIcon from '@material-ui/icons/DynamicFeedSharp';
 
 function Navbar() {
   const [click, setClick] = useState(false);
@@ -40,6 +41,7 @@ function Navbar() {
 
   const logout = () => {
     Cookies.remove("auth-cookie");
+    Cookies.remove("userID");
     history.push("/login");
   };
 
@@ -54,9 +56,11 @@ function Navbar() {
   return (
     <>
       <nav className="navbar">
+     
+
         <div className="navbar-container">
-          <Link to="/" className="navbar-logo" onClick={closeMobileMenu}>
-            UTS:EVENTS <i class="fas fa-glass-cheers" />
+          <Link to="/homePage" className="navbar-logo"  onClick={closeMobileMenu}>
+           UTS:EVENTS  <i class="fas fa-glass-cheers" />
           </Link>
           <div className="menu-icon" onClick={handleClick}>
             <i className={click ? "fas fa-times" : "fas fa-bars"} />
@@ -78,6 +82,7 @@ function Navbar() {
                 onClick={closeMobileMenu}
               >
                 <i class="fas fa-comment-alt"></i>
+                
               </Link>
             </li>
             <li className="nav-item">
@@ -98,22 +103,24 @@ function Navbar() {
                 <i class="fas fa-mail-bulk"></i>
               </Link>
             </li>
-            <li className="nav-item">
-              <Link
-                to="/all-events"
-                className="nav-links"
-                onClick={closeMobileMenu}
-              >
-                <i class="far fa-user-circle"></i>
-              </Link>
-            </li>
+            
           </ul>
+          
           {button && (
             <Button onClick={logout} buttonStyle="btn--outline">
               <i class="fas fa-sign-in-alt"></i>
             </Button>
           )}
         </div>
+        <div className="nav-item">
+              <Link
+                to="/MyEventRoster"
+                className="nav-links"
+                onClick={closeMobileMenu}
+              >
+                <DynamicFeedSharpIcon fontSize="medium"/>
+              </Link>
+              </div>
       </nav>
     </>
   );

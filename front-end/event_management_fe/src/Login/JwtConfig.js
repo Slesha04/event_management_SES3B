@@ -1,7 +1,7 @@
 import Cookies from 'js-cookie'
 
 export const getToken = () => {
-    return Cookies.get('auth-cookie');
+    return Cookies.get('auth-full-cookie');
 };
 export const getUserID = () => {
     return Cookies.get('userID');

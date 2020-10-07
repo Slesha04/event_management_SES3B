@@ -168,6 +168,7 @@ const CreateEvent = (props) => {
   const classes = useStyles();
   const [post, setPostArray] = useState([]);
  
+  const [eventOrganiser, setEventOrganiser] = React.useState("");
 
   const [eventTitle , setEventTitle ] = React.useState("");
   const [eventBodyText , setEventBodyText ] = React.useState("");
@@ -215,7 +216,10 @@ const CreateEvent = (props) => {
    //store eveent id to local storage
    console.log("at the grid- " + eventId)
   localStorage.setItem("viewEventId", eventId);
-  history.push("/view-event");
+  history.push({
+    pathname: "/view-event",
+    state: { AttendeeStatus: "Check into this event?" },
+  });
  }
 
   useEffect(() => {
@@ -238,7 +242,22 @@ const CreateEvent = (props) => {
       );
   }, []);
   
-  
+  function getUserName(userId){
+    axios
+    .get(
+      `https://localhost:5001/api/UserController/GetUserById/${userId}`
+    )
+    .then(
+      (res) => {
+        if (res.status === 200) {
+        console.log("this is" + res.data.userName)
+          return res.data.userName;
+        }
+      },
+      (error) => {
+      }
+    );
+  }
 
   const handleRegister = (event) => {
     event.preventDefault();
@@ -251,11 +270,12 @@ const CreateEvent = (props) => {
           }
         }).then(
             (res) => {
-                if(res.status === 200)
-                    alert("Create Event Success");
+                if(res.status === 200){
+                  alert("Create Event Success");
+                }
             },
             (error) => {
-              alert("Create Event Success", error);
+              alert("Create Event fail", error);
             }
           );
   };
@@ -439,7 +459,7 @@ const CreateEvent = (props) => {
                  <img src={upcomingEvent} alt={item.eventTitle} />
                 <GridListTileBar
                   title={item.eventTitle}
-                  subtitle={<span>by: {item.bodyText}</span>}
+                  subtitle={<span>about: {item.bodyText}</span>}
                   actionIcon={
                     <IconButton
                       aria-label={`info about ${item.title}`}
