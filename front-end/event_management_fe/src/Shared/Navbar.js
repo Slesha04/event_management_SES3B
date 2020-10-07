@@ -93,7 +93,7 @@ function Navbar() {
             </li>
             <li className="nav-item">
               <Link
-                to="/myEventRoster"
+                to="/myEvents"
                 className="nav-links"
                 onClick={closeMobileMenu}
               >

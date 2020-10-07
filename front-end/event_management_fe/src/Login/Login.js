@@ -91,9 +91,7 @@ const Login = (props) => {
   };
 
   const history = useHistory();
-function changeView(){
-  history.push("/homePage")
-}
+ 
   const handleRegister = (event) => {
     event.preventDefault();
     
@@ -111,6 +109,8 @@ function changeView(){
           const userId = res.data.jwtToken.payload.user_id;
           Cookies.set("userID", userId);
           Cookies.set("userName", username);
+          history.push("/homePage")
+
           // setOpen(true);
           // setTimeout(changeView(), 15000);
         },
