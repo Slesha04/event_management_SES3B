@@ -32,7 +32,7 @@ import Cookies from "js-cookie";
 import { useHistory } from "react-router-dom";
 import { withRouter } from "react-router-dom";
 import axios from "axios";
-import { getHeaderToken, getToken, getUserID } from "../Login/JwtConfig";
+import { getHeaderToken, getToken, getUserID } from "../../Login/JwtConfig";
 import { useEffect } from "react";
 import Dialog from "@material-ui/core/Dialog";
 import DialogActions from "@material-ui/core/DialogActions";

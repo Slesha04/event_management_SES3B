@@ -26,9 +26,9 @@ import { useHistory } from "react-router-dom";
 import { withRouter } from "react-router-dom";
 import axios from "axios";
 import { useEffect, useState } from "react";
-import { getHeaderToken, getToken, getUserID } from "../Login/JwtConfig";
-import MyEventCard from "./cards/MyEventCard";
-import { getUserName } from "../Login/JwtConfig";
+import { getHeaderToken, getToken, getUserID } from "../../Login/JwtConfig";
+import MyEventCard from "../cards/MyEventCard";
+import { getUserName } from "../../Login/JwtConfig";
 
 const useStyles = makeStyles((theme) => ({
   paper: {

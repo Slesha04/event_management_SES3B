@@ -8,7 +8,7 @@ import TableHead from "@material-ui/core/TableHead";
 import TableRow from "@material-ui/core/TableRow";
 import Paper from "@material-ui/core/Paper";
 import { useEffect, useState } from "react";
-import { getHeaderToken, getToken, getUserID } from "../Login/JwtConfig";
+import { getHeaderToken, getToken, getUserID } from "../../Login/JwtConfig";
 import axios from "axios";
 import { withStyles } from "@material-ui/core/styles";
 import { Checkbox } from "semantic-ui-react";
@@ -54,11 +54,12 @@ function createData(
   };
 }
 
-export default function MyEventsRoster() {
+export default function EventsGuestList() {
   const classes = useStyles();
   const [post, setPostArray] = useState([]);
 
   let selectedCardId = localStorage.getItem("selectedCard");
+
 
 
   // function handleMarkAttende(inputCode){
@@ -85,7 +86,7 @@ export default function MyEventsRoster() {
 
     axios
       .get(
-        `https://localhost:5001/api/EventRosterController/GetRosterEntriesByUser`,
+        `https://localhost:5001/api/EventRosterController/GetRosterByEvent/${selectedCardId}`,
         {
           headers: {
             Authorization: getHeaderToken(),
