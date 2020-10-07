@@ -24,7 +24,6 @@ import { withRouter } from "react-router-dom";
 import axios from "axios";
 import AccountCircleIcon from "@material-ui/icons/AccountCircle";
 import Snackbar from '@material-ui/core/Snackbar';
-import MuiAlert from '@material-ui/lab/Alert';
 
 const useStyles = makeStyles((theme) => ({
   paper: {
@@ -60,10 +59,6 @@ const useStyles = makeStyles((theme) => ({
     minWidth: 120,
   },
 }));
-
-function Alert(props) {
-  return <MuiAlert elevation={6} variant="filled" {...props} />;
-}
 
 //export default function SignUp() {
 const Login = (props) => {

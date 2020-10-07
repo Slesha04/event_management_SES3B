@@ -216,7 +216,10 @@ const CreateEvent = (props) => {
    //store eveent id to local storage
    console.log("at the grid- " + eventId)
   localStorage.setItem("viewEventId", eventId);
-  history.push("/view-event");
+  history.push({
+    pathname: "/view-event",
+    state: { AttendeeStatus: "Check into this event?" },
+  });
  }
 
   useEffect(() => {
@@ -267,11 +270,13 @@ const CreateEvent = (props) => {
           }
         }).then(
             (res) => {
-                if(res.status === 200)
-                    alert("Create Event Success");
+                if(res.status === 200){
+                  alert("Create Event Success");
+
+                }
             },
             (error) => {
-              alert("Create Event Success", error);
+              alert("Create Event fail", error);
             }
           );
   };

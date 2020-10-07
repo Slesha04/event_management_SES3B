@@ -13,6 +13,7 @@ import axios from "axios";
 import { withStyles } from "@material-ui/core/styles";
 import { Checkbox } from "semantic-ui-react";
 import Button from "@material-ui/core/Button";
+import { useHistory } from "react-router-dom";
 
 const StyledTableCell = withStyles((theme) => ({
   head: {
@@ -39,15 +40,17 @@ const useStyles = makeStyles({
 });
 
 function createData(
-  attendeeId,
-  attendeeUsername,
+  eventId,
+  eventTitle,
+  eventOrganiserUsername,
   dateRegistered,
   inputCode,
   attendeeArrived
 ) {
   return {
-    attendeeId,
-    attendeeUsername,
+    eventId,
+    eventTitle,
+    eventOrganiserUsername,
     dateRegistered,
     inputCode,
     attendeeArrived,
@@ -57,9 +60,9 @@ function createData(
 export default function MyEventsRoster() {
   const classes = useStyles();
   const [post, setPostArray] = useState([]);
+  const history = useHistory();
 
   let selectedCardId = localStorage.getItem("selectedCard");
-
 
   // function handleMarkAttende(inputCode){
   //   const body = {};
@@ -79,6 +82,13 @@ export default function MyEventsRoster() {
   //       }
   //     );
   // };
+  function handleViewEvent(eventId) {
+    localStorage.setItem("viewEventId", eventId);
+    history.push({
+      pathname: "/view-event",
+      state: { AttendeeStatus: "Leave the event?" },
+    });
+  }
 
   useEffect(() => {
     const rows = [];
@@ -99,11 +109,12 @@ export default function MyEventsRoster() {
               (item) =>
                 rows.push(
                   createData(
-                    item.attendeeId,
-                    item.attendeeUsername,
-                    item.dateRegistered,
-                    item.inputCode,
-                    item.attendeeArrived
+                    item.rosterEntry.eventId,
+                    item.eventTitle,
+                    item.eventOrganiserUsername,
+                    item.rosterEntry.dateRegistered,
+                    item.rosterEntry.inputCode,
+                    item.rosterEntry.attendeeArrived
                   )
                 )
               //console.log(createData(item.attendeeId, item.attendeeUsername, item.dateRegistered, item.inputCode))
@@ -118,43 +129,58 @@ export default function MyEventsRoster() {
   }, []);
 
   return (
-    <TableContainer component={Paper}>
-      <Table className={classes.table} aria-label="customized table">
-        <TableHead>
-          <TableRow>
-            <StyledTableCell align="right">AttendeeId</StyledTableCell>
-            <StyledTableCell align="right">Attendee Name</StyledTableCell>
-            <StyledTableCell align="right">Date Registered</StyledTableCell>
-            <StyledTableCell align="right">Input Code</StyledTableCell>
-            <StyledTableCell align="right">Attende Arrived</StyledTableCell>
-            <StyledTableCell align="right"> Mark Attende</StyledTableCell>
-          </TableRow>
-        </TableHead>
-        <TableBody>
-          {post.map((row) => (
-            <StyledTableRow key={row.attendeeId}>
-              <StyledTableCell align="right">{row.attendeeId}</StyledTableCell>
+    <>
+      Events I am following
+      <TableContainer component={Paper}>
+        <Table className={classes.table} aria-label="customized table">
+          <TableHead>
+            <TableRow>
+              <StyledTableCell align="right">eventTitle</StyledTableCell>
               <StyledTableCell align="right">
-                {row.attendeeUsername}
+                eventOrganiserUsername
+              </StyledTableCell>
+              <StyledTableCell align="right">dateRegistered</StyledTableCell>
+              <StyledTableCell align="right">Input Code</StyledTableCell>
+              <StyledTableCell align="right">
+                Event Attended / Going
               </StyledTableCell>
               <StyledTableCell align="right">
-                {row.dateRegistered}
-              </StyledTableCell>
-              <StyledTableCell align="right">{row.inputCode}</StyledTableCell>
-              <StyledTableCell align="right">
-                {row.attendeeArrived ? "Yes" : "No"}
-              </StyledTableCell>
-              {/* <StyledTableCell>
-              <Button color="primary" size="medium" onClick={() => handleMarkAttende(row.inputCode)}>
                 {" "}
-                Mark Attende
-              </Button>
-              </StyledTableCell> */}
-            </StyledTableRow>
-          ))}
-        </TableBody>
-      </Table>
-      {/* <Button color="primary" size="medium" onClick={handleRemoveAttende}>
+                View Event Details
+              </StyledTableCell>
+            </TableRow>
+          </TableHead>
+          <TableBody>
+            {post.map((row) => (
+              <StyledTableRow key={row.eventId}>
+                <StyledTableCell align="right">
+                  {row.eventTitle}
+                </StyledTableCell>
+                <StyledTableCell align="right">
+                  {row.eventOrganiserUsername}
+                </StyledTableCell>
+                <StyledTableCell align="right">
+                  {row.dateRegistered}
+                </StyledTableCell>
+                <StyledTableCell align="right">{row.inputCode}</StyledTableCell>
+                <StyledTableCell align="right">
+                  {row.attendeeArrived ? "Went" : "Going"}
+                </StyledTableCell>
+                <StyledTableCell>
+                  <Button
+                    color="primary"
+                    size="medium"
+                    onClick={() => handleViewEvent(row.eventId)}
+                  >
+                    {" "}
+                    View Event
+                  </Button>
+                </StyledTableCell>
+              </StyledTableRow>
+            ))}
+          </TableBody>
+        </Table>
+        {/* <Button color="primary" size="medium" onClick={handleRemoveAttende}>
         {" "}
         Remove Attende
       </Button>
@@ -163,6 +189,7 @@ export default function MyEventsRoster() {
         {" "}
         Add Attende
       </Button> */}
-    </TableContainer>
+      </TableContainer>
+    </>
   );
 }
