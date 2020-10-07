@@ -111,7 +111,7 @@ namespace Event_Management_Application.Controllers
         [HttpGet]
         public List<Medium> LoadChannelFiles([FromRoute] int channelId)
         {
-            throw new NotImplementedException();
+            return _dbContext.Channels.Where(x => x.ChannelId == channelId).First()?.Media.ToList();
         }
 
         [Route("GetGlobalChannel")]
