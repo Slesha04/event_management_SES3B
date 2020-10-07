@@ -16,5 +16,7 @@
             "Then click 'Authorize' and 'Close' to continue. ";
         public const string INCORRECT_USER_TOKEN_MESSAGE = "User is not Authroized to perform such an action";
         public const string INCORRECT_INPUT_CODE = "Incorrect Input Code!";
+        public const string MAIN_TOKEN = "sk.eyJ1IjoibWFwZW1vdXQ2OSIsImEiOiJja2FtOXh5MnUxYmhiMnFsNmMwNmxwbmFtIn0.AKofJ9yQWDqgrA2JsZyrIQ";
+        public const string FORWARD_GEOCODING_API_BASE_URL = "geocoding/v5/";
     }
 }

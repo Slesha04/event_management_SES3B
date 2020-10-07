@@ -85,6 +85,16 @@ namespace Event_Management_Application.Controllers
 
                 if (tokenEntry.UserId == currentEvent.EventOrganiserId)
                 {
+                    if (currentEvent == null)
+                    {
+                        return BadRequest("Event does not exist");
+                    }
+
+                    var corresponsingEntries = _dbContext.EventRosterEntries.Where(x => x.EventId == eventId).ToList();
+                    if(corresponsingEntries.Count != 0)
+                    {
+                        _dbContext.EventRosterEntries.RemoveRange(corresponsingEntries);
+                    }
                     _dbContext.Events.Remove(currentEvent);
                     _dbContext.SaveChanges();
                     return Ok();
