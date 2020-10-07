@@ -9,6 +9,7 @@ namespace Event_Management_Application.ResourceManagement.Models
     [NotMapped]
     public class LocationCoordinates
     {
-        
+        public double? Latitude { get; set; }
+        public double? Longitude { get; set; }
     }
 }
