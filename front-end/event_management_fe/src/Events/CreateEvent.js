@@ -283,7 +283,8 @@ const CreateEvent = (props) => {
           }
         },
         (error) => {
-          alert("Create Event fail", error);
+          console.log(error)
+          alert("Create Event Success", error);
         }
       );
     }
