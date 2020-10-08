@@ -193,35 +193,56 @@ export default function ViewEventCard(props) {
                       <Grid item xs={12}>
                         {" "}
                         <Typography variant="h4" color="Primary" component="h2">
-                          Event Description: "{props.eventDescription}"
+                          Description: "{props.eventDescription}"
                         </Typography>
                       </Grid>
 
                       <Grid item xs={12}>
                         <Typography variant="h5" component="h2">
-                          eventDate: {props.eventDate}
+                          Date: {props.eventDate}
                         </Typography>
                       </Grid>
                       <Grid item xs={12}>
                         <Typography variant="h5" component="h2">
-                          eventVenue: {props.eventVenue}
+                          Venue: {props.eventVenue}
                         </Typography>
                       </Grid>
+                      {/* <Grid item xs={12}>
+                        <Grid
+                          container
+                          direction="row"
+                          justify="flex-start"
+                          alignItems="flex-start"
+                        >
+                          <Grid item xs={6} sm={3}>
+                            <Typography variant="h5" component="h2">
+                              Description{" "}
+                            </Typography>
+                          </Grid>
+                          <Grid item xs={6}>
+                            <Typography
+                              variant="h5"
+                              component="h2"
+                              align="left"
+                              paragraph="true"
+                            >
+                              {props.eventDescription}
+                            </Typography>
+                          </Grid>
+                        </Grid>
+                      </Grid> */}
 
-                      <Grid item xs={12}>
+                      <Grid item xs={12} >
                         <Typography variant="h5" component="h2">
-                          eventDescription: {props.eventDescription}
-                        </Typography>
-                      </Grid>
-
-                      <Grid item xs={12}>
-                        <Typography variant="h5" component="h2">
-                          eventOrgainser : {props.eventOrgainser}
+                          Orgainser : {props.eventOrgainser}
                         </Typography>
                       </Grid>
                       <Grid item xs={12}>
                         <Typography variant="h5" component="h2">
-                          eventPrice: {props.eventPrice}
+                          Price:{" "}
+                          {props.eventPrice == 0
+                            ? "Free Event"
+                            : "Ticketed Event"}
                         </Typography>
                       </Grid>
                       <Typography variant="body2" component="p">

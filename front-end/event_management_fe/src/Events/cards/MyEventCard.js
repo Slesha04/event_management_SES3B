@@ -152,29 +152,29 @@ export default function MyEventCard(props) {
                 >
                   <Grid item xs={12}>
                     <Typography variant="h5" component="h2">
-                      eventDate: {props.eventDate}
+                      Date: {props.eventDate}
                     </Typography>
                   </Grid>
                   <Grid item xs={12}>
                     <Typography variant="h5" component="h2">
-                      eventVenue: {props.eventVenue}
+                      Venue: {props.eventVenue}
+                    </Typography>
+                  </Grid>
+
+                  <Grid item xs={12}>
+                    <Typography variant="h5" component="h2" align='left'>
+                      Description: {props.eventDescription}
                     </Typography>
                   </Grid>
 
                   <Grid item xs={12}>
                     <Typography variant="h5" component="h2">
-                      eventDescription: {props.eventDescription}
-                    </Typography>
-                  </Grid>
-
-                  <Grid item xs={12}>
-                    <Typography variant="h5" component="h2">
-                      eventOrgainser : {props.eventOrgainser}
+                      Orgainser : {props.eventOrgainser}
                     </Typography>
                   </Grid>
                   <Grid item xs={12}>
                     <Typography variant="h5" component="h2">
-                      eventPrice: {props.eventPrice}
+                      Price: {props.eventPrice}
                     </Typography>
                   </Grid>
                   <Typography variant="body2" component="p">
