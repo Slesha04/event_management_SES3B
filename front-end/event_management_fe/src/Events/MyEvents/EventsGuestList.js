@@ -13,6 +13,7 @@ import axios from "axios";
 import { withStyles } from "@material-ui/core/styles";
 import { Checkbox } from "semantic-ui-react";
 import Button from "@material-ui/core/Button";
+import { getUserPlatformAPIPort} from "../../Login/JwtConfig";
 
 const StyledTableCell = withStyles((theme) => ({
   head: {
@@ -86,7 +87,7 @@ export default function EventsGuestList() {
 
     axios
       .get(
-        `https://localhost:5001/api/EventRosterController/GetRosterByEvent/${selectedCardId}`,
+        `${getUserPlatformAPIPort()}api/EventRosterController/GetRosterByEvent/${selectedCardId}`,
         {
           headers: {
             Authorization: getHeaderToken(),

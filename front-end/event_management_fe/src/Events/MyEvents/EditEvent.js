@@ -40,6 +40,7 @@ import DialogContent from "@material-ui/core/DialogContent";
 import DialogContentText from "@material-ui/core/DialogContentText";
 import DialogTitle from "@material-ui/core/DialogTitle";
 import Snackbars from "../../Shared/Snackbar";
+import { getUserPlatformAPIPort} from "../../Login/JwtConfig";
 
 import {
   fade,
@@ -269,7 +270,7 @@ const EditEvent = (props) => {
 
     axios
       .get(
-        `https://localhost:5001/api/EventController/ViewEvent/${selectedCardId}`
+        `${getUserPlatformAPIPort()}api/EventController/ViewEvent/${selectedCardId}`
       )
 
       .then(

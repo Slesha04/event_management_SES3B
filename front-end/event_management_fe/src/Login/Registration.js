@@ -24,6 +24,7 @@ import axios from "axios";
 import Paper from "@material-ui/core/Paper";
 import { getHeaderToken, getToken, getUserID } from "../Login/JwtConfig";
 import Snackbars from "../Shared/Snackbar";
+import { getUserPlatformAPIPort} from "../Login/JwtConfig";
 
 /* https://github.com/mui-org/material-ui/blob/master/docs/src/pages/getting-started/templates/sign-up/SignUp.js*/
 
@@ -119,7 +120,7 @@ const Registration = (props) => {
     ) {
       //logout previous user
       axios
-        .put(`https://localhost:5001/api/UserController/LogoutUser`, {
+        .put(`${getUserPlatformAPIPort()}api/UserController/LogoutUser`, {
           headers: {
             Authorization: getHeaderToken(),
           },

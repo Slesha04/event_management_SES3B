@@ -3,6 +3,7 @@ import FullCalendar from "@fullcalendar/react";
 import dayGridPlugin from "@fullcalendar/daygrid";
 import interactionPlugin from "@fullcalendar/interaction";
 import axios from "axios";
+import { getUserPlatformAPIPort} from "../../Login/JwtConfig";
 
 export default class Schedule extends Component {
   // declare any necessary functions such as handleDateClick, etc.
@@ -20,7 +21,7 @@ export default class Schedule extends Component {
 
     axios
       .get(
-        `https://localhost:5001/api/EventController/SearchEventsByDate/${"06-10-2020"}/1?resultLimit=20`
+        `${getUserPlatformAPIPort()}api/EventController/SearchEventsByDate/${"06-10-2020"}/1?resultLimit=20`
       )
       .then(
         (res) => {

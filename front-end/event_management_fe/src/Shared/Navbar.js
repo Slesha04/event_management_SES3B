@@ -9,6 +9,7 @@ import { getHeaderToken } from "../Login/JwtConfig";
 import { useHistory } from "react-router-dom";
 import DynamicFeedSharpIcon from "@material-ui/icons/DynamicFeedSharp";
 import Snackbars from "../Shared/Snackbar";
+import { getUserPlatformAPIPort} from "../Login/JwtConfig";
 
 function Navbar() {
   const [click, setClick] = useState(false);
@@ -47,7 +48,7 @@ function Navbar() {
     const body = {};
 
     axios
-      .post(`https://localhost:5001/api/UserController/LogoutUser`, body, {
+      .post(`${getUserPlatformAPIPort()}api/UserController/LogoutUser`, body, {
         headers: {
           Authorization: getHeaderToken(),
         },
@@ -59,6 +60,8 @@ function Navbar() {
           console.log(res);
           Cookies.remove("auth-cookie");
           Cookies.remove("userID");
+          Cookies.remove("user-platform-api-port");
+
           setDisplayValue(true);
           setTimeout(() => {
             history.push("/login");

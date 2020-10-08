@@ -39,6 +39,7 @@ import { useEffect, useState } from "react";
 import upcomingEvent from "./Events.jpg";
 import { useForm } from "react-hook-form";
 import Snackbars from "../Shared/Snackbar";
+import { getUserPlatformAPIPort} from "../Login/JwtConfig";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -232,7 +233,7 @@ const CreateEvent = (props) => {
     const userId = getUserID();
     console.log("called");
     axios
-      .get(`https://localhost:5001/api/EventController/LoadRecentEvents/1`)
+      .get(`${getUserPlatformAPIPort()}api/EventController/LoadRecentEvents/1`)
       .then(
         (res) => {
           if (res.status === 200) {
@@ -250,7 +251,7 @@ const CreateEvent = (props) => {
 
   function getUserName(userId) {
     axios
-      .get(`https://localhost:5001/api/UserController/GetUserById/${userId}`)
+      .get(`${getUserPlatformAPIPort()}api/UserController/GetUserById/${userId}`)
       .then(
         (res) => {
           if (res.status === 200) {
@@ -268,7 +269,7 @@ const CreateEvent = (props) => {
     event.preventDefault();
     const body = {};
     console.log(
-      `https://localhost:5001/api/EventController/CreateEvent/${eventTitle}/${eventBodyText}/${eventLocation}/${eventDate}/${ticketPrice}/${eventType}/${eventVisibility}`
+      `${getUserPlatformAPIPort()}api/EventController/CreateEvent/${eventTitle}/${eventBodyText}/${eventLocation}/${eventDate}/${ticketPrice}/${eventType}/${eventVisibility}`
     );
     console.log(getHeaderToken());
     if (
@@ -287,7 +288,7 @@ const CreateEvent = (props) => {
     } else {
       const res = axios
         .put(
-          `https://localhost:5001/api/EventController/CreateEvent/${eventTitle}/${eventBodyText}/${eventLocation}/${eventDate}/${ticketPrice}/${eventType}/${eventVisibility}`,
+          `${getUserPlatformAPIPort()}api/EventController/CreateEvent/${eventTitle}/${eventBodyText}/${eventLocation}/${eventDate}/${ticketPrice}/${eventType}/${eventVisibility}`,
           body,
           {
             headers: {

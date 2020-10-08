@@ -1,6 +1,7 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import { useHistory } from "react-router-dom";
+import { getUserPlatformAPIPort} from "../../Login/JwtConfig";
 
 function AllEventCard(props) {
   const history = useHistory();

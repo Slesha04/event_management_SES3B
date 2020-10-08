@@ -15,6 +15,7 @@ import { Checkbox } from "semantic-ui-react";
 import Button from "@material-ui/core/Button";
 import { useHistory } from "react-router-dom";
 import Typography from "@material-ui/core/Typography";
+import { getUserPlatformAPIPort} from "../../Login/JwtConfig";
 
 const StyledTableCell = withStyles((theme) => ({
   head: {
@@ -105,7 +106,7 @@ export default function MyEventsRoster() {
 
     axios
       .get(
-        `https://localhost:5001/api/EventRosterController/GetRosterEntriesByUser`,
+        `${getUserPlatformAPIPort()}api/EventRosterController/GetRosterEntriesByUser`,
         {
           headers: {
             Authorization: getHeaderToken(),

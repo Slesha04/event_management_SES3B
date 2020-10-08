@@ -24,7 +24,10 @@ import { withRouter } from "react-router-dom";
 import axios from "axios";
 import AccountCircleIcon from "@material-ui/icons/AccountCircle";
 import Snackbars from "../Shared/Snackbar";
-
+import DesktopMacTwoToneIcon from "@material-ui/icons/DesktopMacTwoTone";
+import LaptopWindowsTwoToneIcon from "@material-ui/icons/LaptopWindowsTwoTone";
+import { IconButton } from "@material-ui/core";
+import { getUserPlatformAPIPort} from "../Login/JwtConfig";
 
 const useStyles = makeStyles((theme) => ({
   paper: {
@@ -34,6 +37,10 @@ const useStyles = makeStyles((theme) => ({
     display: "flex",
     flexDirection: "column",
     alignItems: "center",
+  },
+  iconButtonLabel: {
+    display: "flex",
+    flexDirection: "column",
   },
   outsidePaper: {
     marginTop: theme.spacing(8),
@@ -66,11 +73,11 @@ const Login = (props) => {
   const classes = useStyles();
   const [username, setUsername] = React.useState("");
   const [password, setPassword] = React.useState("");
+  const [uservalue, setUservalue] = React.useState("");
 
   // snackBar
   const [alertValue, setAlertValue] = React.useState("");
   const [DisplayValue, setDisplayValue] = React.useState("");
-
 
   const handleUsernameChange = (event) => {
     setUsername(event.target.value);
@@ -82,12 +89,19 @@ const Login = (props) => {
 
   const history = useHistory();
 
+  const handleAPIPortNumMac = (event) => {
+    setUservalue("http://localhost:5000/");
+  };
+  const handleAPIPortNumWindows = (event) => {
+    setUservalue("https://localhost:5001/");
+  };
   const handleRegister = (event) => {
     event.preventDefault();
-
+    Cookies.set("user-platform-api-port",uservalue);
+    console.log("user-platform-api-port -"+uservalue);
     axios
       .get(
-        `https://localhost:5001/api/UserController/LoginUser/${username}/${password}`
+        `${getUserPlatformAPIPort()}api/UserController/LoginUser/${username}/${password}`
       )
       .then(
         (res) => {
@@ -96,7 +110,7 @@ const Login = (props) => {
           console.log(res.data.encodedForm);
           Cookies.set("auth-cookie", res.data.encodedForm);
           Cookies.set("auth-full-cookie", res.data);
-
+          
           const userId = res.data.jwtToken.payload.user_id;
           Cookies.set("userID", userId);
           Cookies.set("userName", username);
@@ -183,14 +197,27 @@ const Login = (props) => {
               </Grid>
             </form>
           </div>
+          <Grid container direction="row" justify="center" alignItems="center">
+            <Grid item xs={12} sm={6}>
+              <IconButton classes={{ label: classes.iconButtonLabel }} onClick={handleAPIPortNumMac}>
+                <DesktopMacTwoToneIcon style={{ fontSize: 60 }} />
+                <div>Mac</div>
+              </IconButton>
+            </Grid>
+            <Grid item xs={12} sm={6}>
+              <IconButton classes={{ label: classes.iconButtonLabel }} onClick={handleAPIPortNumWindows}>
+                <LaptopWindowsTwoToneIcon style={{ fontSize: 60 }} />
+                <div>Windows</div>
+              </IconButton>
+            </Grid>
+          </Grid>
         </Container>
-        {/* <Snackbar open={open} autoHideDuration={9000} onClose={handleClose}>
-        <Alert onClose={handleClose} severity="success">
-          LogIn success!
-        </Alert>
-      </Snackbar>
-      */}
-     <Snackbars title={"Log In"} alertValue={alertValue} DisplayValue={DisplayValue}/>
+
+        <Snackbars
+          title={"Log In"}
+          alertValue={alertValue}
+          DisplayValue={DisplayValue}
+        />
       </Paper>
     </>
   );

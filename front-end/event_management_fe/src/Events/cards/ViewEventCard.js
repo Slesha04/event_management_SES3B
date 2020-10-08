@@ -20,6 +20,7 @@ import DialogContent from "@material-ui/core/DialogContent";
 import DialogContentText from "@material-ui/core/DialogContentText";
 import DialogTitle from "@material-ui/core/DialogTitle";
 import Snackbars from "../../Shared/Snackbar";
+import { getUserPlatformAPIPort} from "../../Login/JwtConfig";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -101,7 +102,7 @@ export default function ViewEventCard(props) {
     } else {
       const res = axios
         .post(
-          `https://localhost:5001/api/EventRosterController/AddAttendee/${selectedCardId}`,
+          `${getUserPlatformAPIPort()}api/EventRosterController/AddAttendee/${selectedCardId}`,
           body,
           {
             headers: {
@@ -135,7 +136,7 @@ export default function ViewEventCard(props) {
 
     const res = axios
       .delete(
-        `https://localhost:5001/api/EventRosterController/RemoveAttendee/${selectedCardId}/${getUserID()}`,
+        `${getUserPlatformAPIPort()}api/EventRosterController/RemoveAttendee/${selectedCardId}/${getUserID()}`,
 
         {
           headers: {
