@@ -19,6 +19,8 @@ import DialogActions from "@material-ui/core/DialogActions";
 import DialogContent from "@material-ui/core/DialogContent";
 import DialogContentText from "@material-ui/core/DialogContentText";
 import DialogTitle from "@material-ui/core/DialogTitle";
+import Snackbars from "../../Shared/Snackbar";
+
 const useStyles = makeStyles((theme) => ({
   root: {
     minWidth: 275,
@@ -63,17 +65,22 @@ export default function ViewEventCard(props) {
   const classes = useStyles();
   const cardId = props.eventId;
   const history = useHistory();
+  // snackBar
+  const [alertValue, setAlertValue] = React.useState("");
+  const [DisplayValue, setDisplayValue] = React.useState("");
+  const [alertTitle, setAlertTitle] = React.useState("");
+
   let selectedCardId = localStorage.getItem("viewEventId");
   const [open, setOpen] = React.useState(false);
   const handleClickOpen = (event) => {
     event.preventDefault();
     setOpen(true);
   };
-  const handleEditEvent = (event) => {
-    history.push("/edit-event");
-    console.log(cardId);
-    localStorage.setItem("selectedCard", cardId);
-  };
+  // const handleEditEvent = (event) => {
+  //   history.push("/edit-event");
+  //   console.log(cardId);
+  //   localStorage.setItem("selectedCard", cardId);
+  // };
   const handleClose = () => {
     setOpen(false);
   };
@@ -84,7 +91,12 @@ export default function ViewEventCard(props) {
     console.log(getUserID());
 
     if (props.eventOrganiserId == getUserID()) {
-      alert("You cant join your own event!");
+      //open snackbar
+      setAlertTitle("You cant join your own event!");
+      setDisplayValue(true);
+      setAlertValue(0);
+
+      //close dialog
       setOpen(false);
     } else {
       const res = axios
@@ -100,10 +112,18 @@ export default function ViewEventCard(props) {
         .then(
           (res) => {
             console.log(res);
-            if (res.status === 200) alert("You are added to the event!");
+            if (res.status === 200) {
+              setAlertTitle("You are added to the event!");
+              setDisplayValue(true);
+              setAlertValue(1);
+            }
           },
           (error) => {
-            alert("You are already added to the event!", error);
+            console.log(error);
+            //open snackbar
+            setAlertTitle("You are already added to the event!");
+            setDisplayValue(true);
+            setAlertValue(0);
           }
         );
       setOpen(false);
@@ -126,17 +146,30 @@ export default function ViewEventCard(props) {
       .then(
         (res) => {
           console.log(res);
-          if (res.status === 200) alert("You left the event!");
-          history.push("/MyEventRoster");
+          if (res.status === 200) {
+            setAlertTitle("You left the event!");
+            setDisplayValue(true);
+            setAlertValue(1);
+            setTimeout(() => {
+              history.push("/MyEventRoster");
+            }, 2500);
+          }
         },
         (error) => {
-          alert("try again!", error);
+          setAlertTitle("Backend Error!");
+          setDisplayValue(true);
+          setAlertValue(1);
         }
       );
     setOpen(false);
   };
   return (
     <Card className={classes.root}>
+      <Snackbars
+        title={alertTitle}
+        alertValue={alertValue}
+        DisplayValue={DisplayValue}
+      />
       <CardContent>
         <Grid
           container

@@ -31,6 +31,7 @@ import { getHeaderToken, getToken, getUserID } from "../Login/JwtConfig";
 import ViewEventCard from "./cards/ViewEventCard";
 import { getUserName } from "../Login/JwtConfig";
 import Map from "./map/map";
+import Snackbars from "../Shared/Snackbar";
 
 const useStyles = makeStyles((theme) => ({
   paper: {
@@ -75,6 +76,10 @@ const MyEvents = (props) => {
 
   const history = useHistory();
   let selectedCardId = localStorage.getItem("selectedCard");
+
+  // snackBar
+  const [alertValue, setAlertValue] = React.useState("");
+  const [DisplayValue, setDisplayValue] = React.useState("");
 
   const [latitude, setLatitude] = React.useState("");
   const [longitude, setLongtitude] = React.useState("");
@@ -151,7 +156,8 @@ const MyEvents = (props) => {
           }
         },
         (error) => {
-          alert("something Went Wrong");
+          setDisplayValue(true);
+          setAlertValue(0);
         }
       );
   }
@@ -163,7 +169,6 @@ const MyEvents = (props) => {
       .get(
         `https://localhost:5001/api/EventController/ViewEvent/${selectedEvent}`
       )
-
       .then(
         (res) => {
           if (res.status === 200) {
@@ -178,11 +183,11 @@ const MyEvents = (props) => {
             setEventVisibility(res.data.eventVisibility);
             setEventOrganiser(getUserName(res.data.eventOrganiserId));
             setEventOrganiserID(res.data.eventOrganiserId);
-
           }
         },
         (error) => {
-          alert("something Went Wrong");
+          setDisplayValue(true);
+          setAlertValue(0);
         }
       );
 
@@ -199,7 +204,8 @@ const MyEvents = (props) => {
           }
         },
         (error) => {
-          console.log(error);
+          setDisplayValue(true);
+          setAlertValue(0);
         }
       );
   }, []);
@@ -231,6 +237,11 @@ const MyEvents = (props) => {
 
   return (
     <div>
+      <Snackbars
+        title={"Backend Unrecheable"}
+        alertValue={alertValue}
+        DisplayValue={DisplayValue}
+      />
       <Paper elevation={5}>
         <ViewEventCard
           eventId={selectedEvent}

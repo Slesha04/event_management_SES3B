@@ -140,57 +140,70 @@ export default function MyEventsRoster() {
 
   return (
     <>
-            <Typography variant={'h4'}>Events I am following</Typography>
-      <TableContainer component={Paper}>
-        <Table className={classes.table} aria-label="customized table">
-          <TableHead>
-            <TableRow>
-              <StyledTableCell align="right">eventTitle</StyledTableCell>
-              <StyledTableCell align="right">
-                eventOrganiserUsername
-              </StyledTableCell>
-              <StyledTableCell align="right">dateRegistered</StyledTableCell>
-              <StyledTableCell align="right">Input Code</StyledTableCell>
-              <StyledTableCell align="right">
-                Event Attended / Going
-              </StyledTableCell>
-              <StyledTableCell align="right">
-                {" "}
-                View Event Details
-              </StyledTableCell>
-            </TableRow>
-          </TableHead>
-          <TableBody>
-            {post.map((row) => (
-              <StyledTableRow key={row.eventId}>
-                <StyledTableCell align="right">
-                  {row.eventTitle}
-                </StyledTableCell>
-                <StyledTableCell align="right">
-                  {row.eventOrganiserUsername}
-                </StyledTableCell>
-                <StyledTableCell align="right">
-                  {row.dateRegistered}
-                </StyledTableCell>
-                <StyledTableCell align="right">{row.inputCode}</StyledTableCell>
-                <StyledTableCell align="right">
-                  {row.attendeeArrived ? "Went" : "Going"}
-                </StyledTableCell>
-                <StyledTableCell>
-                  <Button
-                    color="primary"
-                    size="medium"
-                    onClick={() => handleViewEvent(row.eventId)}
-                  >
+      {post.length == 0 ? (
+        <>
+          <img src={require("../noData.jpg")} />
+          <Typography variant="h2">
+            No Data found this time, come back soon
+          </Typography>
+        </>
+      ) : (
+        <>
+          <Typography variant={"h4"}>Events I am following</Typography>
+          <TableContainer component={Paper}>
+            <Table className={classes.table} aria-label="customized table">
+              <TableHead>
+                <TableRow>
+                  <StyledTableCell align="right">eventTitle</StyledTableCell>
+                  <StyledTableCell align="right">
+                    eventOrganiserUsername
+                  </StyledTableCell>
+                  <StyledTableCell align="right">
+                    dateRegistered
+                  </StyledTableCell>
+                  <StyledTableCell align="right">Input Code</StyledTableCell>
+                  <StyledTableCell align="right">
+                    Event Attended / Going
+                  </StyledTableCell>
+                  <StyledTableCell align="right">
                     {" "}
-                    View Event
-                  </Button>
-                </StyledTableCell>
-              </StyledTableRow>
-            ))}
-          </TableBody>
-        </Table>
-        {/* <Button color="primary" size="medium" onClick={handleRemoveAttende}>
+                    View Event Details
+                  </StyledTableCell>
+                </TableRow>
+              </TableHead>
+              <TableBody>
+                {post.map((row) => (
+                  <StyledTableRow key={row.eventId}>
+                    <StyledTableCell align="right">
+                      {row.eventTitle}
+                    </StyledTableCell>
+                    <StyledTableCell align="right">
+                      {row.eventOrganiserUsername}
+                    </StyledTableCell>
+                    <StyledTableCell align="right">
+                      {row.dateRegistered}
+                    </StyledTableCell>
+                    <StyledTableCell align="right">
+                      {row.inputCode}
+                    </StyledTableCell>
+                    <StyledTableCell align="right">
+                      {row.attendeeArrived ? "Went" : "Going"}
+                    </StyledTableCell>
+                    <StyledTableCell>
+                      <Button
+                        color="primary"
+                        size="medium"
+                        onClick={() => handleViewEvent(row.eventId)}
+                      >
+                        {" "}
+                        View Event
+                      </Button>
+                    </StyledTableCell>
+                  </StyledTableRow>
+                ))}
+              </TableBody>
+            </Table>
+            {/* <Button color="primary" size="medium" onClick={handleRemoveAttende}>
         {" "}
         Remove Attende
       </Button>
@@ -199,7 +212,9 @@ export default function MyEventsRoster() {
         {" "}
         Add Attende
       </Button> */}
-      </TableContainer>
+          </TableContainer>
+        </>
+      )}
     </>
   );
 }
