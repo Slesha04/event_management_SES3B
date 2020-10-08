@@ -8,10 +8,14 @@ import axios from "axios";
 import { getHeaderToken } from "../Login/JwtConfig";
 import { useHistory } from "react-router-dom";
 import DynamicFeedSharpIcon from "@material-ui/icons/DynamicFeedSharp";
+import Snackbars from "../Shared/Snackbar";
 
 function Navbar() {
   const [click, setClick] = useState(false);
   const [button, setButton] = useState(true);
+  // snackBar
+  const [alertValue, setAlertValue] = React.useState("");
+  const [DisplayValue, setDisplayValue] = React.useState("");
 
   const handleClick = () => setClick(!click);
   const closeMobileMenu = () => setClick(false);
@@ -43,23 +47,31 @@ function Navbar() {
     const body = {};
 
     axios
-      .post(`https://localhost:5001/api/UserController/LogoutUser`,
-      body, {
+      .post(`https://localhost:5001/api/UserController/LogoutUser`, body, {
         headers: {
           Authorization: getHeaderToken(),
         },
       })
       .then(
         (res) => {
+          setAlertValue(1);
+
           console.log(res);
-          alert("You are logged out");
           Cookies.remove("auth-cookie");
           Cookies.remove("userID");
-          history.push("/login");
+          setDisplayValue(true);
+          setTimeout(() => {
+            history.push("/login");
+            setDisplayValue(false);
+          }, 2500);
         },
         (error) => {
           console.log(error);
-          alert("try again");
+          setDisplayValue(true);
+          setAlertValue(0);
+          setTimeout(() => {
+            setDisplayValue(false);
+          }, 1500);
         }
       );
   };
@@ -141,6 +153,11 @@ function Navbar() {
           </Link>
         </div>
       </nav>
+      <Snackbars
+        title={alertValue == 0 ? "try again" : "Account logout,"}
+        alertValue={alertValue}
+        DisplayValue={DisplayValue}
+      />
     </>
   );
 }
