@@ -80,28 +80,34 @@ export default function ViewEventCard(props) {
 
   const joinEvent = (event) => {
     const body = {};
-    console.log(selectedCardId);
+    console.log(props.eventOrganiserId);
+    console.log(getUserID());
 
-    const res = axios
-      .post(
-        `https://localhost:5001/api/EventRosterController/AddAttendee/${selectedCardId}`,
-        body,
-        {
-          headers: {
-            Authorization: getHeaderToken(),
+    if (props.eventOrganiserId == getUserID()) {
+      alert("You cant join your own event!");
+      setOpen(false);
+    } else {
+      const res = axios
+        .post(
+          `https://localhost:5001/api/EventRosterController/AddAttendee/${selectedCardId}`,
+          body,
+          {
+            headers: {
+              Authorization: getHeaderToken(),
+            },
+          }
+        )
+        .then(
+          (res) => {
+            console.log(res);
+            if (res.status === 200) alert("You are added to the event!");
           },
-        }
-      )
-      .then(
-        (res) => {
-          console.log(res);
-          if (res.status === 200) alert("You are added to the event!");
-        },
-        (error) => {
-          alert("You are already added to the event!", error);
-        }
-      );
-    setOpen(false);
+          (error) => {
+            alert("You are already added to the event!", error);
+          }
+        );
+      setOpen(false);
+    }
   };
   const leaveEvent = (event) => {
     const body = {};
@@ -232,7 +238,7 @@ export default function ViewEventCard(props) {
                         </Grid>
                       </Grid> */}
 
-                      <Grid item xs={12} >
+                      <Grid item xs={12}>
                         <Typography variant="h5" component="h2">
                           Orgainser : {props.eventOrgainser}
                         </Typography>
