@@ -31,6 +31,7 @@ import MyEventCard from "../cards/MyEventCard";
 import { getUserName } from "../../Login/JwtConfig";
 import Snackbars from "../../Shared/Snackbar";
 import noData from "../noData.jpg";
+import { getUserPlatformAPIPort} from "../../Login/JwtConfig";
 
 const useStyles = makeStyles((theme) => ({
   paper: {
@@ -81,7 +82,7 @@ const MyEvents = (props) => {
     console.log("called");
     axios
       .get(
-        `https://localhost:5001/api/EventController/ViewUserEvents/${userId}`
+        `${getUserPlatformAPIPort()}api/EventController/ViewUserEvents/${userId}`
       )
       .then(
         (res) => {

@@ -7,6 +7,7 @@ import { useEffect, useState } from "react";
 import { getHeaderToken, getToken, getUserID } from "../Login/JwtConfig";
 import { getUserName } from "../Login/JwtConfig";
 import Schedule   from "./Calendar/EventCalendar"
+import { getUserPlatformAPIPort} from "../Login/JwtConfig";
 
 const AllEvents = () => {
   const [post, setPostArray] = useState([]);
@@ -15,7 +16,7 @@ const AllEvents = () => {
     const userId = getUserID();
     console.log("called");
     axios
-      .get(`https://localhost:5001/api/EventController/LoadMostPopularEvents/1`)
+      .get(`${getUserPlatformAPIPort()}api/EventController/LoadMostPopularEvents/1`)
 
       .then(
         (res) => {

@@ -6,6 +6,9 @@ export const getToken = () => {
 export const getUserID = () => {
     return Cookies.get('userID');
 };
+export const getUserPlatformAPIPort = () => {
+    return Cookies.get('user-platform-api-port');
+};
 export const getUserName = () => {
     return Cookies.get('userName');
 };

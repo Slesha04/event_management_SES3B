@@ -32,6 +32,7 @@ import ViewEventCard from "./cards/ViewEventCard";
 import { getUserName } from "../Login/JwtConfig";
 import Map from "./map/map";
 import Snackbars from "../Shared/Snackbar";
+import { getUserPlatformAPIPort} from "../Login/JwtConfig";
 
 const useStyles = makeStyles((theme) => ({
   paper: {
@@ -147,7 +148,7 @@ const MyEvents = (props) => {
   };
   function getUserName(userId) {
     axios
-      .get(`https://localhost:5001/api/UserController/GetUserById/${userId}`)
+      .get(`${getUserPlatformAPIPort()}api/UserController/GetUserById/${userId}`)
       .then(
         (res) => {
           if (res.status === 200) {
@@ -167,7 +168,7 @@ const MyEvents = (props) => {
 
     axios
       .get(
-        `https://localhost:5001/api/EventController/ViewEvent/${selectedEvent}`
+        `${getUserPlatformAPIPort()}api/EventController/ViewEvent/${selectedEvent}`
       )
       .then(
         (res) => {
@@ -194,7 +195,7 @@ const MyEvents = (props) => {
     //map
     axios
       .get(
-        `https://localhost:5001/api/EventController/GetEventCoordinates/${selectedEvent}`
+        `${getUserPlatformAPIPort()}api/EventController/GetEventCoordinates/${selectedEvent}`
       )
       .then(
         (res) => {

@@ -16,6 +16,7 @@ import DialogContentText from "@material-ui/core/DialogContentText";
 import DialogTitle from "@material-ui/core/DialogTitle";
 import { getHeaderToken, getToken, getUserID } from "../../Login/JwtConfig";
 import Snackbars from "../../Shared/Snackbar";
+import { getUserPlatformAPIPort} from "../../Login/JwtConfig";
 
 import axios from "axios";
 
@@ -75,7 +76,7 @@ export default function MyEventCard(props) {
   const handleDeleteEvent = (event) => {
     axios
       .delete(
-        `https://localhost:5001/api/EventController/DeleteEvent/${cardId}`,
+        `${getUserPlatformAPIPort()}api/EventController/DeleteEvent/${cardId}`,
         {
           headers: {
             Authorization: getHeaderToken(),
