@@ -23,7 +23,8 @@ import { useHistory } from "react-router-dom";
 import { withRouter } from "react-router-dom";
 import axios from "axios";
 import AccountCircleIcon from "@material-ui/icons/AccountCircle";
-import Snackbar from '@material-ui/core/Snackbar';
+import Snackbars from "../Shared/Snackbar";
+
 
 const useStyles = makeStyles((theme) => ({
   paper: {
@@ -65,18 +66,12 @@ const Login = (props) => {
   const classes = useStyles();
   const [username, setUsername] = React.useState("");
   const [password, setPassword] = React.useState("");
-  // const [open, setOpen] = React.useState(false);
-  // const handleClick = () => {
-  //   setOpen(true);
-  // };
 
-  // const handleClose = (event, reason) => {
-  //   if (reason === 'clickaway') {
-  //     return;
-  //   }
+  // snackBar
+  const [alertValue, setAlertValue] = React.useState("");
+  const [DisplayValue, setDisplayValue] = React.useState("");
 
-  //   setOpen(false);
-  // };
+
   const handleUsernameChange = (event) => {
     setUsername(event.target.value);
   };
@@ -86,17 +81,18 @@ const Login = (props) => {
   };
 
   const history = useHistory();
- 
+
   const handleRegister = (event) => {
     event.preventDefault();
-    
-        axios
+
+    axios
       .get(
         `https://localhost:5001/api/UserController/LoginUser/${username}/${password}`
       )
       .then(
         (res) => {
           // user id - console.log(res.data.jwtToken.payload.user_id);
+          setAlertValue(1);
           console.log(res.data.encodedForm);
           Cookies.set("auth-cookie", res.data.encodedForm);
           Cookies.set("auth-full-cookie", res.data);
@@ -104,94 +100,99 @@ const Login = (props) => {
           const userId = res.data.jwtToken.payload.user_id;
           Cookies.set("userID", userId);
           Cookies.set("userName", username);
-          history.push("/homePage")
-
-          // setOpen(true);
-          // setTimeout(changeView(), 15000);
+          // snackbar
+          setDisplayValue(true);
+          setTimeout(() => {
+            history.push("/homePage");
+          }, 2500);
         },
         (error) => {
-          alert("something Went Wrong");
+          setDisplayValue(true);
+          setAlertValue(0);
         }
       );
   };
 
   return (
-    <Paper variant="outlined" className={classes.outsidePaper} elevation={3}>
-      <Container component="main" maxWidth="xs">
-        <CssBaseline />
-        <div className={classes.paper}>
-          <Avatar className={classes.avatar}>
-            <AccountCircleIcon />
-          </Avatar>
-          <Typography component="h1" variant="h5">
-            Log in
-          </Typography>
-          <form className={classes.form} onSubmit={handleRegister} noValidate>
-            <Grid container spacing={2}>
-              <Grid item xs={12}>
-                <TextField
-                  autoComplete="fname"
-                  name="fullName"
-                  variant="outlined"
-                  required
-                  fullWidth
-                  id="fullName"
-                  label="Full Name"
-                  value={username}
-                  onChange={handleUsernameChange}
-                  autoFocus
-                />
+    <>
+      <Paper variant="outlined" className={classes.outsidePaper} elevation={3}>
+        <Container component="main" maxWidth="xs">
+          <CssBaseline />
+          <div className={classes.paper}>
+            <Avatar className={classes.avatar}>
+              <AccountCircleIcon />
+            </Avatar>
+            <Typography component="h1" variant="h5">
+              Log in
+            </Typography>
+            <form className={classes.form} onSubmit={handleRegister} noValidate>
+              <Grid container spacing={2}>
+                <Grid item xs={12}>
+                  <TextField
+                    autoComplete="fname"
+                    name="fullName"
+                    variant="outlined"
+                    required
+                    fullWidth
+                    id="fullName"
+                    label="Full Name"
+                    value={username}
+                    onChange={handleUsernameChange}
+                    autoFocus
+                  />
+                </Grid>
+
+                <Grid item xs={12}>
+                  <TextField
+                    variant="outlined"
+                    required
+                    fullWidth
+                    name="password"
+                    label="Password"
+                    type="password"
+                    id="password"
+                    autoComplete="current-password"
+                    value={password}
+                    onChange={handlePasswordChange}
+                  />
+                </Grid>
+
+                <Grid item xs={12}>
+                  <FormControlLabel
+                    control={<Checkbox value="Remember Me" color="primary" />}
+                    label="Remember me"
+                  />
+                </Grid>
               </Grid>
 
-              <Grid item xs={12}>
-                <TextField
-                  variant="outlined"
-                  required
-                  fullWidth
-                  name="password"
-                  label="Password"
-                  type="password"
-                  id="password"
-                  autoComplete="current-password"
-                  value={password}
-                  onChange={handlePasswordChange}
-                />
+              <Button
+                type="submit"
+                fullWidth
+                variant="contained"
+                color="primary"
+                className={classes.submit}
+              >
+                Log In
+              </Button>
+              <Grid container justify="flex-end">
+                <Grid item>
+                  <Link href="/Register" variant="body2">
+                    Don't Have an account yet? Sign Up
+                  </Link>
+                </Grid>
               </Grid>
-
-              <Grid item xs={12}>
-                <FormControlLabel
-                  control={<Checkbox value="Remember Me" color="primary" />}
-                  label="Remember me"
-                />
-              </Grid>
-            </Grid>
-
-            <Button
-              type="submit"
-              fullWidth
-              variant="contained"
-              color="primary"
-              className={classes.submit}
-            >
-              Log In
-            </Button>
-            <Grid container justify="flex-end">
-              <Grid item>
-                <Link href="/Register" variant="body2">
-                  Don't Have an account yet? Sign Up
-                </Link>
-              </Grid>
-            </Grid>
-          </form>
-        </div>
-      </Container>
-      {/* <Snackbar open={open} autoHideDuration={9000} onClose={handleClose}>
+            </form>
+          </div>
+        </Container>
+        {/* <Snackbar open={open} autoHideDuration={9000} onClose={handleClose}>
         <Alert onClose={handleClose} severity="success">
           LogIn success!
         </Alert>
       </Snackbar>
       */}
-    </Paper>
+     <Snackbars title={"Log In"} alertValue={alertValue} DisplayValue={DisplayValue}/>
+      </Paper>
+    </>
   );
 };
 

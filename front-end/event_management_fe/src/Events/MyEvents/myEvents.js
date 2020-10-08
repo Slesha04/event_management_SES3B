@@ -29,24 +29,26 @@ import { useEffect, useState } from "react";
 import { getHeaderToken, getToken, getUserID } from "../../Login/JwtConfig";
 import MyEventCard from "../cards/MyEventCard";
 import { getUserName } from "../../Login/JwtConfig";
+import Snackbars from "../../Shared/Snackbar";
+import noData from "../noData.jpg";
 
 const useStyles = makeStyles((theme) => ({
   paper: {
-    marginTop: theme.spacing(8),
     marginBottom: theme.spacing(8),
-
+    width:"200",
     display: "flex",
     flexDirection: "column",
     alignItems: "center",
+    backgroundColor:  "#F5F4F2"
+
   },
   outsidePaper: {
-    marginTop: theme.spacing(8),
     marginBottom: theme.spacing(8),
     marginLeft: theme.spacing(30),
     marginRight: theme.spacing(30),
     flexDirection: "column",
     alignItems: "center",
-    backgroundColor: theme.palette.background.paper,
+    // backgroundColor: "#FDBAA5",
   },
   avatar: {
     margin: theme.spacing(1),
@@ -70,6 +72,9 @@ const MyEvents = (props) => {
   const [post, setPostArray] = useState([]);
 
   const history = useHistory();
+  // snackBar
+  const [alertValue, setAlertValue] = React.useState("");
+  const [DisplayValue, setDisplayValue] = React.useState("");
 
   useEffect(() => {
     const userId = getUserID();
@@ -78,7 +83,6 @@ const MyEvents = (props) => {
       .get(
         `https://localhost:5001/api/EventController/ViewUserEvents/${userId}`
       )
-
       .then(
         (res) => {
           if (res.status === 200) {
@@ -87,32 +91,45 @@ const MyEvents = (props) => {
           }
         },
         (error) => {
-          alert("something Went Wrong");
+          setDisplayValue(true);
+          setAlertValue(0);
         }
       );
   });
-  
 
   return (
-    <div>
-      <Typography variant={'h4'}>My Events</Typography>
-      {console.log(post)}
-      {post.map((item) => (
-        <div key={item} >
-          <Paper elevation={5}>
-            <MyEventCard
-              eventId={item.eventId}
-              eventTitle={item.eventTitle}        
-              eventDate={item.eventDate.slice(0, 10)}
-              eventVenue={item.location.locationName}
-              eventDescription={item.bodyText}
-              eventOrgainser={getUserName()}
-              eventPrice={item.eventTicketPrice}
-             />
-          </Paper>
-          
-        </div>
-      ))}
+    <div className={classes.paper}>
+      {" "}
+      {post.length == 0 ? (
+        <>
+          <img src={require("../noData.jpg")}  />
+          <Typography variant="h2">No Data found this time, come back soon</Typography>
+
+        </>
+      ) : (
+        <Paper elevation={5} className={classes.outsidePaper}>
+        <Snackbars
+            title={"Backend"}
+            alertValue={alertValue}
+            DisplayValue={DisplayValue}
+          />{" "}
+          <Typography variant={"h2"} >My Events</Typography>
+          {console.log(post)}
+          {post.map((item) => (
+            <div key={item}>
+                <MyEventCard
+                  eventId={item.eventId}
+                  eventTitle={item.eventTitle}
+                  eventDate={item.eventDate.slice(0, 10)}
+                  eventVenue={item.location.locationName}
+                  eventDescription={item.bodyText}
+                  eventOrgainser={getUserName()}
+                  eventPrice={item.eventTicketPrice}
+                />
+            </div>
+          ))}
+        </Paper>
+      )}
     </div>
   );
 };

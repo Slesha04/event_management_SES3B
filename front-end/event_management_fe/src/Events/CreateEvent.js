@@ -37,7 +37,8 @@ import { getHeaderToken, getToken, getUserID } from "../Login/JwtConfig";
 import utsBackground from "./utsBackground.jpg";
 import { useEffect, useState } from "react";
 import upcomingEvent from "./Events.jpg";
-import {useForm} from "react-hook-form";
+import { useForm } from "react-hook-form";
+import Snackbars from "../Shared/Snackbar";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -169,6 +170,11 @@ const CreateEvent = (props) => {
   const classes = useStyles();
   const [post, setPostArray] = useState([]);
 
+  // snackBar
+  const [alertValue, setAlertValue] = React.useState("");
+  const [alertTitle, setAlertTitle] = React.useState("");
+  const [DisplayValue, setDisplayValue] = React.useState("");
+
   const [eventOrganiser, setEventOrganiser] = React.useState("");
 
   const [eventTitle, setEventTitle] = React.useState("");
@@ -235,7 +241,9 @@ const CreateEvent = (props) => {
           }
         },
         (error) => {
-          alert("something Went Wrong");
+          setAlertTitle("Backend Error!");
+          setDisplayValue(true);
+          setAlertValue(0);
         }
       );
   }, []);
@@ -250,7 +258,9 @@ const CreateEvent = (props) => {
             return res.data.userName;
           }
         },
-        (error) => {}
+        (error) => { setAlertTitle("Backend Error!");
+        setDisplayValue(true);
+        setAlertValue(0);}
       );
   }
 
@@ -261,38 +271,56 @@ const CreateEvent = (props) => {
       `https://localhost:5001/api/EventController/CreateEvent/${eventTitle}/${eventBodyText}/${eventLocation}/${eventDate}/${ticketPrice}/${eventType}/${eventVisibility}`
     );
     console.log(getHeaderToken());
-    if(eventTitle === "" || eventBodyText === "" || eventLocation === "" || eventDate === ""){
-      alert("Please fill the required fields ");
-
-    }else{
+    if (
+      eventTitle === "" ||
+      eventBodyText === "" ||
+      eventLocation === "" ||
+      eventDate === ""
+    ) {
+      setAlertTitle("Please fill the required fields");
+              setDisplayValue(true);
+              setAlertValue(0);
+              setTimeout(() => {
+                setDisplayValue(false);
+              }, 3500);
+            
+    } else {
       const res = axios
-      .put(
-        `https://localhost:5001/api/EventController/CreateEvent/${eventTitle}/${eventBodyText}/${eventLocation}/${eventDate}/${ticketPrice}/${eventType}/${eventVisibility}`,
-        body,
-        {
-          headers: {
-            Authorization: getHeaderToken(),
-          },
-        }
-      )
-      .then(
-        (res) => {
-          if (res.status === 200) {
-            console.log(res)
-            alert("Create Event Success");
+        .put(
+          `https://localhost:5001/api/EventController/CreateEvent/${eventTitle}/${eventBodyText}/${eventLocation}/${eventDate}/${ticketPrice}/${eventType}/${eventVisibility}`,
+          body,
+          {
+            headers: {
+              Authorization: getHeaderToken(),
+            },
           }
-        },
-        (error) => {
-          console.log(error)
-          alert("Create Event Success", error);
-        }
-      );
+        )
+        .then(
+          (res) => {
+            if (res.status === 200) {
+              console.log(res);
+              //andre has  to fix this backend error
+              setAlertTitle("Create Event");
+              setDisplayValue(true);
+              setAlertValue(1);
+            }
+          },
+          (error) => {
+            console.log(error);
+            setAlertTitle("Create Event");
+            setDisplayValue(true);
+            setAlertValue(1);          }
+        );
     }
-    
   };
 
   return (
     <div className={classes.root}>
+      <Snackbars
+        title={alertTitle}
+        alertValue={alertValue}
+        DisplayValue={DisplayValue}
+      />
       <form
         noValidate
         autoComplete="off"
@@ -320,9 +348,8 @@ const CreateEvent = (props) => {
                   autoComplete="Event-Name"
                   type="text"
                   error={!!errors.text}
-                 inputRef={register}
+                  inputRef={register}
                 />
-               
               </Grid>
               {/* event Description */}
               <Grid item xs={12}>

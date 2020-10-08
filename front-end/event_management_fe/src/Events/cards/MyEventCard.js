@@ -15,12 +15,17 @@ import DialogContent from "@material-ui/core/DialogContent";
 import DialogContentText from "@material-ui/core/DialogContentText";
 import DialogTitle from "@material-ui/core/DialogTitle";
 import { getHeaderToken, getToken, getUserID } from "../../Login/JwtConfig";
+import Snackbars from "../../Shared/Snackbar";
 
 import axios from "axios";
 
-const useStyles = makeStyles({
+const useStyles = makeStyles((theme) => ({
   root: {
     minWidth: 275,
+    marginBottom: theme.spacing(5),
+    margin: theme.spacing(5),
+    backgroundColor:  "#EFEFEF"
+
   },
   bullet: {
     display: "inline-block",
@@ -37,7 +42,7 @@ const useStyles = makeStyles({
     height: 250,
     width: 200,
   },
-});
+}));
 
 export default function MyEventCard(props) {
   const [open, setOpen] = React.useState(false);
@@ -45,7 +50,9 @@ export default function MyEventCard(props) {
   const classes = useStyles();
   const cardId = props.eventId;
   const history = useHistory();
-
+  // snackBar
+  const [alertValue, setAlertValue] = React.useState("");
+  const [DisplayValue, setDisplayValue] = React.useState("");
   const handleClickOpen = (event) => {
     event.preventDefault();
     setOpen(true);
@@ -54,7 +61,6 @@ export default function MyEventCard(props) {
   const handleClose = () => {
     setOpen(false);
   };
-
 
   const handleEditEvent = (event) => {
     history.push("/edit-event");
@@ -68,28 +74,40 @@ export default function MyEventCard(props) {
   };
   const handleDeleteEvent = (event) => {
     axios
-    .delete(
-      `https://localhost:5001/api/EventController/DeleteEvent/${cardId}`,  {
-        headers: {
-          'Authorization':  getHeaderToken()
-        }}
-    )
-    .then(
-      (res) => {
-        console.log(res)
-        if (res.status === 200) {
-          alert("event deleted");
+      .delete(
+        `https://localhost:5001/api/EventController/DeleteEvent/${cardId}`,
+        {
+          headers: {
+            Authorization: getHeaderToken(),
+          },
         }
-      },
-      (error) => {
-        alert("something Went Wrong");
-      }
-    );
+      )
+      .then(
+        (res) => {
+          console.log(res);
+          if (res.status === 200) {
+            setDisplayValue(true);
+            setAlertValue(1);
+            setTimeout(() => {
+              setDisplayValue(false);
+            }, 2100);
+          }
+        },
+        (error) => {
+          setDisplayValue(true);
+          setAlertValue(0);
+        }
+      );
     setOpen(false);
   };
 
   return (
     <Card className={classes.root}>
+      <Snackbars
+        title={alertValue == 0 ? "Backend" : "Evented Deleted"}
+        alertValue={alertValue}
+        DisplayValue={DisplayValue}
+      />
       <CardContent>
         <Grid
           container
@@ -162,7 +180,7 @@ export default function MyEventCard(props) {
                   </Grid>
 
                   <Grid item xs={12}>
-                    <Typography variant="h5" component="h2" align='left'>
+                    <Typography variant="h5" component="h2" align="left">
                       Description: {props.eventDescription}
                     </Typography>
                   </Grid>
@@ -174,7 +192,8 @@ export default function MyEventCard(props) {
                   </Grid>
                   <Grid item xs={12}>
                     <Typography variant="h5" component="h2">
-                      Price: {props.eventPrice}
+                      Price:{" "}
+                      {props.eventPrice == 0 ? "Free Event" : "Ticketed Event"}
                     </Typography>
                   </Grid>
                   <Typography variant="body2" component="p">
@@ -198,31 +217,28 @@ export default function MyEventCard(props) {
         <Button color="primary" size="medium" onClick={handleClickOpen}>
           {" "}
           Delete Event
-
         </Button>
         <Dialog
-                open={open}
-                onClose={handleClose}
-                aria-labelledby="alert-dialog-title"
-                aria-describedby="alert-dialog-description"
-              >
-                <DialogTitle id="alert-dialog-title">
-                  {"Confirmation"}
-                </DialogTitle>
-                <DialogContent>
-                  <DialogContentText id="alert-dialog-description">
-                    You are going to delete this event. Are you sure?
-                  </DialogContentText>
-                </DialogContent>
-                <DialogActions>
-                  <Button onClick={handleDeleteEvent} color="primary">
-                    Ok
-                  </Button>
-                  <Button onClick={handleClose} color="primary" autoFocus>
-                    Cancel
-                  </Button>
-                </DialogActions>
-              </Dialog>
+          open={open}
+          onClose={handleClose}
+          aria-labelledby="alert-dialog-title"
+          aria-describedby="alert-dialog-description"
+        >
+          <DialogTitle id="alert-dialog-title">{"Confirmation"}</DialogTitle>
+          <DialogContent>
+            <DialogContentText id="alert-dialog-description">
+              You are going to delete this event. Are you sure?
+            </DialogContentText>
+          </DialogContent>
+          <DialogActions>
+            <Button onClick={handleDeleteEvent} color="primary">
+              Ok
+            </Button>
+            <Button onClick={handleClose} color="primary" autoFocus>
+              Cancel
+            </Button>
+          </DialogActions>
+        </Dialog>
       </CardActions>
     </Card>
   );
