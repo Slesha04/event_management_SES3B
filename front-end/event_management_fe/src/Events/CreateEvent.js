@@ -1,4 +1,3 @@
- 
 import Radio from "@material-ui/core/Radio";
 import RadioGroup from "@material-ui/core/RadioGroup";
 import FormControlLabel from "@material-ui/core/FormControlLabel";
@@ -30,22 +29,22 @@ import IconButton from "@material-ui/core/IconButton";
 import InfoIcon from "@material-ui/icons/Info";
 //import { tileData } from  '../Data/titleData';
 import { borders } from "@material-ui/system";
- import Cookies from "js-cookie";
+import Cookies from "js-cookie";
 import { useHistory } from "react-router-dom";
 import { withRouter } from "react-router-dom";
 import axios from "axios";
 import { getHeaderToken, getToken, getUserID } from "../Login/JwtConfig";
-import  utsBackground  from "./utsBackground.jpg"
- import { useEffect, useState } from "react";
+import utsBackground from "./utsBackground.jpg";
+import { useEffect, useState } from "react";
 import upcomingEvent from "./Events.jpg";
-
+import {useForm} from "react-hook-form";
 
 const useStyles = makeStyles((theme) => ({
   root: {
     display: "flex",
     height: theme.spacing(150),
-width:    theme.spacing(300),
-backgroundImage: `url(${utsBackground})`
+    width: theme.spacing(300),
+    backgroundImage: `url(${utsBackground})`,
   },
   formtwo: {
     margin: theme.spacing(5, 40, 40, 40),
@@ -165,14 +164,16 @@ const eventVisibilityTypes = [
 ];
 
 const CreateEvent = (props) => {
+  const { register, handleSubmit, errors } = useForm();
+
   const classes = useStyles();
   const [post, setPostArray] = useState([]);
- 
+
   const [eventOrganiser, setEventOrganiser] = React.useState("");
 
-  const [eventTitle , setEventTitle ] = React.useState("");
-  const [eventBodyText , setEventBodyText ] = React.useState("");
-  const [eventLocation , setEventLocation ] = React.useState("");
+  const [eventTitle, setEventTitle] = React.useState("");
+  const [eventBodyText, setEventBodyText] = React.useState("");
+  const [eventLocation, setEventLocation] = React.useState("");
 
   const [eventDate, setEventDate] = React.useState("");
 
@@ -183,7 +184,6 @@ const CreateEvent = (props) => {
   const [eventVisibility, setEventVisibility] = React.useState(0);
   const history = useHistory();
 
- 
   const handleEventTitleChange = (event) => {
     setEventTitle(event.target.value);
   };
@@ -199,7 +199,7 @@ const CreateEvent = (props) => {
   const handleEventDateChange = (event) => {
     setEventDate(event.target.value);
   };
-  
+
   const handleTicketPriceChange = (event) => {
     setTicketPrice(event.target.value);
   };
@@ -207,28 +207,26 @@ const CreateEvent = (props) => {
   const handleEventTypeChange = (event) => {
     setEventType(event.target.value);
   };
-  
+
   const handleEventVisibility = (event) => {
     setEventVisibility(event.target.value);
   };
 
-  const  showEvent = (eventId) => {
-   //store eveent id to local storage
-   console.log("at the grid- " + eventId)
-  localStorage.setItem("viewEventId", eventId);
-  history.push({
-    pathname: "/view-event",
-    state: { AttendeeStatus: "Check into this event?" },
-  });
- }
+  const showEvent = (eventId) => {
+    //store eveent id to local storage
+    console.log("at the grid- " + eventId);
+    localStorage.setItem("viewEventId", eventId);
+    history.push({
+      pathname: "/view-event",
+      state: { AttendeeStatus: "Check into this event?" },
+    });
+  };
 
   useEffect(() => {
     const userId = getUserID();
     console.log("called");
     axios
-      .get(
-        `https://localhost:5001/api/EventController/LoadRecentEvents/1`
-      )
+      .get(`https://localhost:5001/api/EventController/LoadRecentEvents/1`)
       .then(
         (res) => {
           if (res.status === 200) {
@@ -241,48 +239,66 @@ const CreateEvent = (props) => {
         }
       );
   }, []);
-  
-  function getUserName(userId){
+
+  function getUserName(userId) {
     axios
-    .get(
-      `https://localhost:5001/api/UserController/GetUserById/${userId}`
-    )
-    .then(
-      (res) => {
-        if (res.status === 200) {
-        console.log("this is" + res.data.userName)
-          return res.data.userName;
-        }
-      },
-      (error) => {
-      }
-    );
+      .get(`https://localhost:5001/api/UserController/GetUserById/${userId}`)
+      .then(
+        (res) => {
+          if (res.status === 200) {
+            console.log("this is" + res.data.userName);
+            return res.data.userName;
+          }
+        },
+        (error) => {}
+      );
   }
 
   const handleRegister = (event) => {
     event.preventDefault();
     const body = {};
-        console.log(`https://localhost:5001/api/EventController/CreateEvent/${eventTitle}/${eventBodyText}/${eventLocation}/${eventDate}/${ticketPrice}/${eventType}/${eventVisibility}`)
-        console.log(getHeaderToken()  )
-        const res =  axios.put(`https://localhost:5001/api/EventController/CreateEvent/${eventTitle}/${eventBodyText}/${eventLocation}/${eventDate}/${ticketPrice}/${eventType}/${eventVisibility}`, body, {
+    console.log(
+      `https://localhost:5001/api/EventController/CreateEvent/${eventTitle}/${eventBodyText}/${eventLocation}/${eventDate}/${ticketPrice}/${eventType}/${eventVisibility}`
+    );
+    console.log(getHeaderToken());
+    if(eventTitle === "" || eventBodyText === "" || eventLocation === "" || eventDate === ""){
+      alert("Please fill the required fields ");
+
+    }else{
+      const res = axios
+      .put(
+        `https://localhost:5001/api/EventController/CreateEvent/${eventTitle}/${eventBodyText}/${eventLocation}/${eventDate}/${ticketPrice}/${eventType}/${eventVisibility}`,
+        body,
+        {
           headers: {
-            'Authorization':  getHeaderToken()
+            Authorization: getHeaderToken(),
+          },
+        }
+      )
+      .then(
+        (res) => {
+          if (res.status === 200) {
+            console.log(res)
+            alert("Create Event Success");
           }
-        }).then(
-            (res) => {
-                if(res.status === 200){
-                  alert("Create Event Success");
-                }
-            },
-            (error) => {
-              alert("Create Event fail", error);
-            }
-          );
+        },
+        (error) => {
+          console.log(error)
+          alert("Create Event Success", error);
+        }
+      );
+    }
+    
   };
 
   return (
-    <div className={classes.root}  >
-      <form noValidate autoComplete="off" onSubmit={handleRegister}  className={classes.formtwo}>
+    <div className={classes.root}>
+      <form
+        noValidate
+        autoComplete="off"
+        onSubmit={handleRegister}
+        className={classes.formtwo}
+      >
         <Paper variant="outlined" elevation={6}>
           <h1> Create Event </h1>
           <React.Fragment>
@@ -293,7 +309,7 @@ const CreateEvent = (props) => {
               {/* event title */}
               <Grid item xs={12} sm={6}>
                 <TextField
-                  required
+                  required="true"
                   id="EventName"
                   name="Event Name"
                   label="Event Name"
@@ -302,7 +318,11 @@ const CreateEvent = (props) => {
                   variant="filled"
                   fullWidth
                   autoComplete="Event-Name"
+                  type="text"
+                  error={!!errors.text}
+                 inputRef={register}
                 />
+               
               </Grid>
               {/* event Description */}
               <Grid item xs={12}>
@@ -321,6 +341,7 @@ const CreateEvent = (props) => {
 
               <Grid item xs={12}>
                 <TextField
+                  required
                   id="eventLocation"
                   name="Event Loocation"
                   label="Event Location"
@@ -334,6 +355,7 @@ const CreateEvent = (props) => {
 
               <Grid item xs={12}>
                 <TextField
+                  required
                   id="date"
                   label="Event Date"
                   type="date"
@@ -437,13 +459,12 @@ const CreateEvent = (props) => {
               color="primary"
               size="small"
               type="submit"
-               className={classes.button}
+              className={classes.button}
               startIcon={<SaveIcon />}
             >
               Create Event
             </Button>
           </Grid>
-
         </Paper>
       </form>
 
@@ -455,8 +476,8 @@ const CreateEvent = (props) => {
               <ListSubheader component="div">September</ListSubheader>
             </GridListTile>
             {post.map((item) => (
-              <GridListTile key={item} onClick={() => showEvent(item.eventId)} >
-                 <img src={upcomingEvent} alt={item.eventTitle} />
+              <GridListTile key={item} onClick={() => showEvent(item.eventId)}>
+                <img src={upcomingEvent} alt={item.eventTitle} />
                 <GridListTileBar
                   title={item.eventTitle}
                   subtitle={<span>about: {item.bodyText}</span>}

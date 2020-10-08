@@ -82,6 +82,7 @@ const MyEvents = (props) => {
   const [eventTitle, setEventTitle] = React.useState("");
 
   const [eventOrganiser, setEventOrganiser] = React.useState("");
+  const [eventOrganiserID, setEventOrganiserID] = React.useState("");
 
   const [eventBodyText, setEventBodyText] = React.useState("");
   const [eventLocation, setEventLocation] = React.useState("");
@@ -176,6 +177,8 @@ const MyEvents = (props) => {
             setTicketPrice(res.data.eventTicketPrice);
             setEventVisibility(res.data.eventVisibility);
             setEventOrganiser(getUserName(res.data.eventOrganiserId));
+            setEventOrganiserID(res.data.eventOrganiserId);
+
           }
         },
         (error) => {
@@ -237,6 +240,7 @@ const MyEvents = (props) => {
           eventDescription={eventBodyText}
           eventOrgainser={eventOrganiser}
           eventPrice={ticketPrice}
+          eventOrganiserId={eventOrganiserID}
           JoinOrLeave={props.location.state.AttendeeStatus}
         />
         <Map {...mapProps} />

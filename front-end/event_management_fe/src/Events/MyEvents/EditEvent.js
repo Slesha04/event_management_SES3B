@@ -197,6 +197,7 @@ const eventVisibilityTypes = [
 const EditEvent = (props) => {
   const classes = useStyles();
   let selectedCardId = localStorage.getItem("selectedCard");
+  const history = useHistory();
 
   const [eventTitle, setEventTitle] = React.useState("");
   const [eventBodyText, setEventBodyText] = React.useState("");
@@ -300,7 +301,10 @@ const EditEvent = (props) => {
       .then(
         (res) => {
           console.log(res);
-          if (res.status === 200) alert("update Event Success");
+          if (res.status === 200) {
+            alert("update Event Success");
+            history.push("/myEvents");
+          }
         },
         (error) => {
           alert("something went wrong,  please try again", error);

@@ -80,28 +80,34 @@ export default function ViewEventCard(props) {
 
   const joinEvent = (event) => {
     const body = {};
-    console.log(selectedCardId);
+    console.log(props.eventOrganiserId);
+    console.log(getUserID());
 
-    const res = axios
-      .post(
-        `https://localhost:5001/api/EventRosterController/AddAttendee/${selectedCardId}`,
-        body,
-        {
-          headers: {
-            Authorization: getHeaderToken(),
+    if (props.eventOrganiserId == getUserID()) {
+      alert("You cant join your own event!");
+      setOpen(false);
+    } else {
+      const res = axios
+        .post(
+          `https://localhost:5001/api/EventRosterController/AddAttendee/${selectedCardId}`,
+          body,
+          {
+            headers: {
+              Authorization: getHeaderToken(),
+            },
+          }
+        )
+        .then(
+          (res) => {
+            console.log(res);
+            if (res.status === 200) alert("You are added to the event!");
           },
-        }
-      )
-      .then(
-        (res) => {
-          console.log(res);
-          if (res.status === 200) alert("You are added to the event!");
-        },
-        (error) => {
-          alert("You are already added to the event!", error);
-        }
-      );
-    setOpen(false);
+          (error) => {
+            alert("You are already added to the event!", error);
+          }
+        );
+      setOpen(false);
+    }
   };
   const leaveEvent = (event) => {
     const body = {};
@@ -193,35 +199,56 @@ export default function ViewEventCard(props) {
                       <Grid item xs={12}>
                         {" "}
                         <Typography variant="h4" color="Primary" component="h2">
-                          Event Description: "{props.eventDescription}"
+                          Description: "{props.eventDescription}"
                         </Typography>
                       </Grid>
 
                       <Grid item xs={12}>
                         <Typography variant="h5" component="h2">
-                          eventDate: {props.eventDate}
+                          Date: {props.eventDate}
                         </Typography>
                       </Grid>
                       <Grid item xs={12}>
                         <Typography variant="h5" component="h2">
-                          eventVenue: {props.eventVenue}
+                          Venue: {props.eventVenue}
                         </Typography>
                       </Grid>
+                      {/* <Grid item xs={12}>
+                        <Grid
+                          container
+                          direction="row"
+                          justify="flex-start"
+                          alignItems="flex-start"
+                        >
+                          <Grid item xs={6} sm={3}>
+                            <Typography variant="h5" component="h2">
+                              Description{" "}
+                            </Typography>
+                          </Grid>
+                          <Grid item xs={6}>
+                            <Typography
+                              variant="h5"
+                              component="h2"
+                              align="left"
+                              paragraph="true"
+                            >
+                              {props.eventDescription}
+                            </Typography>
+                          </Grid>
+                        </Grid>
+                      </Grid> */}
 
                       <Grid item xs={12}>
                         <Typography variant="h5" component="h2">
-                          eventDescription: {props.eventDescription}
-                        </Typography>
-                      </Grid>
-
-                      <Grid item xs={12}>
-                        <Typography variant="h5" component="h2">
-                          eventOrgainser : {props.eventOrgainser}
+                          Orgainser : {props.eventOrgainser}
                         </Typography>
                       </Grid>
                       <Grid item xs={12}>
                         <Typography variant="h5" component="h2">
-                          eventPrice: {props.eventPrice}
+                          Price:{" "}
+                          {props.eventPrice == 0
+                            ? "Free Event"
+                            : "Ticketed Event"}
                         </Typography>
                       </Grid>
                       <Typography variant="body2" component="p">
