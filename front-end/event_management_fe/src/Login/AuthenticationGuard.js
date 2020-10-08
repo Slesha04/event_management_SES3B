@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { withRouter } from 'react-router-dom';
-import { getToken } from './JwtConfig';
+import { getToken, getUserID } from './JwtConfig';
 
 class AuthenticationGuard extends Component {
   constructor(props) {
@@ -8,7 +8,7 @@ class AuthenticationGuard extends Component {
   }
 
   componentDidMount() {
-    const jwt = getToken();
+    const jwt = getUserID();
     if (!jwt) {
       this.props.history.push('/login');
     } else {
