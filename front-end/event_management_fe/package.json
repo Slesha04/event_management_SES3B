@@ -22,6 +22,7 @@
     "react": "^16.13.1",
     "react-cookie": "^4.0.3",
     "react-dom": "^16.13.1",
+    "react-dropzone": "^11.2.0",
     "react-event-calendar": "^0.3.0",
     "react-hook-form": "^6.9.2",
     "react-hook-google-maps": "0.0.3",

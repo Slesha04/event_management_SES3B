@@ -37,10 +37,12 @@ import { getHeaderToken, getToken, getUserID } from "../Login/JwtConfig";
 import utsBackground from "./utsBackground.jpg";
 import { useEffect, useState } from "react";
 import upcomingEvent from "./Events.jpg";
-import { useForm } from "react-hook-form";
-import Snackbars from "../Shared/Snackbar";
+import UploadFiles from "./UploadFiles";
+import { SignalCellularNullRounded } from "@material-ui/icons";
+import MyDropzone from "./Upload";
 import { getUserPlatformAPIPort} from "../Login/JwtConfig";
 
+// https://medium.com/@yahone.chow/file-blob-arraybuffer-576a8e99de0d
 const useStyles = makeStyles((theme) => ({
   root: {
     display: "flex",
@@ -166,17 +168,15 @@ const eventVisibilityTypes = [
 ];
 
 const CreateEvent = (props) => {
-  const { register, handleSubmit, errors } = useForm();
-
   const classes = useStyles();
   const [post, setPostArray] = useState([]);
+  const [file, setFile] = useState([]);
 
-  // snackBar
-  const [alertValue, setAlertValue] = React.useState("");
-  const [alertTitle, setAlertTitle] = React.useState("");
-  const [DisplayValue, setDisplayValue] = React.useState("");
-
-  const [eventOrganiser, setEventOrganiser] = React.useState("");
+  //event media state variables
+  const [mediaName, setMediaName] = useState("");
+  const [mediaSize, setMediaSize] = useState("");
+  const [mediaType, setMediaType] = useState("");
+  const [mediaModifiedDate, setMediaModifiedDate] = useState("");
 
   const [eventTitle, setEventTitle] = React.useState("");
   const [eventBodyText, setEventBodyText] = React.useState("");
@@ -223,10 +223,7 @@ const CreateEvent = (props) => {
     //store eveent id to local storage
     console.log("at the grid- " + eventId);
     localStorage.setItem("viewEventId", eventId);
-    history.push({
-      pathname: "/view-event",
-      state: { AttendeeStatus: "Check into this event?" },
-    });
+    history.push("/view-event");
   };
 
   useEffect(() => {
@@ -242,28 +239,49 @@ const CreateEvent = (props) => {
           }
         },
         (error) => {
-          setAlertTitle("Backend Error!");
-          setDisplayValue(true);
-          setAlertValue(0);
+          alert("something Went Wrong");
         }
       );
   }, []);
 
-  function getUserName(userId) {
-    axios
-      .get(`${getUserPlatformAPIPort()}api/UserController/GetUserById/${userId}`)
+  const handleMediaUpload = (event) => {
+    event.preventDefault();
+
+    const body = {
+      EventCoverImage: {
+        // required
+        FileId: mediaName,
+        FileName: mediaName,
+        FileContent: mediaType,
+        FileSize: mediaSize,
+        EventId: 0,
+        //not required (null)
+        ChannelId: 0,
+        Channel: null,
+        //required
+        UploaderId: 0,
+        DateUploaded: "",
+      },
+      EventVideoTrailer: null,
+    };
+
+    console.log();
+    console.log(getHeaderToken());
+    const res = axios
+      .put(
+        `${getUserPlatformAPIPort()}api/EventController/AssignFilesToEvent`,
+        body
+      )
       .then(
         (res) => {
-          if (res.status === 200) {
-            console.log("this is" + res.data.userName);
-            return res.data.userName;
-          }
+          console.log(res);
+          if (res.status === 200) alert("update Event Success");
         },
-        (error) => { setAlertTitle("Backend Error!");
-        setDisplayValue(true);
-        setAlertValue(0);}
+        (error) => {
+          alert("something went wrong,  please try again", error);
+        }
       );
-  }
+  };
 
   const handleRegister = (event) => {
     event.preventDefault();
@@ -272,56 +290,29 @@ const CreateEvent = (props) => {
       `${getUserPlatformAPIPort()}api/EventController/CreateEvent/${eventTitle}/${eventBodyText}/${eventLocation}/${eventDate}/${ticketPrice}/${eventType}/${eventVisibility}`
     );
     console.log(getHeaderToken());
-    if (
-      eventTitle === "" ||
-      eventBodyText === "" ||
-      eventLocation === "" ||
-      eventDate === ""
-    ) {
-      setAlertTitle("Please fill the required fields");
-              setDisplayValue(true);
-              setAlertValue(0);
-              setTimeout(() => {
-                setDisplayValue(false);
-              }, 3500);
-            
-    } else {
-      const res = axios
-        .put(
-          `${getUserPlatformAPIPort()}api/EventController/CreateEvent/${eventTitle}/${eventBodyText}/${eventLocation}/${eventDate}/${ticketPrice}/${eventType}/${eventVisibility}`,
-          body,
-          {
-            headers: {
-              Authorization: getHeaderToken(),
-            },
-          }
-        )
-        .then(
-          (res) => {
-            if (res.status === 200) {
-              console.log(res);
-              //andre has  to fix this backend error
-              setAlertTitle("Create Event");
-              setDisplayValue(true);
-              setAlertValue(1);
-            }
+    const res = axios
+      .put(
+        `${getUserPlatformAPIPort()}api/EventController/CreateEvent/${eventTitle}/${eventBodyText}/${eventLocation}/${eventDate}/${ticketPrice}/${eventType}/${eventVisibility}`,
+        body,
+        {
+          headers: {
+            Authorization: getHeaderToken(),
           },
-          (error) => {
-            console.log(error);
-            setAlertTitle("Create Event");
-            setDisplayValue(true);
-            setAlertValue(1);          }
-        );
-    }
+        }
+      )
+      .then(
+        (res) => {
+          if (res.status === 200) alert("Create Event Success");
+        },
+        (error) => {
+          alert("Create Event Success", error);
+        }
+      );
   };
 
+  
   return (
     <div className={classes.root}>
-      <Snackbars
-        title={alertTitle}
-        alertValue={alertValue}
-        DisplayValue={DisplayValue}
-      />
       <form
         noValidate
         autoComplete="off"
@@ -338,7 +329,7 @@ const CreateEvent = (props) => {
               {/* event title */}
               <Grid item xs={12} sm={6}>
                 <TextField
-                  required="true"
+                  required
                   id="EventName"
                   name="Event Name"
                   label="Event Name"
@@ -347,9 +338,6 @@ const CreateEvent = (props) => {
                   variant="filled"
                   fullWidth
                   autoComplete="Event-Name"
-                  type="text"
-                  error={!!errors.text}
-                  inputRef={register}
                 />
               </Grid>
               {/* event Description */}
@@ -369,7 +357,6 @@ const CreateEvent = (props) => {
 
               <Grid item xs={12}>
                 <TextField
-                  required
                   id="eventLocation"
                   name="Event Loocation"
                   label="Event Location"
@@ -383,7 +370,6 @@ const CreateEvent = (props) => {
 
               <Grid item xs={12}>
                 <TextField
-                  required
                   id="date"
                   label="Event Date"
                   type="date"
@@ -471,12 +457,12 @@ const CreateEvent = (props) => {
                 direction="row"
                 justify="flex-start"
                 alignItems="stretch"
-                >
-                <Grid item xs >
+              >
+                <Grid item xs>
                   <Typography variant={"h6"}>Upload Event Cover </Typography>
                 </Grid>
-                <Grid item xs >
-                  <input type="file" onChange={(e) => getMediaData(e)} />
+                <Grid item xs>
+                  <MyDropzone/>
                 </Grid>
               </Grid>
 
@@ -522,7 +508,7 @@ const CreateEvent = (props) => {
                 <img src={upcomingEvent} alt={item.eventTitle} />
                 <GridListTileBar
                   title={item.eventTitle}
-                  subtitle={<span>about: {item.bodyText}</span>}
+                  subtitle={<span>by: {item.bodyText}</span>}
                   actionIcon={
                     <IconButton
                       aria-label={`info about ${item.title}`}
