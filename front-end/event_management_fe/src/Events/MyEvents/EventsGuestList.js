@@ -13,7 +13,8 @@ import axios from "axios";
 import { withStyles } from "@material-ui/core/styles";
 import { Checkbox } from "semantic-ui-react";
 import Button from "@material-ui/core/Button";
-import { getUserPlatformAPIPort} from "../../Login/JwtConfig";
+import { getUserPlatformAPIPort } from "../../Login/JwtConfig";
+import Typography from "@material-ui/core/Typography";
 
 const StyledTableCell = withStyles((theme) => ({
   head: {
@@ -33,11 +34,20 @@ const StyledTableRow = withStyles((theme) => ({
   },
 }))(TableRow);
 
-const useStyles = makeStyles({
+const useStyles = makeStyles((theme) => ({
   table: {
-    minWidth: 700,
+    minWidth: 700, border: "2px solid rgb(0, 0, 0)"
   },
-});
+  outsidePaper: {
+    marginTop: theme.spacing(8),
+    marginBottom: theme.spacing(8),
+    marginLeft: theme.spacing(30),
+    marginRight: theme.spacing(30),
+    flexDirection: "column",
+    alignItems: "center",
+    backgroundColor: theme.palette.background.paper,
+  },
+}));
 
 function createData(
   attendeeId,
@@ -60,8 +70,6 @@ export default function EventsGuestList() {
   const [post, setPostArray] = useState([]);
 
   let selectedCardId = localStorage.getItem("selectedCard");
-
-
 
   // function handleMarkAttende(inputCode){
   //   const body = {};
@@ -120,43 +128,68 @@ export default function EventsGuestList() {
   }, []);
 
   return (
-    <TableContainer component={Paper}>
-      <Table className={classes.table} aria-label="customized table">
-        <TableHead>
-          <TableRow>
-            <StyledTableCell align="right">AttendeeId</StyledTableCell>
-            <StyledTableCell align="right">Attendee Name</StyledTableCell>
-            <StyledTableCell align="right">Date Registered</StyledTableCell>
-            <StyledTableCell align="right">Input Code</StyledTableCell>
-            <StyledTableCell align="right">Attende Arrived</StyledTableCell>
-            <StyledTableCell align="right"> Mark Attende</StyledTableCell>
-          </TableRow>
-        </TableHead>
-        <TableBody>
-          {post.map((row) => (
-            <StyledTableRow key={row.attendeeId}>
-              <StyledTableCell align="right">{row.attendeeId}</StyledTableCell>
-              <StyledTableCell align="right">
-                {row.attendeeUsername}
-              </StyledTableCell>
-              <StyledTableCell align="right">
-                {row.dateRegistered}
-              </StyledTableCell>
-              <StyledTableCell align="right">{row.inputCode}</StyledTableCell>
-              <StyledTableCell align="right">
-                {row.attendeeArrived ? "Yes" : "No"}
-              </StyledTableCell>
-              {/* <StyledTableCell>
+    <>
+      {post.length == 0 ? (
+        <>
+          <img src={require("../noData.jpg")} />
+          <Typography variant="h2">
+            No Data found this time, come back soon
+          </Typography>{" "}
+        </>
+      ) : (
+        <>
+          <div className={classes.outsidePaper}>
+            <Typography variant={"h3"}>Events I am following</Typography>
+            <TableContainer component={Paper}>
+              <Table className={classes.table} aria-label="customized table">
+                <TableHead>
+                  <TableRow>
+                    <StyledTableCell align="right">AttendeeId</StyledTableCell>
+                    <StyledTableCell align="right">
+                      Attendee Name
+                    </StyledTableCell>
+                    <StyledTableCell align="right">
+                      Date Registered
+                    </StyledTableCell>
+                    <StyledTableCell align="right">Input Code</StyledTableCell>
+                    <StyledTableCell align="right">
+                      Attende Arrived
+                    </StyledTableCell>
+                    {/* <StyledTableCell align="right">
+                      {" "}
+                      Mark Attende
+                    </StyledTableCell> */}
+                  </TableRow>
+                </TableHead>
+                <TableBody>
+                  {post.map((row) => (
+                    <StyledTableRow key={row.attendeeId}>
+                      <StyledTableCell align="right">
+                        {row.attendeeId}
+                      </StyledTableCell>
+                      <StyledTableCell align="right">
+                        {row.attendeeUsername}
+                      </StyledTableCell>
+                      <StyledTableCell align="right">
+                        {row.dateRegistered.slice(0,10)}
+                      </StyledTableCell>
+                      <StyledTableCell align="right">
+                        {row.inputCode}
+                      </StyledTableCell>
+                      <StyledTableCell align="right">
+                        {row.attendeeArrived ? "Yes" : "No"}
+                      </StyledTableCell>
+                      {/* <StyledTableCell>
               <Button color="primary" size="medium" onClick={() => handleMarkAttende(row.inputCode)}>
                 {" "}
                 Mark Attende
               </Button>
               </StyledTableCell> */}
-            </StyledTableRow>
-          ))}
-        </TableBody>
-      </Table>
-      {/* <Button color="primary" size="medium" onClick={handleRemoveAttende}>
+                    </StyledTableRow>
+                  ))}
+                </TableBody>
+              </Table>
+              {/* <Button color="primary" size="medium" onClick={handleRemoveAttende}>
         {" "}
         Remove Attende
       </Button>
@@ -165,6 +198,10 @@ export default function EventsGuestList() {
         {" "}
         Add Attende
       </Button> */}
-    </TableContainer>
+            </TableContainer>{" "}
+          </div>
+        </>
+      )}
+    </>
   );
 }

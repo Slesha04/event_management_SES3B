@@ -15,7 +15,7 @@ import { Checkbox } from "semantic-ui-react";
 import Button from "@material-ui/core/Button";
 import { useHistory } from "react-router-dom";
 import Typography from "@material-ui/core/Typography";
-import { getUserPlatformAPIPort} from "../../Login/JwtConfig";
+import { getUserPlatformAPIPort } from "../../Login/JwtConfig";
 
 const StyledTableCell = withStyles((theme) => ({
   head: {
@@ -23,23 +23,34 @@ const StyledTableCell = withStyles((theme) => ({
     color: theme.palette.common.white,
   },
   body: {
-    fontSize: 14,
+    fontSize: 16,
+    align: "left",
   },
 }))(TableCell);
 
 const StyledTableRow = withStyles((theme) => ({
-  root: {
-    "&:nth-of-type(odd)": {
-      backgroundColor: theme.palette.action.hover,
-    },
-  },
+  // root: {
+  //   "&:nth-of-type(odd)": {
+  //     backgroundColor: theme.palette.action.hover,
+  //   },
+  // },
 }))(TableRow);
 
-const useStyles = makeStyles({
+const useStyles = makeStyles((theme) => ({
   table: {
-    minWidth: 700,
+    minWidth: 700,    border: "2px solid rgb(0, 0, 0)",
+
   },
-});
+  outsidePaper: {
+    marginTop: theme.spacing(8),
+    marginBottom: theme.spacing(8),
+    marginLeft: theme.spacing(30),
+    marginRight: theme.spacing(30),
+    flexDirection: "column",
+    alignItems: "center",
+    backgroundColor: theme.palette.background.paper,
+  },
+}));
 
 function createData(
   eventId,
@@ -146,65 +157,57 @@ export default function MyEventsRoster() {
           <img src={require("../noData.jpg")} />
           <Typography variant="h2">
             No Data found this time, come back soon
-          </Typography>
+          </Typography>{" "}
         </>
       ) : (
         <>
-          <Typography variant={"h4"}>Events I am following</Typography>
-          <TableContainer component={Paper}>
-            <Table className={classes.table} aria-label="customized table">
-              <TableHead>
-                <TableRow>
-                  <StyledTableCell align="right">eventTitle</StyledTableCell>
-                  <StyledTableCell align="right">
-                    eventOrganiserUsername
-                  </StyledTableCell>
-                  <StyledTableCell align="right">
-                    dateRegistered
-                  </StyledTableCell>
-                  <StyledTableCell align="right">Input Code</StyledTableCell>
-                  <StyledTableCell align="right">
-                    Event Attended / Going
-                  </StyledTableCell>
-                  <StyledTableCell align="right">
-                    {" "}
-                    View Event Details
-                  </StyledTableCell>
-                </TableRow>
-              </TableHead>
-              <TableBody>
-                {post.map((row) => (
-                  <StyledTableRow key={row.eventId}>
+          <div className={classes.outsidePaper}>
+            <Typography variant={"h3"}>Events I am following</Typography>
+            <TableContainer>
+              <Table className={classes.table} aria-label="customized table">
+                <TableHead>
+                  <TableRow>
+                    <StyledTableCell align="right">Event</StyledTableCell>
                     <StyledTableCell align="right">
-                      {row.eventTitle}
+                      Event Organiser
                     </StyledTableCell>
                     <StyledTableCell align="right">
-                      {row.eventOrganiserUsername}
+                      Date Registered
                     </StyledTableCell>
+                    <StyledTableCell align="right">Input Code</StyledTableCell>
                     <StyledTableCell align="right">
-                      {row.dateRegistered}
+                      Event Attended / Going
                     </StyledTableCell>
-                    <StyledTableCell align="right">
-                      {row.inputCode}
-                    </StyledTableCell>
-                    <StyledTableCell align="right">
-                      {row.attendeeArrived ? "Went" : "Going"}
-                    </StyledTableCell>
-                    <StyledTableCell>
-                      <Button
-                        color="primary"
-                        size="medium"
-                        onClick={() => handleViewEvent(row.eventId)}
-                      >
-                        {" "}
-                        View Event
-                      </Button>
-                    </StyledTableCell>
-                  </StyledTableRow>
-                ))}
-              </TableBody>
-            </Table>
-            {/* <Button color="primary" size="medium" onClick={handleRemoveAttende}>
+                  </TableRow>
+                </TableHead>
+                <TableBody>
+                  {post.map((row) => (
+                    <StyledTableRow
+                      key={row.eventId}
+                      hover="true"
+                      onClick={() => handleViewEvent(row.eventId)}
+                    >
+                      <StyledTableCell align="right">
+                        {row.eventTitle}
+                      </StyledTableCell>
+                      <StyledTableCell align="right">
+                        {row.eventOrganiserUsername}
+                      </StyledTableCell>
+                      <StyledTableCell align="right">
+                        {row.dateRegistered.slice(0, 10)}
+                      </StyledTableCell>
+                      <StyledTableCell align="right">
+                        {row.inputCode}
+                      </StyledTableCell>
+                      <StyledTableCell align="right">
+                        {row.attendeeArrived ? "Went" : "Going"}
+                      </StyledTableCell>
+                   
+                    </StyledTableRow>
+                  ))}
+                </TableBody>
+              </Table>
+              {/* <Button color="primary" size="medium" onClick={handleRemoveAttende}>
         {" "}
         Remove Attende
       </Button>
@@ -213,7 +216,8 @@ export default function MyEventsRoster() {
         {" "}
         Add Attende
       </Button> */}
-          </TableContainer>
+            </TableContainer>
+          </div>
         </>
       )}
     </>
