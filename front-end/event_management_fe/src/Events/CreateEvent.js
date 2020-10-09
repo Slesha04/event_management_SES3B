@@ -39,7 +39,8 @@ import { useEffect, useState } from "react";
 import upcomingEvent from "./Events.jpg";
 import { useForm } from "react-hook-form";
 import Snackbars from "../Shared/Snackbar";
-import { getUserPlatformAPIPort} from "../Login/JwtConfig";
+import { getUserPlatformAPIPort } from "../Login/JwtConfig";
+import MyDropzone from "./Upload";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -251,7 +252,9 @@ const CreateEvent = (props) => {
 
   function getUserName(userId) {
     axios
-      .get(`${getUserPlatformAPIPort()}api/UserController/GetUserById/${userId}`)
+      .get(
+        `${getUserPlatformAPIPort()}api/UserController/GetUserById/${userId}`
+      )
       .then(
         (res) => {
           if (res.status === 200) {
@@ -259,9 +262,11 @@ const CreateEvent = (props) => {
             return res.data.userName;
           }
         },
-        (error) => { setAlertTitle("Backend Error!");
-        setDisplayValue(true);
-        setAlertValue(0);}
+        (error) => {
+          setAlertTitle("Backend Error!");
+          setDisplayValue(true);
+          setAlertValue(0);
+        }
       );
   }
 
@@ -279,12 +284,11 @@ const CreateEvent = (props) => {
       eventDate === ""
     ) {
       setAlertTitle("Please fill the required fields");
-              setDisplayValue(true);
-              setAlertValue(0);
-              setTimeout(() => {
-                setDisplayValue(false);
-              }, 3500);
-            
+      setDisplayValue(true);
+      setAlertValue(0);
+      setTimeout(() => {
+        setDisplayValue(false);
+      }, 3500);
     } else {
       const res = axios
         .put(
@@ -310,7 +314,8 @@ const CreateEvent = (props) => {
             console.log(error);
             setAlertTitle("Create Event");
             setDisplayValue(true);
-            setAlertValue(1);          }
+            setAlertValue(1);
+          }
         );
     }
   };
@@ -464,6 +469,9 @@ const CreateEvent = (props) => {
                     </option>
                   ))}
                 </TextField>
+              </Grid>
+              <Grid item xs={12}>
+                <MyDropzone />
               </Grid>
 
               <Grid item xs={12}>

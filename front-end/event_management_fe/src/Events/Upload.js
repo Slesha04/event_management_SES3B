@@ -79,7 +79,7 @@ export default function MyDropzone() {
 
         console.log(file.size);
 
-        setMediaSize(binaryStr);
+        setMediaSize(binaryStr.Int8Array);
         console.log(binaryStr)
     
 
