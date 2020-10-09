@@ -32,13 +32,16 @@ import Cookies from "js-cookie";
 import { useHistory } from "react-router-dom";
 import { withRouter } from "react-router-dom";
 import axios from "axios";
-import { getHeaderToken, getToken, getUserID } from "../Login/JwtConfig";
+import { getHeaderToken, getToken, getUserID } from "../../Login/JwtConfig";
 import { useEffect } from "react";
 import Dialog from "@material-ui/core/Dialog";
 import DialogActions from "@material-ui/core/DialogActions";
 import DialogContent from "@material-ui/core/DialogContent";
 import DialogContentText from "@material-ui/core/DialogContentText";
 import DialogTitle from "@material-ui/core/DialogTitle";
+import Snackbars from "../../Shared/Snackbar";
+import { getUserPlatformAPIPort} from "../../Login/JwtConfig";
+
 import {
   fade,
   ThemeProvider,
@@ -55,18 +58,22 @@ const theme = createMuiTheme({
 const useStyles = makeStyles((theme) => ({
   root: {
     display: "flex",
-    height: theme.spacing(150),
-    width: theme.spacing(300),
+    height: theme.spacing(160),
+    width: theme.spacing(250),
+    justifyContent: "center",
+    alignItems: "center",
+    color: "#fff",
+  
   },
   textFieldInput: {},
   formtwo: {
-    margin: theme.spacing(5, 40, 40, 40),
+    margin: theme.spacing(5, 40, 20, 20),
     justifyContent: "center",
     alignItems: "center",
     position: "absolute",
     center: 0,
     width: theme.spacing(80),
-    height: theme.spacing(120),
+    height: theme.spacing(140),
     justifyContent: "auto",
     overflow: "hidden",
     backgroundColor: "white",
@@ -76,7 +83,7 @@ const useStyles = makeStyles((theme) => ({
     position: "absolute",
     right: 0,
     width: theme.spacing(65),
-    height: theme.spacing(100),
+    height: theme.spacing(130),
     justifyContent: "auto",
     overflow: "hidden",
     backgroundColor: "grey",
@@ -197,6 +204,12 @@ const eventVisibilityTypes = [
 const EditEvent = (props) => {
   const classes = useStyles();
   let selectedCardId = localStorage.getItem("selectedCard");
+  const history = useHistory();
+
+  // snackBar
+  const [alertValue, setAlertValue] = React.useState("");
+  const [alertTitle, setAlertTitle] = React.useState("");
+  const [DisplayValue, setDisplayValue] = React.useState("");
 
   const [eventTitle, setEventTitle] = React.useState("");
   const [eventBodyText, setEventBodyText] = React.useState("");
@@ -257,7 +270,7 @@ const EditEvent = (props) => {
 
     axios
       .get(
-        `https://localhost:5001/api/EventController/ViewEvent/${selectedCardId}`
+        `${getUserPlatformAPIPort()}api/EventController/ViewEvent/${selectedCardId}`
       )
 
       .then(
@@ -275,7 +288,9 @@ const EditEvent = (props) => {
           }
         },
         (error) => {
-          alert("something Went Wrong");
+          setAlertTitle("backend");
+          setDisplayValue(true);
+          setAlertValue(0);
         }
       );
   }, []);
@@ -283,34 +298,63 @@ const EditEvent = (props) => {
   const handleUpdate = (event) => {
     event.preventDefault();
     const body = {};
-    console.log(
-      `https://localhost:5001/api/EventController/UpdateEvent/${selectedCardId}/${eventTitle}/${eventBodyText}/${eventLocation}/${eventDate}/${eventStatus}/${ticketPrice}/${eventType}/${eventVisibility}`
-    );
-    console.log(getHeaderToken());
-    const res = axios
-      .put(
-        `https://localhost:5001/api/EventController/UpdateEvent/${selectedCardId}/${eventTitle}/${eventBodyText}/${eventLocation}/${eventDate}/${eventStatus}/${ticketPrice}/${eventType}/${eventVisibility}`,
-        body,
-        {
-          headers: {
-            Authorization: getHeaderToken(),
-          },
-        }
-      )
-      .then(
-        (res) => {
-          console.log(res);
-          if (res.status === 200) alert("update Event Success");
-        },
-        (error) => {
-          alert("something went wrong,  please try again", error);
-        }
+    if (
+      (eventTitle === "null" || eventTitle === "" ) ||
+      (eventBodyText === "null" || eventBodyText === "" ) ||
+      (eventLocation === "null" || eventLocation === "" ) ||
+      (eventDate === "null" || eventDate === "" ) 
+    ) {
+      setAlertTitle("Please fill the required fields");
+      setDisplayValue(true);
+      setAlertValue(0);
+      setTimeout(() => {
+        setDisplayValue(false);
+      }, 3500);
+    } else {
+      console.log(
+        `http://localhost:5000/api/EventController/UpdateEvent/${selectedCardId}/${eventTitle}/${eventBodyText}/${eventLocation}/${eventDate}/${eventStatus}/${ticketPrice}/${eventType}/${eventVisibility}`
       );
-      setOpen(false);
+      console.log(getHeaderToken());
+      const res = axios
+        .put(
+          `https://localhost:5001/api/EventController/UpdateEvent/${selectedCardId}/${eventTitle}/${eventBodyText}/${eventLocation}/${eventDate}/${eventStatus}/${ticketPrice}/${eventType}/${eventVisibility}`,
+          body,
+          {
+            headers: {
+              Authorization: getHeaderToken(),
+            },
+          }
+        )
+        .then(
+          (res) => {
+            console.log(res);
+            if (res.status === 200) {
+              setAlertTitle("Update Event");
+
+              setDisplayValue(true);
+              setAlertValue(1);
+              setTimeout(() => {
+                history.push("/myEvents");
+              }, 2500);
+            }
+          },
+          (error) => {
+            setAlertTitle("something went wrong,  please try again");
+            setDisplayValue(true);
+            setAlertValue(0);
+          }
+        );
+    }
+    setOpen(false);
   };
 
   return (
     <div className={classes.root}>
+      <Snackbars
+        title={alertTitle}
+        alertValue={alertValue}
+        DisplayValue={DisplayValue}
+      />
       <form
         noValidate
         autoComplete="off"
@@ -513,7 +557,8 @@ const EditEvent = (props) => {
                 </DialogTitle>
                 <DialogContent>
                   <DialogContentText id="alert-dialog-description">
-                    You are going to update the details for this event. Are you sure?
+                    You are going to update the details for this event. Are you
+                    sure?
                   </DialogContentText>
                 </DialogContent>
                 <DialogActions>

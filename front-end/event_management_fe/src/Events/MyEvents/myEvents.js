@@ -25,29 +25,31 @@ import Cookies from "js-cookie";
 import { useHistory } from "react-router-dom";
 import { withRouter } from "react-router-dom";
 import axios from "axios";
-import AccountCircleIcon from "@material-ui/icons/AccountCircle";
 import { useEffect, useState } from "react";
-import { getHeaderToken, getToken, getUserID } from "../Login/JwtConfig";
-import MyEventCard from "./cards/MyEventCard";
-import { getUserName } from "../Login/JwtConfig";
+import { getHeaderToken, getToken, getUserID } from "../../Login/JwtConfig";
+import MyEventCard from "../cards/MyEventCard";
+import { getUserName } from "../../Login/JwtConfig";
+import Snackbars from "../../Shared/Snackbar";
+import noData from "../noData.jpg";
+import { getUserPlatformAPIPort} from "../../Login/JwtConfig";
 
 const useStyles = makeStyles((theme) => ({
   paper: {
-    marginTop: theme.spacing(8),
     marginBottom: theme.spacing(8),
-
+    width:"200",
     display: "flex",
     flexDirection: "column",
     alignItems: "center",
+    backgroundColor:  "#F5F4F2"
+
   },
   outsidePaper: {
-    marginTop: theme.spacing(8),
     marginBottom: theme.spacing(8),
     marginLeft: theme.spacing(30),
     marginRight: theme.spacing(30),
     flexDirection: "column",
     alignItems: "center",
-    backgroundColor: theme.palette.background.paper,
+    // backgroundColor: "#FDBAA5",
   },
   avatar: {
     margin: theme.spacing(1),
@@ -66,49 +68,71 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const EventsGuestList = (props) => {
- 
+const MyEvents = (props) => {
   const classes = useStyles();
   const [post, setPostArray] = useState([]);
-  let selectedCardId = localStorage.getItem("selectedCard");
 
   const history = useHistory();
+  // snackBar
+  const [alertValue, setAlertValue] = React.useState("");
+  const [DisplayValue, setDisplayValue] = React.useState("");
 
   useEffect(() => {
     const userId = getUserID();
-    console.log(userId);
-    const body = {};
-   console.log(`https://localhost:5001/api/EventRosterController/GetRosterByEvent/${selectedCardId}`)
-   console.log(getHeaderToken())
-    axios.get(`https://localhost:5001/api/EventRosterController/GetRosterByEvent/${selectedCardId}`, body, {
-      headers: {
-        'Authorization':  getHeaderToken()
-      }
-    }).then(
+    console.log("called");
+    axios
+      .get(
+        `${getUserPlatformAPIPort()}api/EventController/ViewUserEvents/${userId}`
+      )
+      .then(
         (res) => {
-            if(res.status === 200){
-                console.log("res for updateRoster" + res)
-                alert("Create Event Success");
-            }
-           
+          if (res.status === 200) {
+            setPostArray(res.data);
+            // console.log(res.data[0].eventTitle);
+          }
         },
         (error) => {
-          alert("no", error);
+          setDisplayValue(true);
+          setAlertValue(0);
         }
       );
-  }, []);
+  });
 
   return (
-    <div>
-      <Typography variant={"h4"}>My Events</Typography>
-      {console.log(post)}
-      {post.map((item) => (
-        <div key={item}>
-          <Paper elevation={5}>dada</Paper>
-        </div>
-      ))}
+    <div className={classes.paper}>
+      {" "}
+      {post.length == 0 ? (
+        <>
+          <img src={require("../noData.jpg")}  />
+          <Typography variant="h2">No Data found this time, come back soon</Typography>
+
+        </>
+      ) : (
+        <Paper elevation={5} className={classes.outsidePaper}>
+        <Snackbars
+            title={"Backend"}
+            alertValue={alertValue}
+            DisplayValue={DisplayValue}
+          />{" "}
+          <Typography variant={"h2"} >My Events</Typography>
+          {console.log(post)}
+          {post.map((item) => (
+            <div key={item}>
+                <MyEventCard
+                  eventId={item.eventId}
+                  eventTitle={item.eventTitle}
+                  eventDate={item.eventDate.slice(0, 10)}
+                  eventVenue={item.location.locationName}
+                  eventDescription={item.bodyText}
+                  eventOrgainser={getUserName()}
+                  eventPrice={item.eventTicketPrice}
+                />
+            </div>
+          ))}
+        </Paper>
+      )}
     </div>
   );
 };
 
-export default EventsGuestList;
+export default MyEvents;

@@ -23,6 +23,11 @@ import { useHistory } from "react-router-dom";
 import { withRouter } from "react-router-dom";
 import axios from "axios";
 import AccountCircleIcon from "@material-ui/icons/AccountCircle";
+import Snackbars from "../Shared/Snackbar";
+import DesktopMacTwoToneIcon from "@material-ui/icons/DesktopMacTwoTone";
+import LaptopWindowsTwoToneIcon from "@material-ui/icons/LaptopWindowsTwoTone";
+import { IconButton } from "@material-ui/core";
+import { getUserPlatformAPIPort} from "../Login/JwtConfig";
 
 const useStyles = makeStyles((theme) => ({
   paper: {
@@ -32,6 +37,10 @@ const useStyles = makeStyles((theme) => ({
     display: "flex",
     flexDirection: "column",
     alignItems: "center",
+  },
+  iconButtonLabel: {
+    display: "flex",
+    flexDirection: "column",
   },
   outsidePaper: {
     marginTop: theme.spacing(8),
@@ -64,6 +73,11 @@ const Login = (props) => {
   const classes = useStyles();
   const [username, setUsername] = React.useState("");
   const [password, setPassword] = React.useState("");
+  const [uservalue, setUservalue] = React.useState("");
+
+  // snackBar
+  const [alertValue, setAlertValue] = React.useState("");
+  const [DisplayValue, setDisplayValue] = React.useState("");
 
   const handleUsernameChange = (event) => {
     setUsername(event.target.value);
@@ -75,101 +89,137 @@ const Login = (props) => {
 
   const history = useHistory();
 
+  const handleAPIPortNumMac = (event) => {
+    setUservalue("http://localhost:5000/");
+  };
+  const handleAPIPortNumWindows = (event) => {
+    setUservalue("https://localhost:5001/");
+  };
   const handleRegister = (event) => {
     event.preventDefault();
-
+    Cookies.set("user-platform-api-port",uservalue);
+    console.log("user-platform-api-port -"+uservalue);
     axios
       .get(
-        `https://localhost:5001/api/UserController/LoginUser/${username}/${password}`
+        `${getUserPlatformAPIPort()}api/UserController/LoginUser/${username}/${password}`
       )
       .then(
         (res) => {
           // user id - console.log(res.data.jwtToken.payload.user_id);
+          setAlertValue(1);
           console.log(res.data.encodedForm);
           Cookies.set("auth-cookie", res.data.encodedForm);
+          Cookies.set("auth-full-cookie", res.data);
+          
           const userId = res.data.jwtToken.payload.user_id;
           Cookies.set("userID", userId);
           Cookies.set("userName", username);
-          history.push("/homePage");
-           
+          // snackbar
+          setDisplayValue(true);
+          setTimeout(() => {
+            history.push("/homePage");
+          }, 2500);
         },
         (error) => {
-          alert("something Went Wrong");
+          setDisplayValue(true);
+          setAlertValue(0);
         }
       );
   };
 
   return (
-    <Paper variant="outlined" className={classes.outsidePaper} elevation={3}>
-      <Container component="main" maxWidth="xs">
-        <CssBaseline />
-        <div className={classes.paper}>
-          <Avatar className={classes.avatar}>
-            <AccountCircleIcon />
-          </Avatar>
-          <Typography component="h1" variant="h5">
-            Log in
-          </Typography>
-          <form className={classes.form} onSubmit={handleRegister} noValidate>
-            <Grid container spacing={2}>
-              <Grid item xs={12}>
-                <TextField
-                  autoComplete="fname"
-                  name="fullName"
-                  variant="outlined"
-                  required
-                  fullWidth
-                  id="fullName"
-                  label="Full Name"
-                  value={username}
-                  onChange={handleUsernameChange}
-                  autoFocus
-                />
+    <>
+      <Paper variant="outlined" className={classes.outsidePaper} elevation={3}>
+        <Container component="main" maxWidth="xs">
+          <CssBaseline />
+          <div className={classes.paper}>
+            <Avatar className={classes.avatar}>
+              <AccountCircleIcon />
+            </Avatar>
+            <Typography component="h1" variant="h5">
+              Log in
+            </Typography>
+            <form className={classes.form} onSubmit={handleRegister} noValidate>
+              <Grid container spacing={2}>
+                <Grid item xs={12}>
+                  <TextField
+                    autoComplete="fname"
+                    name="fullName"
+                    variant="outlined"
+                    required
+                    fullWidth
+                    id="fullName"
+                    label="Full Name"
+                    value={username}
+                    onChange={handleUsernameChange}
+                    autoFocus
+                  />
+                </Grid>
+
+                <Grid item xs={12}>
+                  <TextField
+                    variant="outlined"
+                    required
+                    fullWidth
+                    name="password"
+                    label="Password"
+                    type="password"
+                    id="password"
+                    autoComplete="current-password"
+                    value={password}
+                    onChange={handlePasswordChange}
+                  />
+                </Grid>
+
+                <Grid item xs={12}>
+                  <FormControlLabel
+                    control={<Checkbox value="Remember Me" color="primary" />}
+                    label="Remember me"
+                  />
+                </Grid>
               </Grid>
 
-              <Grid item xs={12}>
-                <TextField
-                  variant="outlined"
-                  required
-                  fullWidth
-                  name="password"
-                  label="Password"
-                  type="password"
-                  id="password"
-                  autoComplete="current-password"
-                  value={password}
-                  onChange={handlePasswordChange}
-                />
+              <Button
+                type="submit"
+                fullWidth
+                variant="contained"
+                color="primary"
+                className={classes.submit}
+              >
+                Log In
+              </Button>
+              <Grid container justify="flex-end">
+                <Grid item>
+                  <Link href="/Register" variant="body2">
+                    Don't Have an account yet? Sign Up
+                  </Link>
+                </Grid>
               </Grid>
-
-              <Grid item xs={12}>
-                <FormControlLabel
-                  control={<Checkbox value="Remember Me" color="primary" />}
-                  label="Remember me"
-                />
-              </Grid>
+            </form>
+          </div>
+          <Grid container direction="row" justify="center" alignItems="center">
+            <Grid item xs={12} sm={6}>
+              <IconButton classes={{ label: classes.iconButtonLabel }} onClick={handleAPIPortNumMac}>
+                <DesktopMacTwoToneIcon style={{ fontSize: 60 }} />
+                <div>Mac</div>
+              </IconButton>
             </Grid>
-
-            <Button
-              type="submit"
-              fullWidth
-              variant="contained"
-              color="primary"
-              className={classes.submit}
-            >
-              Log In
-            </Button>
-            <Grid container justify="flex-end">
-              <Grid item>
-                <Link href="/Register" variant="body2">
-                  Don't Have an account yet? Sign Up
-                </Link>
-              </Grid>
+            <Grid item xs={12} sm={6}>
+              <IconButton classes={{ label: classes.iconButtonLabel }} onClick={handleAPIPortNumWindows}>
+                <LaptopWindowsTwoToneIcon style={{ fontSize: 60 }} />
+                <div>Windows</div>
+              </IconButton>
             </Grid>
-          </form>
-        </div>
-      </Container>
-    </Paper>
+          </Grid>
+        </Container>
+
+        <Snackbars
+          title={"Log In"}
+          alertValue={alertValue}
+          DisplayValue={DisplayValue}
+        />
+      </Paper>
+    </>
   );
 };
 

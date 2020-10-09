@@ -7,10 +7,16 @@ import { withRouter } from "react-router-dom";
 import axios from "axios";
 import { getHeaderToken } from "../Login/JwtConfig";
 import { useHistory } from "react-router-dom";
+import DynamicFeedSharpIcon from "@material-ui/icons/DynamicFeedSharp";
+import Snackbars from "../Shared/Snackbar";
+import { getUserPlatformAPIPort} from "../Login/JwtConfig";
 
 function Navbar() {
   const [click, setClick] = useState(false);
   const [button, setButton] = useState(true);
+  // snackBar
+  const [alertValue, setAlertValue] = React.useState("");
+  const [DisplayValue, setDisplayValue] = React.useState("");
 
   const handleClick = () => setClick(!click);
   const closeMobileMenu = () => setClick(false);
@@ -39,8 +45,38 @@ function Navbar() {
   });
 
   const logout = () => {
-    Cookies.remove("auth-cookie");
-    history.push("/login");
+    const body = {};
+
+    axios
+      .post(`${getUserPlatformAPIPort()}api/UserController/LogoutUser`, body, {
+        headers: {
+          Authorization: getHeaderToken(),
+        },
+      })
+      .then(
+        (res) => {
+          setAlertValue(1);
+
+          console.log(res);
+          Cookies.remove("auth-cookie");
+          Cookies.remove("userID");
+          Cookies.remove("user-platform-api-port");
+
+          setDisplayValue(true);
+          setTimeout(() => {
+            history.push("/login");
+            setDisplayValue(false);
+          }, 2500);
+        },
+        (error) => {
+          console.log(error);
+          setDisplayValue(true);
+          setAlertValue(0);
+          setTimeout(() => {
+            setDisplayValue(false);
+          }, 1500);
+        }
+      );
   };
 
   //------------------------------------------------------------
@@ -55,7 +91,11 @@ function Navbar() {
     <>
       <nav className="navbar">
         <div className="navbar-container">
-          <Link to="/" className="navbar-logo" onClick={closeMobileMenu}>
+          <Link
+            to="/homePage"
+            className="navbar-logo"
+            onClick={closeMobileMenu}
+          >
             UTS:EVENTS <i class="fas fa-glass-cheers" />
           </Link>
           <div className="menu-icon" onClick={handleClick}>
@@ -98,23 +138,29 @@ function Navbar() {
                 <i class="fas fa-mail-bulk"></i>
               </Link>
             </li>
-            <li className="nav-item">
-              <Link
-                to="/all-events"
-                className="nav-links"
-                onClick={closeMobileMenu}
-              >
-                <i class="far fa-user-circle"></i>
-              </Link>
-            </li>
           </ul>
+
           {button && (
             <Button onClick={logout} buttonStyle="btn--outline">
               <i class="fas fa-sign-in-alt"></i>
             </Button>
           )}
         </div>
+        <div className="nav-item">
+          <Link
+            to="/MyEventRoster"
+            className="nav-links"
+            onClick={closeMobileMenu}
+          >
+            <DynamicFeedSharpIcon fontSize="medium" />
+          </Link>
+        </div>
       </nav>
+      <Snackbars
+        title={alertValue == 0 ? "try again" : "Account logout,"}
+        alertValue={alertValue}
+        DisplayValue={DisplayValue}
+      />
     </>
   );
 }

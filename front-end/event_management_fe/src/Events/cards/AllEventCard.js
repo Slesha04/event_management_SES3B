@@ -1,6 +1,7 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import { useHistory } from "react-router-dom";
+import { getUserPlatformAPIPort} from "../../Login/JwtConfig";
 
 function AllEventCard(props) {
   const history = useHistory();
@@ -9,6 +10,7 @@ function AllEventCard(props) {
     //store eveent id to local storage
     console.log("at the grid- " + eventId);
     localStorage.setItem("viewEventId", eventId);
+    
    };
 
   return (
@@ -16,7 +18,7 @@ function AllEventCard(props) {
       <li className="cards__item">
         <Link
           className="cards__item__link"
-          to={props.path}
+          to={{pathname: "/view-event",state: { AttendeeStatus: "Check into this event?" }}}
           onClick={() => showEvent(props.evenetId)}
         >
           <figure className="cards__item__pic-wrap" data-category={props.label}>

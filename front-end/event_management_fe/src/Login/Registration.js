@@ -22,6 +22,9 @@ import { useHistory } from "react-router-dom";
 import { withRouter } from "react-router-dom";
 import axios from "axios";
 import Paper from "@material-ui/core/Paper";
+import { getHeaderToken, getToken, getUserID } from "../Login/JwtConfig";
+import Snackbars from "../Shared/Snackbar";
+import { getUserPlatformAPIPort} from "../Login/JwtConfig";
 
 /* https://github.com/mui-org/material-ui/blob/master/docs/src/pages/getting-started/templates/sign-up/SignUp.js*/
 
@@ -85,6 +88,10 @@ const Registration = (props) => {
   const [username, setUsername] = React.useState("");
   const [birthDate, setBirthDate] = React.useState("");
 
+  const [alertValue, setAlertValue] = React.useState("");
+
+  const [DisplayValue, setDisplayValue] = React.useState("");
+
   const handleUsernameChange = (event) => {
     setUsername(event.target.value);
   };
@@ -104,21 +111,52 @@ const Registration = (props) => {
 
   const handleRegister = (event) => {
     event.preventDefault();
+    if (
+      username !== "" ||
+      password !== "" ||
+      birthDate !== "" ||
+      gender !== "" ||
+      email !== ""
+    ) {
+      //logout previous user
+      axios
+        .put(`${getUserPlatformAPIPort()}api/UserController/LogoutUser`, {
+          headers: {
+            Authorization: getHeaderToken(),
+          },
+        })
+        .then(
+          (res) => {
+            console.log("Successfully logged out!");
+          },
+          (error) => {
+            console.log(" log out dosent work!");
+          }
+        );
 
-    axios
-      .get(
-        `https://localhost:5001/api/UserController/RegisterUser/${username}/${birthDate}/${gender}/${email}/${password}`
-      )
-      .then(
-        (res) => {
-          Cookies.set("auth-cookie", res.data.access_token);
-          history.push("/homepage");
-          alert("Successfully registered!");
-        },
-        (error) => {
-          alert("Didnt work!");
-        }
-      );
+      //register user
+      axios
+        .get(
+          `https://localhost:5001/api/UserController/RegisterUser/${username}/${birthDate}/${gender}/${email}/${password}`
+        )
+        .then(
+          (res) => {
+            Cookies.set("auth-cookie", res.data.access_token);
+            setDisplayValue(true);
+            setAlertValue(1);
+            setTimeout(() => {
+              history.push("/homePage");
+            }, 2500);
+          },
+          (error) => {
+            setDisplayValue(true);
+            setAlertValue(0);
+          }
+        );
+    }else {
+      setDisplayValue(true);
+      setAlertValue(0);
+    }
   };
 
   return (
@@ -236,6 +274,11 @@ const Registration = (props) => {
           <Copyright />
         </Box>
       </Container>
+      <Snackbars
+        title={"Registration"}
+        alertValue={alertValue}
+        DisplayValue={DisplayValue}
+      />
     </Paper>
   );
 };

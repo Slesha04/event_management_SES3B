@@ -8,7 +8,6 @@ import '../App.css'
 import HeroSection from '../Shared/HeroSection'
 import Cards from '../Shared/Cards';
 import Footer from '../Shared/Footer';
- 
 
 export default class homePage extends Component{
     componentDidMount() {

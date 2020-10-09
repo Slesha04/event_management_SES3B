@@ -30,6 +30,9 @@ import { useEffect, useState } from "react";
 import { getHeaderToken, getToken, getUserID } from "../Login/JwtConfig";
 import ViewEventCard from "./cards/ViewEventCard";
 import { getUserName } from "../Login/JwtConfig";
+import Map from "./map/map";
+import Snackbars from "../Shared/Snackbar";
+import { getUserPlatformAPIPort} from "../Login/JwtConfig";
 
 const useStyles = makeStyles((theme) => ({
   paper: {
@@ -75,7 +78,18 @@ const MyEvents = (props) => {
   const history = useHistory();
   let selectedCardId = localStorage.getItem("selectedCard");
 
+  // snackBar
+  const [alertValue, setAlertValue] = React.useState("");
+  const [DisplayValue, setDisplayValue] = React.useState("");
+
+  const [latitude, setLatitude] = React.useState("");
+  const [longitude, setLongtitude] = React.useState("");
+
   const [eventTitle, setEventTitle] = React.useState("");
+
+  const [eventOrganiser, setEventOrganiser] = React.useState("");
+  const [eventOrganiserID, setEventOrganiserID] = React.useState("");
+
   const [eventBodyText, setEventBodyText] = React.useState("");
   const [eventLocation, setEventLocation] = React.useState("");
   const [eventDate, setEventDate] = React.useState("");
@@ -87,6 +101,7 @@ const MyEvents = (props) => {
 
   const [eventVisibility, setEventVisibility] = React.useState(0);
   const [open, setOpen] = React.useState(false);
+  const [AttendeeStatus, setAttendeeStatus] = React.useState("Join Event?");
 
   const handleClickOpen = (event) => {
     event.preventDefault();
@@ -128,19 +143,37 @@ const MyEvents = (props) => {
   const handleEventVisibility = (event) => {
     setEventVisibility(event.target.value);
   };
+  const handleEventOrganiserChange = (event) => {
+    setEventOrganiser(event.target.value);
+  };
+  function getUserName(userId) {
+    axios
+      .get(`${getUserPlatformAPIPort()}api/UserController/GetUserById/${userId}`)
+      .then(
+        (res) => {
+          if (res.status === 200) {
+            console.log(res);
+            setEventOrganiser(res.data.userName);
+          }
+        },
+        (error) => {
+          setDisplayValue(true);
+          setAlertValue(0);
+        }
+      );
+  }
 
   useEffect(() => {
     const userId = getUserID();
 
     axios
       .get(
-        `https://localhost:5001/api/EventController/ViewEvent/${selectedEvent}`
+        `${getUserPlatformAPIPort()}api/EventController/ViewEvent/${selectedEvent}`
       )
-
       .then(
         (res) => {
           if (res.status === 200) {
-            // console.log(res)
+            console.log(res);
             setEventTitle(res.data.eventTitle);
             console.log(res.data.eventTitle);
             setEventBodyText(res.data.bodyText);
@@ -149,15 +182,67 @@ const MyEvents = (props) => {
             setEventType(res.data.eventType);
             setTicketPrice(res.data.eventTicketPrice);
             setEventVisibility(res.data.eventVisibility);
+            setEventOrganiser(getUserName(res.data.eventOrganiserId));
+            setEventOrganiserID(res.data.eventOrganiserId);
           }
         },
         (error) => {
-          alert("something Went Wrong");
+          setDisplayValue(true);
+          setAlertValue(0);
+        }
+      );
+
+    //map
+    axios
+      .get(
+        `${getUserPlatformAPIPort()}api/EventController/GetEventCoordinates/${selectedEvent}`
+      )
+      .then(
+        (res) => {
+          if (res.status === 200) {
+            setLatitude(res.data.latitude);
+            setLongtitude(res.data.longitude);
+          }
+        },
+        (error) => {
+          setDisplayValue(true);
+          setAlertValue(0);
         }
       );
   }, []);
+  function addMarkers(map, links) {
+    const marker = new window.google.maps.Marker({
+      map,
+      position: link.coords,
+      label: `${0 + 1}`,
+      title: link.title,
+    });
+    marker.addListener(`click`, () => {
+      window.location.href = link.url;
+    });
+  }
+  const link = {
+    coords: { lat: latitude, lng: longitude }, // required: latitude & longitude at which to display the marker
+    title: `Life, the Universe and Everything`, // optional
+    url: `https://wikipedia.org/wiki/Life,_the_Universe_and_Everything`, // optional
+  };
+
+  let mapProps = {
+    options: {
+      center: { lat: latitude, lng: longitude },
+      zoom: 15,
+    },
+    onMount: addMarkers,
+    onMountProps: link,
+  };
+
   return (
     <div>
+      <Snackbars
+        title={"Backend Unrecheable"}
+        alertValue={alertValue}
+        DisplayValue={DisplayValue}
+      />
       <Paper elevation={5}>
         <ViewEventCard
           eventId={selectedEvent}
@@ -165,9 +250,12 @@ const MyEvents = (props) => {
           eventDate={eventDate}
           eventVenue={eventLocation}
           eventDescription={eventBodyText}
-          eventOrgainser={getUserName()}
+          eventOrgainser={eventOrganiser}
           eventPrice={ticketPrice}
+          eventOrganiserId={eventOrganiserID}
+          JoinOrLeave={props.location.state.AttendeeStatus}
         />
+        <Map {...mapProps} />
       </Paper>
     </div>
   );
