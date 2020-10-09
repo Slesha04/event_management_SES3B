@@ -16,16 +16,22 @@ import DialogContentText from "@material-ui/core/DialogContentText";
 import DialogTitle from "@material-ui/core/DialogTitle";
 import { getHeaderToken, getToken, getUserID } from "../../Login/JwtConfig";
 import Snackbars from "../../Shared/Snackbar";
-import { getUserPlatformAPIPort} from "../../Login/JwtConfig";
-
+import { getUserPlatformAPIPort } from "../../Login/JwtConfig";
+import { IconButton } from "@material-ui/core";
+import DeleteSweepIcon from "@material-ui/icons/DeleteSweep";
 import axios from "axios";
-
+import ViewListIcon from "@material-ui/icons/ViewList";
+import EditIcon from "@material-ui/icons/Edit";
 const useStyles = makeStyles((theme) => ({
   root: {
     minWidth: 275,
     marginBottom: theme.spacing(5),
     margin: theme.spacing(5),
-    backgroundColor:  "#EFEFEF"
+    backgroundColor: "#EFEFEF",
+  },
+  iconButtonLabel: {
+    display: "flex",
+    flexDirection: "column",        
 
   },
   bullet: {
@@ -207,18 +213,36 @@ export default function MyEventCard(props) {
         </Grid>
       </CardContent>
       <CardActions>
-        <Button color="primary" size="medium" onClick={handleEditEvent}>
-          {" "}
-          Edit
-        </Button>
-        <Button color="primary" size="medium" onClick={handleViewGuestList}>
-          {" "}
-          Guest View/list
-        </Button>
-        <Button color="primary" size="medium" onClick={handleClickOpen}>
-          {" "}
-          Delete Event
-        </Button>
+        {" "}
+        <Grid container direction="row" justify="center" alignItems="center">
+          <Grid item xs={3} sm={3}>
+            <IconButton
+              classes={{ label: classes.iconButtonLabel }}
+              onClick={handleEditEvent}color="primary" variant="raised"
+            >
+              <EditIcon style={{ fontSize: 20 }} />
+              <Typography variant="h6" >Edit Event</Typography>
+            </IconButton>
+          </Grid>
+          <Grid item xs={3} sm={3}>
+            <IconButton
+              classes={{ label: classes.iconButtonLabel }}
+              onClick={handleViewGuestList}color="primary" variant="raised"
+            >
+              <ViewListIcon style={{ fontSize: 20 }} />
+              <Typography variant="h6" >Guest View/list</Typography>
+            </IconButton>
+          </Grid>
+          <Grid item xs={3} sm={3}>
+            <IconButton
+              classes={{ label: classes.iconButtonLabel }}
+              onClick={handleClickOpen}color="primary" variant="raised"
+            >
+              <DeleteSweepIcon style={{ fontSize: 20 }} />
+              <Typography variant="h6" >Delete Event</Typography>
+            </IconButton>
+          </Grid>
+        </Grid>
         <Dialog
           open={open}
           onClose={handleClose}
