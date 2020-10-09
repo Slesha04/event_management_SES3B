@@ -206,7 +206,7 @@ export default function ViewEventCard(props) {
                 <CardMedia
                   component="img"
                   className={classes.media}
-                  image={upcomingEvent}
+                  image={localStorage.getItem(`imageIdEvent${selectedCardId}`)}
                   title="Contemplative Reptile"
                 />
               </Grid>
