@@ -16,7 +16,7 @@ export default function Map({ options, onMount, className, onMountProps }) {
       const script = document.createElement(`script`)
       script.src =
         `https://maps.googleapis.com/maps/api/js?key=` +
-        "AIzaSyDQ***JB_E"
+        "AIzaSyDQX5DWbWVmu_vRwhbFjAsx2pU1fdhJB_E"
       document.head.append(script)
       script.addEventListener(`load`, onLoad)
       return () => script.removeEventListener(`load`, onLoad)

@@ -39,7 +39,38 @@ import { useEffect, useState } from "react";
 import upcomingEvent from "./Events.jpg";
 import { useForm } from "react-hook-form";
 import Snackbars from "../Shared/Snackbar";
-import { getUserPlatformAPIPort} from "../Login/JwtConfig";
+import { getUserPlatformAPIPort } from "../Login/JwtConfig";
+
+const ProjectData = [
+  { imageUrl: require("./dummyData/img1.jpg") },
+  {
+    imageUrl: require("./dummyData/img2.jpg"),
+  },
+  {
+    imageUrl: require("./dummyData/img3.jpg"),
+  },
+  {
+    imageUrl: require("./dummyData/img4.jpg"),
+  },
+  {
+    imageUrl: require("./dummyData/img6.jpg"),
+  },
+  {
+    imageUrl: require("./dummyData/img7.jpg"),
+  },
+  {
+    imageUrl: require("./dummyData/img8.jpg"),
+  },
+  {
+    imageUrl: require("./dummyData/img9.jpg"),
+  },
+  {
+    imageUrl: require("./dummyData/img10.jpg"),
+  },
+  {
+    imageUrl: require("./dummyData/img11.jpg"),
+  },
+];
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -167,10 +198,9 @@ const eventVisibilityTypes = [
 
 const CreateEvent = (props) => {
   const { register, handleSubmit, errors } = useForm();
-
   const classes = useStyles();
   const [post, setPostArray] = useState([]);
-
+  var x;
   // snackBar
   const [alertValue, setAlertValue] = React.useState("");
   const [alertTitle, setAlertTitle] = React.useState("");
@@ -190,7 +220,7 @@ const CreateEvent = (props) => {
 
   const [eventVisibility, setEventVisibility] = React.useState(0);
   const history = useHistory();
-
+  console.log(ProjectData[0].imageUrl);
   const handleEventTitleChange = (event) => {
     setEventTitle(event.target.value);
   };
@@ -218,8 +248,10 @@ const CreateEvent = (props) => {
   const handleEventVisibility = (event) => {
     setEventVisibility(event.target.value);
   };
-
-  const showEvent = (eventId) => {
+  const imgData = (event) => {
+    return ProjectData[Math.floor(Math.random() * ProjectData.length)].imageUrl;
+  };
+  const showEvent = (eventId,x) => {
     //store eveent id to local storage
     console.log("at the grid- " + eventId);
     localStorage.setItem("viewEventId", eventId);
@@ -251,7 +283,9 @@ const CreateEvent = (props) => {
 
   function getUserName(userId) {
     axios
-      .get(`${getUserPlatformAPIPort()}api/UserController/GetUserById/${userId}`)
+      .get(
+        `${getUserPlatformAPIPort()}api/UserController/GetUserById/${userId}`
+      )
       .then(
         (res) => {
           if (res.status === 200) {
@@ -259,9 +293,11 @@ const CreateEvent = (props) => {
             return res.data.userName;
           }
         },
-        (error) => { setAlertTitle("Backend Error!");
-        setDisplayValue(true);
-        setAlertValue(0);}
+        (error) => {
+          setAlertTitle("Backend Error!");
+          setDisplayValue(true);
+          setAlertValue(0);
+        }
       );
   }
 
@@ -279,12 +315,11 @@ const CreateEvent = (props) => {
       eventDate === ""
     ) {
       setAlertTitle("Please fill the required fields");
-              setDisplayValue(true);
-              setAlertValue(0);
-              setTimeout(() => {
-                setDisplayValue(false);
-              }, 3500);
-            
+      setDisplayValue(true);
+      setAlertValue(0);
+      setTimeout(() => {
+        setDisplayValue(false);
+      }, 3500);
     } else {
       const res = axios
         .put(
@@ -310,7 +345,8 @@ const CreateEvent = (props) => {
             console.log(error);
             setAlertTitle("Create Event");
             setDisplayValue(true);
-            setAlertValue(1);          }
+            setAlertValue(1);
+          }
         );
     }
   };
@@ -504,8 +540,10 @@ const CreateEvent = (props) => {
               <ListSubheader component="div">September</ListSubheader>
             </GridListTile>
             {post.map((item) => (
-              <GridListTile key={item} onClick={() => showEvent(item.eventId)}>
-                <img src={upcomingEvent} alt={item.eventTitle} />
+                x = imgData(),     localStorage.setItem(`imageIdEvent${item.eventId}`, x),
+
+              <GridListTile key={item} onClick={() => showEvent(item.eventId,x)}>
+                <img src={x} alt={item.eventTitle} />
                 <GridListTileBar
                   title={item.eventTitle}
                   subtitle={<span>about: {item.bodyText}</span>}

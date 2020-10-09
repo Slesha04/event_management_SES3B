@@ -223,7 +223,7 @@ const MyEvents = (props) => {
   }
   const link = {
     coords: { lat: latitude, lng: longitude }, // required: latitude & longitude at which to display the marker
-    title: `Life, the Universe and Everything`, // optional
+    title: eventTitle, // optional
     url: `https://wikipedia.org/wiki/Life,_the_Universe_and_Everything`, // optional
   };
 

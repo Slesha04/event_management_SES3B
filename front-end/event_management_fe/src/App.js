@@ -20,7 +20,7 @@ import MyEvents from './Events/MyEvents/myEvents';
 import viewEvent from './Events/viewEvent';
 import EventsGuestList from './Events/MyEvents/EventsGuestList'
 import MyEventRoster from './Events/MyEventRoster/MyEventRoster'
-
+import Schedule from "./Events/Calendar/EventCalendar"
 import ChatStore from './Chats/ChatStore';
 function App() {
   return (
@@ -46,6 +46,8 @@ function App() {
           <Route path='/MyEventRoster' component={MyEventRoster}/>
           <Route path='/all-events' component={AllEvents}/>
           <Route path='/guestList-event' component={EventsGuestList}/>
+          <Route path='/events-calendar' component={Schedule}/>
+
           </AuthenticationGuard>
         </Switch>
       </div>
