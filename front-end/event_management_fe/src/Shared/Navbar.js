@@ -9,7 +9,7 @@ import { getHeaderToken } from "../Login/JwtConfig";
 import { useHistory } from "react-router-dom";
 import DynamicFeedSharpIcon from "@material-ui/icons/DynamicFeedSharp";
 import Snackbars from "../Shared/Snackbar";
-import { getUserPlatformAPIPort} from "../Login/JwtConfig";
+import { getUserPlatformAPIPort } from "../Login/JwtConfig";
 
 function Navbar() {
   const [click, setClick] = useState(false);
@@ -153,6 +153,15 @@ function Navbar() {
             onClick={closeMobileMenu}
           >
             <DynamicFeedSharpIcon fontSize="medium" />
+          </Link>
+        </div>
+        <div className="nav-item">
+          <Link
+            to="/events-calendar"
+            className="nav-links"
+            onClick={closeMobileMenu}
+          >
+            <i class="fas fa-calendar-alt" ></i>
           </Link>
         </div>
       </nav>

@@ -6,8 +6,7 @@ import axios from "axios";
 import { useEffect, useState } from "react";
 import { getHeaderToken, getToken, getUserID } from "../Login/JwtConfig";
 import { getUserName } from "../Login/JwtConfig";
-import Schedule from "./Calendar/EventCalendar";
-import { getUserPlatformAPIPort } from "../Login/JwtConfig";
+ import { getUserPlatformAPIPort } from "../Login/JwtConfig";
 const ProjectData = [
   { imageUrl: require("./dummyData/img1.jpg") },
   {
@@ -106,8 +105,7 @@ const AllEvents = () => {
           )
         )
       )}
-      <Schedule />
-    </div>
+     </div>
   );
 };
 

@@ -3,7 +3,9 @@ import FullCalendar from "@fullcalendar/react";
 import dayGridPlugin from "@fullcalendar/daygrid";
 import interactionPlugin from "@fullcalendar/interaction";
 import axios from "axios";
-import { getUserPlatformAPIPort} from "../../Login/JwtConfig";
+import { getUserPlatformAPIPort } from "../../Login/JwtConfig";
+import { Paper } from "@material-ui/core";
+import { Typography } from "@material-ui/core";
 
 export default class Schedule extends Component {
   // declare any necessary functions such as handleDateClick, etc.
@@ -35,7 +37,7 @@ export default class Schedule extends Component {
               apiData.push(myObject);
             });
             this.setState({
-              events: apiData
+              events: apiData,
             });
           }
         },
@@ -45,8 +47,6 @@ export default class Schedule extends Component {
       );
 
     console.log(apiData);
-   
-
   }
 
   formatEvents() {
@@ -87,16 +87,27 @@ export default class Schedule extends Component {
 
   render() {
     console.log(this.state.events);
- 
+
     return (
-      <FullCalendar
-        defaultView="dayGridMonth"
-        plugins={[dayGridPlugin, interactionPlugin]}
-        editable={true}
-        eventDrop={this.handleEventDrop}
-        eventClick={this.handleEventClick}
-        events={this.state.events}
-      />
+      <Paper
+        style={{
+          marginTop: 100,
+          marginBottom: 100,
+          marginLeft: 300,
+          marginRight: 300,
+          flexDirection: "column",
+          alignItems: "center",
+         }}
+      > <Typography variant="h3">Event Calendar</Typography>
+        <FullCalendar
+          defaultView="dayGridMonth"
+          plugins={[dayGridPlugin, interactionPlugin]}
+          editable={true}
+          eventDrop={this.handleEventDrop}
+          eventClick={this.handleEventClick}
+          events={this.state.events}
+        />
+      </Paper>
     );
   }
 }
