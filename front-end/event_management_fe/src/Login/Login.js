@@ -114,11 +114,14 @@ const Login = (props) => {
           const userId = res.data.jwtToken.payload.user_id;
           Cookies.set("userID", userId);
           Cookies.set("userName", username);
+          localStorage.setItem("userName",username);
           // snackbar
           setDisplayValue(true);
           setTimeout(() => {
             history.push("/homePage");
-          }, 2500);
+            window.location.reload(false);
+
+          }, 500);
         },
         (error) => {
           setDisplayValue(true);

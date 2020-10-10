@@ -21,6 +21,14 @@ import DialogContentText from "@material-ui/core/DialogContentText";
 import DialogTitle from "@material-ui/core/DialogTitle";
 import Snackbars from "../../Shared/Snackbar";
 import { getUserPlatformAPIPort } from "../../Login/JwtConfig";
+import ExitToAppIcon from "@material-ui/icons/ExitToApp";
+import CheckIcon from "@material-ui/icons/Check";
+import Avatar from "@material-ui/core/Avatar";
+import AvatarGroup from "@material-ui/lab/AvatarGroup";
+import PersonIcon from "@material-ui/icons/Person";
+import batman from "./avatar-viewEvent.png";
+import Ratings from "../../Shared/Rating";
+import Flairs from "../../Shared/Flairs";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -41,6 +49,11 @@ const useStyles = makeStyles((theme) => ({
   media: {
     height: 250,
     width: 200,
+  },
+  paper1: {
+    display: "flex",
+    marginTop: theme.spacing(1),
+    marginBottom: theme.spacing(2),
   },
   paper: {
     display: "flex",
@@ -245,6 +258,7 @@ export default function ViewEventCard(props) {
                           Venue: {props.eventVenue}
                         </Typography>
                       </Grid>
+
                       {/* <Grid item xs={12}>
                         <Grid
                           container
@@ -283,72 +297,114 @@ export default function ViewEventCard(props) {
                             : "Ticketed Event"}
                         </Typography>
                       </Grid>
+                      <Grid item xs={12}>
+                        {/* people Going */}
+                        <Paper elevation={7} className={classes.paper1}>
+                          <Typography component="div" variant={"h5"}>
+                            {" "}
+                            People Interestred :
+                            {localStorage.getItem(
+                              `peopleGoing${selectedCardId}`
+                            )}
+                          </Typography>{" "}
+                          <AvatarGroup max={2}>
+                            {Array.from(Array(3), (e, i) => {
+                              return <Avatar alt="Remy Sharp" src={batman} />;
+                            })}
+                          </AvatarGroup>
+                        </Paper>{" "}
+                      </Grid>
+                      <Grid item xs={12}>
+                        {/* event rating */}
+                        <Paper elevation={7} className={classes.paper1}>
+                          <Ratings />{" "}
+                        </Paper>
+                      </Grid>
+                      <Grid item xs={12}>
+                        {/* event rating */}
+                        <Paper elevation={7} className={classes.paper1}>
+                          <Flairs />{" "}
+                        </Paper>
+                      </Grid>
                       <Typography variant="body2" component="p">
                         <br />
                       </Typography>
                     </Grid>
+                    <Grid item sm={6}>
+                      <Paper elevation={7} className={classes.paper2}>
+                        {props.JoinOrLeave == "Leave the event?" ? (
+                          <ExitToAppIcon></ExitToAppIcon>
+                        ) : (
+                          <CheckIcon></CheckIcon>
+                        )}{" "}
+                        <Grid item xs={12}>
+                          <Typography variant="h5" component="h2">
+                            {props.JoinOrLeave}
+                          </Typography>
+                        </Grid>
+                        <CardActions>
+                          {/* button1 */}
+                          <Grid item xs={6}>
+                            <Button
+                              variant="contained"
+                              onClick={handleClickOpen}
+                              color="primary"
+                              size="medium"
+                            >
+                              Yes
+                            </Button>
+                          </Grid>
+                          {/* button 2 */}
+                          <Grid item xs={12}>
+                            <Button
+                              variant="contained"
+                              color="primary"
+                              size="medium"
+                            >
+                              Cancel
+                            </Button>
+                          </Grid>
+                          <Dialog
+                            open={open}
+                            onClose={handleClose}
+                            aria-labelledby="alert-dialog-title"
+                            aria-describedby="alert-dialog-description"
+                          >
+                            <DialogTitle id="alert-dialog-title">
+                              {"Confirmation"}
+                            </DialogTitle>
+                            <DialogContent>
+                              <DialogContentText id="alert-dialog-description">
+                                {props.JoinOrLeave == "Leave the event?"
+                                  ? "You are going to leave this event. Are you sure?"
+                                  : "You are going to join this event. Are you sure?"}
+                              </DialogContentText>
+                            </DialogContent>
+                            <DialogActions>
+                              <Button
+                                onClick={
+                                  props.JoinOrLeave == "Leave the event?"
+                                    ? leaveEvent
+                                    : joinEvent
+                                }
+                                color="primary"
+                              >
+                                Ok
+                              </Button>
+                              <Button
+                                onClick={handleClose}
+                                color="primary"
+                                autoFocus
+                              >
+                                Cancel
+                              </Button>
+                            </DialogActions>
+                          </Dialog>
+                        </CardActions>
+                      </Paper>
+                    </Grid>
                   </Grid>
                 </Grid>
-              </Grid>
-              <Grid item sm={6}>
-                <Paper elevation={7} className={classes.paper2}>
-                  <Grid item xs={12}>
-                    <Typography variant="h5" component="h2">
-                      {props.JoinOrLeave}
-                    </Typography>
-                  </Grid>
-                  <CardActions>
-                    {/* button1 */}
-                    <Grid item xs={6}>
-                      <Button
-                        variant="contained"
-                        onClick={handleClickOpen}
-                        color="primary"
-                        size="medium"
-                      >
-                        Yes
-                      </Button>
-                    </Grid>
-                    {/* button 2 */}
-                    <Grid item xs={6}>
-                      <Button variant="contained" color="primary" size="medium">
-                        Cancel
-                      </Button>
-                    </Grid>
-                    <Dialog
-                      open={open}
-                      onClose={handleClose}
-                      aria-labelledby="alert-dialog-title"
-                      aria-describedby="alert-dialog-description"
-                    >
-                      <DialogTitle id="alert-dialog-title">
-                        {"Confirmation"}
-                      </DialogTitle>
-                      <DialogContent>
-                        <DialogContentText id="alert-dialog-description">
-                          {props.JoinOrLeave == "Leave the event?"
-                            ? "You are going to leave this event. Are you sure?"
-                            : "You are going to join this event. Are you sure?"}
-                        </DialogContentText>
-                      </DialogContent>
-                      <DialogActions>
-                        <Button
-                          onClick={
-                            props.JoinOrLeave == "Leave the event?"
-                              ? leaveEvent
-                              : joinEvent
-                          }
-                          color="primary"
-                        >
-                          Ok
-                        </Button>
-                        <Button onClick={handleClose} color="primary" autoFocus>
-                          Cancel
-                        </Button>
-                      </DialogActions>
-                    </Dialog>
-                  </CardActions>
-                </Paper>
               </Grid>
             </Grid>
           </Grid>
@@ -377,13 +433,6 @@ export default function ViewEventCard(props) {
               {/* grid item 3 */}
             </Grid>
           </Grid>
-          <Paper elevation={7} className={classes.paper1}>
-            <Typography component="div" variant={"h5"}>
-              {" "}
-              People Interestred : 
-              {localStorage.getItem(`peopleGoing${selectedCardId}`)} 
-            </Typography>
-          </Paper>
         </Grid>
       </CardContent>
     </Card>

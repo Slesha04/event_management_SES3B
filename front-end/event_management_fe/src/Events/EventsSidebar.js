@@ -198,8 +198,10 @@ const EventSidebar = (props) => {
           </GridListTile>
           {post.map(
             (item) => (
-              (x = imgData()),
-              localStorage.setItem(`imageIdEvent${item.eventId}`, x),
+              localStorage.getItem(`imageIdEvent${item.eventId}`) === ""
+              ? ((x = imgData()),
+                localStorage.setItem(`imageIdEvent${item.eventId}`, x))
+              : (x = localStorage.getItem(`imageIdEvent${item.eventId}`)),
               (
                 <GridListTile
                   key={item}
