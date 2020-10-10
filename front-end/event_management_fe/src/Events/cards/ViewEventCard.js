@@ -20,7 +20,7 @@ import DialogContent from "@material-ui/core/DialogContent";
 import DialogContentText from "@material-ui/core/DialogContentText";
 import DialogTitle from "@material-ui/core/DialogTitle";
 import Snackbars from "../../Shared/Snackbar";
-import { getUserPlatformAPIPort} from "../../Login/JwtConfig";
+import { getUserPlatformAPIPort } from "../../Login/JwtConfig";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -44,12 +44,10 @@ const useStyles = makeStyles((theme) => ({
   },
   paper: {
     display: "flex",
-    flexWrap: "wrap",
-    "& > *": {
-      margin: theme.spacing(1),
-      width: theme.spacing(80),
-      height: theme.spacing(90),
-    },
+
+    margin: theme.spacing(1),
+    width: theme.spacing(70),
+    height: theme.spacing(90),
   },
   paper2: {
     display: "flex",
@@ -368,8 +366,8 @@ export default function ViewEventCard(props) {
                 <Typography variant={"h4"}> Event Chat</Typography>
               </Grid>
               {/* grid item 2 */}
-              <Grid item xs={6} sm={6} className={classes.paper}>
-                <Paper elevation={7}>
+              <Grid item xs={6} sm={6}>
+                <Paper elevation={7} className={classes.paper}>
                   <Typography component="div" variant={"h5"}>
                     {" "}
                     event chat goes here
@@ -379,6 +377,13 @@ export default function ViewEventCard(props) {
               {/* grid item 3 */}
             </Grid>
           </Grid>
+          <Paper elevation={7} className={classes.paper1}>
+            <Typography component="div" variant={"h5"}>
+              {" "}
+              People Interestred : 
+              {localStorage.getItem(`peopleGoing${selectedCardId}`)} 
+            </Typography>
+          </Paper>
         </Grid>
       </CardContent>
     </Card>

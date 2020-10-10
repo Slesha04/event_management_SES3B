@@ -105,6 +105,7 @@ export default function EventsGuestList() {
       .then(
         (res) => {
           if (res.status === 200) {
+             localStorage.setItem(`peopleGoing${selectedCardId}`,res.data.length);
             res.data.map(
               (item) =>
                 rows.push(
@@ -139,7 +140,7 @@ export default function EventsGuestList() {
       ) : (
         <>
           <div className={classes.outsidePaper}>
-            <Typography variant={"h3"}>Events I am following</Typography>
+            <Typography variant={"h3"}>My Events GuestList</Typography>
             <TableContainer component={Paper}>
               <Table className={classes.table} aria-label="customized table">
                 <TableHead>

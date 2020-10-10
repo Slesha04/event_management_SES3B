@@ -36,10 +36,10 @@ import { getUserPlatformAPIPort} from "../Login/JwtConfig";
 
 const useStyles = makeStyles((theme) => ({
   paper: {
-    marginTop: theme.spacing(8),
-    marginBottom: theme.spacing(8),
-
-    display: "flex",
+    marginTop: 100,
+    marginBottom: 100,
+    marginLeft: 300,
+    marginRight: 300,
     flexDirection: "column",
     alignItems: "center",
   },
@@ -61,6 +61,8 @@ const useStyles = makeStyles((theme) => ({
     marginTop: theme.spacing(3),
   },
   submit: {
+    margin: theme.spacing(3, 0, 2),
+  },title: {
     margin: theme.spacing(3, 0, 2),
   },
   formControl: {
@@ -237,7 +239,7 @@ const MyEvents = (props) => {
   };
 
   return (
-    <div>
+    <div className={classes.paper}>
       <Snackbars
         title={"Backend Unrecheable"}
         alertValue={alertValue}
@@ -254,7 +256,11 @@ const MyEvents = (props) => {
           eventPrice={ticketPrice}
           eventOrganiserId={eventOrganiserID}
           JoinOrLeave={props.location.state.AttendeeStatus}
-        />
+        />  
+        <Typography className={classes.title} component="div" variant={"h4"}>
+        {" "}
+        Google Map Location
+      </Typography>
         <Map {...mapProps} />
       </Paper>
     </div>
