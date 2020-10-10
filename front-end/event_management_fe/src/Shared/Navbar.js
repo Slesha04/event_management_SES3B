@@ -5,14 +5,64 @@ import "./Navbar.css";
 import Cookies from "js-cookie";
 import { withRouter } from "react-router-dom";
 import axios from "axios";
-import { getHeaderToken } from "../Login/JwtConfig";
+import { getHeaderToken, getUserName } from "../Login/JwtConfig";
 import { useHistory } from "react-router-dom";
 import DynamicFeedSharpIcon from "@material-ui/icons/DynamicFeedSharp";
 import Snackbars from "../Shared/Snackbar";
 import { getUserPlatformAPIPort } from "../Login/JwtConfig";
 import Tooltip from "@material-ui/core/Tooltip";
-
+import Avatar from "@material-ui/core/Avatar";
+import { makeStyles, withStyles } from "@material-ui/core/styles";
+import Badge from "@material-ui/core/Badge";
+import avatar from "./avatar.jpg";
+import { Typography } from "@material-ui/core";
+const useStyles = makeStyles((theme) => ({
+  root: {
+    display: "flex",
+    "& > *": {
+      margin: theme.spacing(1),
+    },
+  },
+  small: {
+    width: theme.spacing(3),
+    height: theme.spacing(3),
+  },
+  large: {
+    width: theme.spacing(7),
+    height: theme.spacing(7),
+  },
+}));
+const StyledBadge = withStyles((theme) => ({
+  badge: {
+    backgroundColor: "#44b700",
+    color: "#44b700",
+    boxShadow: `0 0 0 2px ${theme.palette.background.paper}`,
+    "&::after": {
+      position: "absolute",
+      top: 0,
+      left: 0,
+      width: "100%",
+      height: "100%",
+      borderRadius: "50%",
+      animation: "$ripple 1.2s infinite ease-in-out",
+      border: "1px solid currentColor",
+      content: '""',
+    },
+  },
+  "@keyframes ripple": {
+    "0%": {
+      transform: "scale(.8)",
+      opacity: 1,
+    },
+    "100%": {
+      transform: "scale(2.4)",
+      opacity: 0,
+    },
+  },
+}))(Badge);
 function Navbar() {
+  const classes = useStyles();
+
   const [click, setClick] = useState(false);
   const [button, setButton] = useState(true);
   // snackBar
@@ -21,7 +71,9 @@ function Navbar() {
 
   const handleClick = () => setClick(!click);
   const closeMobileMenu = () => setClick(false);
-
+  const showUserProfile = () => {
+    history.push("/profile");
+  };
   const showButton = () => {
     if (window.innerWidth <= 960) {
       setButton(false);
@@ -103,7 +155,7 @@ function Navbar() {
             <i className={click ? "fas fa-times" : "fas fa-bars"} />
           </div>
           <ul className={click ? "nav-menu active" : "nav-menu"}>
-            <Tooltip title="Home">
+            {/* <Tooltip title="Home">
               <li className="nav-item">
                 <Link
                   to="/homePage"
@@ -113,8 +165,19 @@ function Navbar() {
                   <i class="fas fa-home"></i>
                 </Link>
               </li>
-            </Tooltip>
+            </Tooltip> */}
 
+            <Tooltip title="Search event">
+              <div className="nav-item">
+                <Link
+                  to="/all-events"
+                  className="nav-links"
+                  onClick={closeMobileMenu}
+                >
+                  <i class="fas fa-search"></i>
+                </Link>
+              </div>
+            </Tooltip>
             <Tooltip title="Global Chat">
               <li className="nav-item">
                 <Link
@@ -152,13 +215,7 @@ function Navbar() {
             </Tooltip>
           </ul>
 
-          {button && (
-            <Tooltip title="Logout">
-              <Button onClick={logout} buttonStyle="btn--outline">
-                <i class="fas fa-sign-in-alt"></i>
-              </Button>
-            </Tooltip>
-          )}
+         
         </div>
         <Tooltip title="Checked-in Events ">
           <div className="nav-item">
@@ -184,17 +241,30 @@ function Navbar() {
           </div>
         </Tooltip>
 
-        <Tooltip title="Search event">
-          <div className="nav-item">
-            <Link
-              to="/all-events"
-              className="nav-links"
-              onClick={closeMobileMenu}
+        <Tooltip title="User Profile">
+          <div>
+            <StyledBadge
+              overlap="circle"
+              anchorOrigin={{
+                vertical: "bottom",
+                horizontal: "right",
+              }}
+              variant="dot"
+              onClick={showUserProfile}
+              label={"fff"}
             >
-              <i class="fas fa-search"></i>
-            </Link>
+              <Avatar alt="Remy Sharp" src={avatar} className={classes.large} />
+            </StyledBadge>
+            <Typography>{getUserName()}</Typography>
           </div>
         </Tooltip>
+        {button && (
+            <Tooltip title="Logout">
+              <Button onClick={logout} buttonStyle="btn--outline">
+                <i class="fas fa-sign-in-alt"></i>
+              </Button>
+            </Tooltip>
+          )}
       </nav>
       <Snackbars
         title={alertValue == 0 ? "try again" : "Account logout,"}
