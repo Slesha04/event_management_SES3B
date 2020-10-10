@@ -6,6 +6,7 @@ import axios from "axios";
 import { getUserPlatformAPIPort } from "../../Login/JwtConfig";
 import { Paper } from "@material-ui/core";
 import { Typography } from "@material-ui/core";
+import { getHeaderToken, getToken, getUserID } from "../../Login/JwtConfig";
 
 export default class Schedule extends Component {
   // declare any necessary functions such as handleDateClick, etc.
@@ -20,10 +21,14 @@ export default class Schedule extends Component {
 
   componentDidMount() {
     let apiData = [];
-
     axios
       .get(
-        `${getUserPlatformAPIPort()}api/EventController/SearchEventsByDate/${"06-10-2020"}/1?resultLimit=20`
+        `${getUserPlatformAPIPort()}api/EventRosterController/GetRosterEntriesByUser`,
+        {
+          headers: {
+            Authorization: getHeaderToken(),
+          },
+        }
       )
       .then(
         (res) => {
@@ -33,7 +38,7 @@ export default class Schedule extends Component {
               // console.log(item.eventTitle);
               myObject["title"] = item.eventTitle;
               //console.log(item.eventDate.slice(0, 10));
-              myObject["start"] = item.eventDate.slice(0, 10);
+              myObject["start"] = item.rosterEntry.dateRegistered.slice(0, 10);
               apiData.push(myObject);
             });
             this.setState({
@@ -45,6 +50,30 @@ export default class Schedule extends Component {
           alert("something Went Wrong");
         }
       );
+    // axios
+    //   .get(
+    //     `${getUserPlatformAPIPort()}api/EventController/SearchEventsByDate/${"06-10-2020"}/1?resultLimit=20`
+    //   )
+    //   .then(
+    //     (res) => {
+    //       if (res.status === 200) {
+    //         res.data.map((item) => {
+    //           var myObject = {};
+    //           // console.log(item.eventTitle);
+    //           myObject["title"] = item.eventTitle;
+    //           //console.log(item.eventDate.slice(0, 10));
+    //           myObject["start"] = item.eventDate.slice(0, 10);
+    //           apiData.push(myObject);
+    //         });
+    //         this.setState({
+    //           events: apiData,
+    //         });
+    //       }
+    //     },
+    //     (error) => {
+    //       alert("something Went Wrong");
+    //     }
+    //   );
 
     console.log(apiData);
   }
@@ -97,8 +126,10 @@ export default class Schedule extends Component {
           marginRight: 300,
           flexDirection: "column",
           alignItems: "center",
-         }}
-      > <Typography variant="h3">Event Calendar</Typography>
+        }}
+      >
+        {" "}
+        <Typography variant="h3">Event Calendar</Typography>
         <FullCalendar
           defaultView="dayGridMonth"
           plugins={[dayGridPlugin, interactionPlugin]}
