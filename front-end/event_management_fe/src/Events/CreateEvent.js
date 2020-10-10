@@ -251,7 +251,7 @@ const CreateEvent = (props) => {
   const imgData = (event) => {
     return ProjectData[Math.floor(Math.random() * ProjectData.length)].imageUrl;
   };
-  const showEvent = (eventId,x) => {
+  const showEvent = (eventId, x) => {
     //store eveent id to local storage
     console.log("at the grid- " + eventId);
     localStorage.setItem("viewEventId", eventId);
@@ -539,25 +539,34 @@ const CreateEvent = (props) => {
             <GridListTile key="Subheader" cols={2} style={{ height: "auto" }}>
               <ListSubheader component="div">September</ListSubheader>
             </GridListTile>
-            {post.map((item) => (
-                x = imgData(),     localStorage.setItem(`imageIdEvent${item.eventId}`, x),
-
-              <GridListTile key={item} onClick={() => showEvent(item.eventId,x)}>
-                <img src={x} alt={item.eventTitle} />
-                <GridListTileBar
-                  title={item.eventTitle}
-                  subtitle={<span>about: {item.bodyText}</span>}
-                  actionIcon={
-                    <IconButton
-                      aria-label={`info about ${item.title}`}
-                      className={classes.icon}
-                    >
-                      <InfoIcon />
-                    </IconButton>
-                  }
-                />
-              </GridListTile>
-            ))}
+            {post.map(
+              (item) => (
+                localStorage.getItem(`imageIdEvent${item.eventId}`) === ""
+                  ? ((x = imgData()),
+                    localStorage.setItem(`imageIdEvent${item.eventId}`, x))
+                  : (x = localStorage.getItem(`imageIdEvent${item.eventId}`)),
+                (
+                  <GridListTile
+                    key={item}
+                    onClick={() => showEvent(item.eventId, x)}
+                  >
+                    <img src={x} alt={item.eventTitle} />
+                    <GridListTileBar
+                      title={item.eventTitle}
+                      subtitle={<span>about: {item.bodyText}</span>}
+                      actionIcon={
+                        <IconButton
+                          aria-label={`info about ${item.title}`}
+                          className={classes.icon}
+                        >
+                          <InfoIcon />
+                        </IconButton>
+                      }
+                    />
+                  </GridListTile>
+                )
+              )
+            )}
           </GridList>
         </Paper>
       </form>
