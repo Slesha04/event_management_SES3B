@@ -65,10 +65,10 @@ function Navbar() {
 
   const [click, setClick] = useState(false);
   const [button, setButton] = useState(true);
-  // snackBar
+   // snackBar
   const [alertValue, setAlertValue] = React.useState("");
   const [DisplayValue, setDisplayValue] = React.useState("");
-
+ const[val,setVal] = React.useState("");
   const handleClick = () => setClick(!click);
   const closeMobileMenu = () => setClick(false);
   const showUserProfile = () => {
@@ -84,18 +84,18 @@ function Navbar() {
   //avis code
   const history = useHistory();
 
-  useEffect(() => {
-    // Update the document title using the browser API
-    axios
-      .get("/protected", { headers: { Authorization: getHeaderToken() } })
-      .then((res) => {
-        this.setState({
-          user: res.data,
-          userType: res.data["userType"],
-        });
-        console.log("NAVBAR", res.data["userType"]);
-      });
-  });
+  // useEffect(() => {
+  //   // Update the document title using the browser API
+  //   axios
+  //     .get("/protected", { headers: { Authorization: getHeaderToken() } })
+  //     .then((res) => {
+  //       this.setState({
+  //         user: res.data,
+  //         userType: res.data["userType"],
+  //       });
+  //       console.log("NAVBAR", res.data["userType"]);
+  //     });
+  // });
 
   const logout = () => {
     const body = {};
@@ -114,12 +114,13 @@ function Navbar() {
           Cookies.remove("auth-cookie");
           Cookies.remove("userID");
           Cookies.remove("user-platform-api-port");
+          localStorage.setItem("userName","")
 
           setDisplayValue(true);
           setTimeout(() => {
             history.push("/login");
             setDisplayValue(false);
-          }, 2500);
+          }, 1000);
         },
         (error) => {
           console.log(error);
@@ -255,7 +256,7 @@ function Navbar() {
             >
               <Avatar alt="Remy Sharp" src={avatar} className={classes.large} />
             </StyledBadge>
-            <Typography>{getUserName()}</Typography>
+            <Typography>{localStorage.getItem("userName")}</Typography>
           </div>
         </Tooltip>
         {button && (

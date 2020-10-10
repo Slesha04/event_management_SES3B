@@ -33,7 +33,6 @@ import { getUserName } from "../Login/JwtConfig";
 import Map from "./map/map";
 import Snackbars from "../Shared/Snackbar";
 import { getUserPlatformAPIPort} from "../Login/JwtConfig";
-
 const useStyles = makeStyles((theme) => ({
   paper: {
     marginTop: 100,
