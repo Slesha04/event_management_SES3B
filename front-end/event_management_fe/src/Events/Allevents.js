@@ -43,6 +43,7 @@ const ProjectData = [
 const AllEvents = () => {
   const [post, setPostArray] = useState([]);
   const [searchItem, setSearchItem] = useState("");
+
   var x;
 
   const handleSearchItem = (event) => {
@@ -61,11 +62,11 @@ const AllEvents = () => {
             // 1. Make a shallow copy of the items
             let arr = post;
             // 2. Make a shallow copy of the item you want to mutate
-            console.log(res.data);
+            console.log(res.data[0]);
 
-            let item = res.data;
+            let item = res.data[0];
             // 3. Put it back into our array. N.B. we *are* mutating the array here, but that's why we made a copy first
-            arr[1] = item;
+            arr[0] = item;
             // 4. Set the state to our new copy
             setPostArray(arr);
             console.log(post);
@@ -76,28 +77,62 @@ const AllEvents = () => {
           alert("something Went Wrong");
           console.log(error);
         }
-      );
+      ); // see NOTE above
   };
 
   useEffect(() => {
     const userId = getUserID();
     console.log("called");
-    axios
-      .get(
-        `${getUserPlatformAPIPort()}api/EventController/LoadMostPopularEvents/1`
-      )
-      .then(
-        (res) => {
-          if (res.status === 200) {
-            setPostArray(res.data);
-            // console.log(res.data[0].eventTitle);
+    if (post.length == 0) {
+      axios
+        .get(
+          `${getUserPlatformAPIPort()}api/EventController/LoadMostPopularEvents/1`
+        )
+        .then(
+          (res) => {
+            if (res.status === 200) {
+              setPostArray(res.data);
+              // console.log(res.data[0].eventTitle);
+            }
+          },
+          (error) => {
+            alert("something Went Wrong");
           }
-        },
-        (error) => {
-          alert("something Went Wrong");
-        }
-      );
-  }, []);
+        );
+    }
+      axios
+        .get(
+          `${getUserPlatformAPIPort()}api/EventController/SearchEventsByName/${searchItem}/1`
+        )
+        .then(
+          (res) => {
+            if (res.data.length != 0) {
+              // 1. Make a shallow copy of the items
+              let arr = post;
+  
+              // 2. Make a shallow copy of the item you want to mutate
+              console.log(res.data[0]);
+
+              let item = res.data[0];
+              // 3. Put it back into our array. N.B. we *are* mutating the array here, but that's why we made a copy first
+              arr[0] = item;
+               // 4. Set the state to our new copy
+              // let y = `imageIdEvent${res.data[0].evenetId}`;
+              // x = imgData();
+              // localStorage.setItem("imageIdEvent3", x),
+              setPostArray(arr);
+              console.log(post);
+              // console.log(res.data[0].eventTitle);
+            }
+          },
+          (error) => {
+            // alert("something Went Wrong");
+            // setPostArray(post);
+          }
+        ); // see NOTE above}
+   
+  });
+
   const imgData = (event) => {
     return ProjectData[Math.floor(Math.random() * ProjectData.length)].imageUrl;
   };
@@ -126,6 +161,9 @@ const AllEvents = () => {
         value={searchItem}
         onChange={(searchItem) => setSearchItem(searchItem)}
         onRequestSearch={() => handleRequest(searchItem)}
+        cancelOnEscape = {true}
+        placeholder={"Search for an event"}
+        style={{border: "1px solid rgb(0, 0, 0)"}}
       />
 
       {post.map(
