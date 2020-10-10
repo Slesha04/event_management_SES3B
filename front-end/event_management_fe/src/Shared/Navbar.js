@@ -10,6 +10,7 @@ import { useHistory } from "react-router-dom";
 import DynamicFeedSharpIcon from "@material-ui/icons/DynamicFeedSharp";
 import Snackbars from "../Shared/Snackbar";
 import { getUserPlatformAPIPort } from "../Login/JwtConfig";
+import Tooltip from "@material-ui/core/Tooltip";
 
 function Navbar() {
   const [click, setClick] = useState(false);
@@ -102,68 +103,98 @@ function Navbar() {
             <i className={click ? "fas fa-times" : "fas fa-bars"} />
           </div>
           <ul className={click ? "nav-menu active" : "nav-menu"}>
-            <li className="nav-item">
-              <Link
-                to="/homePage"
-                className="nav-links"
-                onClick={closeMobileMenu}
-              >
-                <i class="fas fa-home"></i>
-              </Link>
-            </li>
-            <li className="nav-item">
-              <Link
-                to="/global-chat"
-                className="nav-links"
-                onClick={closeMobileMenu}
-              >
-                <i class="fas fa-comment-alt"></i>
-              </Link>
-            </li>
-            <li className="nav-item">
-              <Link
-                to="/createEvent"
-                className="nav-links"
-                onClick={closeMobileMenu}
-              >
-                <i class="fas fa-person-booth"></i>
-              </Link>
-            </li>
-            <li className="nav-item">
-              <Link
-                to="/myEvents"
-                className="nav-links"
-                onClick={closeMobileMenu}
-              >
-                <i class="fas fa-mail-bulk"></i>
-              </Link>
-            </li>
+            <Tooltip title="Home">
+              <li className="nav-item">
+                <Link
+                  to="/homePage"
+                  className="nav-links"
+                  onClick={closeMobileMenu}
+                >
+                  <i class="fas fa-home"></i>
+                </Link>
+              </li>
+            </Tooltip>
+
+            <Tooltip title="Global Chat">
+              <li className="nav-item">
+                <Link
+                  to="/global-chat"
+                  className="nav-links"
+                  onClick={closeMobileMenu}
+                >
+                  <i class="fas fa-comment-alt"></i>
+                </Link>
+              </li>
+            </Tooltip>
+
+            <Tooltip title="Create Events">
+              <li className="nav-item">
+                <Link
+                  to="/createEvent"
+                  className="nav-links"
+                  onClick={closeMobileMenu}
+                >
+                  <i class="fas fa-person-booth"></i>
+                </Link>
+              </li>
+            </Tooltip>
+
+            <Tooltip title="My Events">
+              <li className="nav-item">
+                <Link
+                  to="/myEvents"
+                  className="nav-links"
+                  onClick={closeMobileMenu}
+                >
+                  <i class="fas fa-mail-bulk"></i>
+                </Link>
+              </li>
+            </Tooltip>
           </ul>
 
           {button && (
-            <Button onClick={logout} buttonStyle="btn--outline">
-              <i class="fas fa-sign-in-alt"></i>
-            </Button>
+            <Tooltip title="Logout">
+              <Button onClick={logout} buttonStyle="btn--outline">
+                <i class="fas fa-sign-in-alt"></i>
+              </Button>
+            </Tooltip>
           )}
         </div>
-        <div className="nav-item">
-          <Link
-            to="/MyEventRoster"
-            className="nav-links"
-            onClick={closeMobileMenu}
-          >
-            <DynamicFeedSharpIcon fontSize="medium" />
-          </Link>
-        </div>
-        <div className="nav-item">
-          <Link
-            to="/events-calendar"
-            className="nav-links"
-            onClick={closeMobileMenu}
-          >
-            <i class="fas fa-calendar-alt" ></i>
-          </Link>
-        </div>
+        <Tooltip title="Checked-in Events ">
+          <div className="nav-item">
+            <Link
+              to="/MyEventRoster"
+              className="nav-links"
+              onClick={closeMobileMenu}
+            >
+              <DynamicFeedSharpIcon fontSize="medium" />
+            </Link>
+          </div>
+        </Tooltip>
+
+        <Tooltip title="Events Calendar ">
+          <div className="nav-item">
+            <Link
+              to="/events-calendar"
+              className="nav-links"
+              onClick={closeMobileMenu}
+            >
+              <i class="fas fa-calendar-alt"></i>
+            </Link>
+          </div>
+        </Tooltip>
+
+        <Tooltip title="Search event">
+          <div className="nav-item">
+            <Link
+              to="/all-events"
+              className="nav-links"
+              onClick={closeMobileMenu}
+            >
+              <i class="fas fa-search"></i>
+            </Link>
+          </div>
+        </Tooltip>
       </nav>
       <Snackbars
         title={alertValue == 0 ? "try again" : "Account logout,"}

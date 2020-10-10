@@ -16,6 +16,7 @@ import Button from "@material-ui/core/Button";
 import { useHistory } from "react-router-dom";
 import Typography from "@material-ui/core/Typography";
 import { getUserPlatformAPIPort } from "../../Login/JwtConfig";
+import Tooltip from "@material-ui/core/Tooltip";
 
 const StyledTableCell = withStyles((theme) => ({
   head: {
@@ -38,8 +39,8 @@ const StyledTableRow = withStyles((theme) => ({
 
 const useStyles = makeStyles((theme) => ({
   table: {
-    minWidth: 700,    border: "2px solid rgb(0, 0, 0)",
-
+    minWidth: 700,
+    border: "2px solid rgb(0, 0, 0)",
   },
   outsidePaper: {
     marginTop: theme.spacing(8),
@@ -182,28 +183,29 @@ export default function MyEventsRoster() {
                 </TableHead>
                 <TableBody>
                   {post.map((row) => (
-                    <StyledTableRow
-                      key={row.eventId}
-                      hover="true"
-                      onClick={() => handleViewEvent(row.eventId)}
-                    >
-                      <StyledTableCell align="right">
-                        {row.eventTitle}
-                      </StyledTableCell>
-                      <StyledTableCell align="right">
-                        {row.eventOrganiserUsername}
-                      </StyledTableCell>
-                      <StyledTableCell align="right">
-                        {row.dateRegistered.slice(0, 10)}
-                      </StyledTableCell>
-                      <StyledTableCell align="right">
-                        {row.inputCode}
-                      </StyledTableCell>
-                      <StyledTableCell align="right">
-                        {row.attendeeArrived ? "Went" : "Going"}
-                      </StyledTableCell>
-                   
-                    </StyledTableRow>
+                    <Tooltip title="Click to view event">
+                      <StyledTableRow
+                        key={row.eventId}
+                        hover="true"
+                        onClick={() => handleViewEvent(row.eventId)}
+                      >
+                        <StyledTableCell align="right">
+                          {row.eventTitle}
+                        </StyledTableCell>
+                        <StyledTableCell align="right">
+                          {row.eventOrganiserUsername}
+                        </StyledTableCell>
+                        <StyledTableCell align="right">
+                          {row.dateRegistered.slice(0, 10)}
+                        </StyledTableCell>
+                        <StyledTableCell align="right">
+                          {row.inputCode}
+                        </StyledTableCell>
+                        <StyledTableCell align="right">
+                          {row.attendeeArrived ? "Went" : "Going"}
+                        </StyledTableCell>
+                      </StyledTableRow>
+                    </Tooltip>
                   ))}
                 </TableBody>
               </Table>
