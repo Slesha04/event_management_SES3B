@@ -541,7 +541,7 @@ const CreateEvent = (props) => {
             </GridListTile>
             {post.map(
               (item) => (
-                localStorage.getItem(`imageIdEvent${item.eventId}`) === ""
+                localStorage.getItem(`imageIdEvent${item.eventId}`) === null
                   ? ((x = imgData()),
                     localStorage.setItem(`imageIdEvent${item.eventId}`, x))
                   : (x = localStorage.getItem(`imageIdEvent${item.eventId}`)),

@@ -51,10 +51,43 @@ const useStyles = makeStyles((theme) => ({
     width: 200,
   },
 }));
+const ProjectData = [
+  { imageUrl: require("../dummyData/img1.jpg") },
+  {
+    imageUrl: require("../dummyData/img2.jpg"),
+  },
+  {
+    imageUrl: require("../dummyData/img3.jpg"),
+  },
+  {
+    imageUrl: require("../dummyData/img4.jpg"),
+  },
+  {
+    imageUrl: require("../dummyData/img6.jpg"),
+  },
+  {
+    imageUrl: require("../dummyData/img7.jpg"),
+  },
+  {
+    imageUrl: require("../dummyData/img8.jpg"),
+  },
+  {
+    imageUrl: require("../dummyData/img9.jpg"),
+  },
+  {
+    imageUrl: require("../dummyData/img10.jpg"),
+  },
+  {
+    imageUrl: require("../dummyData/img11.jpg"),
+  },
+];
 
 export default function MyEventCard(props) {
   const [open, setOpen] = React.useState(false);
-
+  var x;
+  const imgData = (event) => {
+    return ProjectData[Math.floor(Math.random() * ProjectData.length)].imageUrl;
+  };
   const classes = useStyles();
   const cardId = props.eventId;
   const history = useHistory();
@@ -117,6 +150,10 @@ export default function MyEventCard(props) {
   };
 
   return (
+      localStorage.getItem(`imageIdEvent${cardId}`) === null
+                  ? ((x = imgData()),
+                    localStorage.setItem(`imageIdEvent${cardId}`, x))
+                  : (x = localStorage.getItem(`imageIdEvent${cardId}`)),
     <Card className={classes.root}>
       <Snackbars
         title={alertValue == 0 ? "Backend" : "Evented Deleted"}
@@ -144,9 +181,8 @@ export default function MyEventCard(props) {
                 <CardMedia
                   component="img"
                   className={classes.media}
-                  image={upcomingEvent}
-                  title="Contemplative Reptile"
-                />
+                  image={x}
+                 />
               </Grid>
               <Grid item xs={12}>
                 <Typography

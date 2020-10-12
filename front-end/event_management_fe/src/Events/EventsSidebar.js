@@ -51,63 +51,43 @@ const useStyles = makeStyles((theme) => ({
 const ProjectData = [
   {
     imageUrl: require("./dummyData/img1.jpg"),
-    title: "Image",
-    author: "author",
-    featured: true,
+    
   },
   {
     imageUrl: require("./dummyData/img2.jpg"),
-    title: "Image",
-    author: "author",
-    featured: true,
+     
   },
   {
     imageUrl: require("./dummyData/img3.jpg"),
-    title: "Image",
-    author: "author",
-    featured: true,
+  
   },
   {
     imageUrl: require("./dummyData/img4.jpg"),
-    title: "Image",
-    author: "author",
-    featured: true,
+   
   },
   {
     imageUrl: require("./dummyData/img6.jpg"),
-    title: "Image",
-    author: "author",
-    featured: true,
+    
   },
   {
     imageUrl: require("./dummyData/img7.jpg"),
-    title: "Image",
-    author: "author",
-    featured: true,
+   
   },
   {
     imageUrl: require("./dummyData/img8.jpg"),
-    title: "Image",
-    author: "author",
-    featured: true,
+   
   },
   {
     imageUrl: require("./dummyData/img9.jpg"),
-    title: "Image",
-    author: "author",
-    featured: true,
+    
   },
   {
     imageUrl: require("./dummyData/img10.jpg"),
-    title: "Image",
-    author: "author",
-    featured: true,
+     
   },
   {
     imageUrl: require("./dummyData/img11.jpg"),
-    title: "Image",
-    author: "author",
-    featured: true,
+     
   },
 ];
 
@@ -166,11 +146,11 @@ export default function EventSidebar() {
           >
             {post.map(
               (item) => (
-                localStorage.getItem(`imageIdEvent${item.eventId}`) === ""
-                  ? ((x = imgData()),
-                    localStorage.setItem(`imageIdEvent${item.eventId}`, x))
-                  : (x = localStorage.getItem(`imageIdEvent${item.eventId}`)),
-                (
+                localStorage.getItem(`imageIdEvent${item.eventId}`) === null
+                ? ((x = imgData()),
+                  localStorage.setItem(`imageIdEvent${item.eventId}`, x))
+                : (x = localStorage.getItem(`imageIdEvent${item.eventId}`)),
+                                (
                   <GridListTile
                     key={item}
                     onClick={() => showEvent(item.eventId, x)}
