@@ -250,10 +250,12 @@ const MyEvents = (props) => {
           eventTitle={eventTitle}
           eventDate={eventDate}
           eventVenue={eventLocation}
+          eventType={eventType}
           eventDescription={eventBodyText}
           eventOrgainser={eventOrganiser}
           eventPrice={ticketPrice}
           eventOrganiserId={eventOrganiserID}
+          eventVisibility={eventVisibility}
           JoinOrLeave={props.location.state.AttendeeStatus}
         />  
         <Typography className={classes.title} component="div" variant={"h4"}>

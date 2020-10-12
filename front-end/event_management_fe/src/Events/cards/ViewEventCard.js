@@ -12,7 +12,12 @@ import { useHistory } from "react-router-dom";
 import CssBaseline from "@material-ui/core/CssBaseline";
 import Container from "@material-ui/core/Container";
 import axios from "axios";
-import { getHeaderToken, getToken, getUserID,getUserName } from "../../Login/JwtConfig";
+import {
+  getHeaderToken,
+  getToken,
+  getUserID,
+  getUserName,
+} from "../../Login/JwtConfig";
 import Paper from "@material-ui/core/Paper";
 import Dialog from "@material-ui/core/Dialog";
 import DialogActions from "@material-ui/core/DialogActions";
@@ -81,7 +86,7 @@ export default function ViewEventCard(props) {
   const [alertValue, setAlertValue] = React.useState("");
   const [DisplayValue, setDisplayValue] = React.useState("");
   const [alertTitle, setAlertTitle] = React.useState("");
-  const [JoinOrLeave, setJoinOrLeave ] = React.useState(props.JoinOrLeave);
+  const [JoinOrLeave, setJoinOrLeave] = React.useState(props.JoinOrLeave);
 
   let selectedCardId = localStorage.getItem("viewEventId");
   const [open, setOpen] = React.useState(false);
@@ -220,7 +225,13 @@ export default function ViewEventCard(props) {
                   component="img"
                   className={classes.media}
                   image={localStorage.getItem(`imageIdEvent${selectedCardId}`)}
-                  title="Contemplative Reptile"
+                  style={{
+                    border: "1px solid #ddd",
+                    borderRadius: "4px",
+                    padding: "5px",
+                    width: "350px",
+                    height: "350px",
+                  }}
                 />
               </Grid>
               <Grid item xs={12}>
@@ -325,14 +336,39 @@ export default function ViewEventCard(props) {
                       <Grid item xs={12}>
                         {/* event rating */}
                         <Paper elevation={7} className={classes.paper1}>
-                          <Flairs />{" "}
+                          <Flairs
+                            eventType={
+                              props.eventType == 0
+                                ? "Meet Up"
+                                : props.eventType == 1
+                                ? "Study"
+                                : props.eventType == 2
+                                ? "Party"
+                                : "Special"
+                            }
+                            ticketTypes={
+                              props.eventPrice == 0
+                                ? "Free Event"
+                                : "Ticketed Event"
+                            }
+                            eventVisibilityTypes={
+                              props.eventVisibility == 0 ? "Public" : "Unlisted"
+                            }
+                            UTSEvent={
+                              console.log(props.eventVenue.includes('UTS')) ,props.eventVenue.includes('UTS')
+                                ? "On-Campus Event"
+                                : "Off-Campus event"
+                            }
+                          />{" "}
                         </Paper>
                       </Grid>
                       <Typography variant="body2" component="p">
                         <br />
                       </Typography>
                     </Grid>
-                    {getUserName() == props.eventOrgainser ?  " " : (
+                    {getUserName() == props.eventOrgainser ? (
+                      " "
+                    ) : (
                       <Grid item sm={6}>
                         <Paper elevation={7} className={classes.paper2}>
                           {JoinOrLeave == "Leave the event?" ? (

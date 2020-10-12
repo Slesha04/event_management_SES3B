@@ -22,7 +22,7 @@ import DeleteSweepIcon from "@material-ui/icons/DeleteSweep";
 import axios from "axios";
 import ViewListIcon from "@material-ui/icons/ViewList";
 import EditIcon from "@material-ui/icons/Edit";
-import VisibilityIcon from '@material-ui/icons/Visibility';
+import VisibilityIcon from "@material-ui/icons/Visibility";
 const useStyles = makeStyles((theme) => ({
   root: {
     minWidth: 275,
@@ -32,8 +32,7 @@ const useStyles = makeStyles((theme) => ({
   },
   iconButtonLabel: {
     display: "flex",
-    flexDirection: "column",        
-
+    flexDirection: "column",
   },
   bullet: {
     display: "inline-block",
@@ -109,7 +108,8 @@ export default function MyEventCard(props) {
     history.push({
       pathname: "/view-event",
       state: { AttendeeStatus: "Check into this event?" },
-    });   };
+    });
+  };
   const handleEditEvent = (event) => {
     history.push("/edit-event");
     console.log(cardId);
@@ -150,176 +150,192 @@ export default function MyEventCard(props) {
   };
 
   return (
-      localStorage.getItem(`imageIdEvent${cardId}`) === null
-                  ? ((x = imgData()),
-                    localStorage.setItem(`imageIdEvent${cardId}`, x))
-                  : (x = localStorage.getItem(`imageIdEvent${cardId}`)),
-    <Card className={classes.root}>
-      <Snackbars
-        title={alertValue == 0 ? "Backend" : "Evented Deleted"}
-        alertValue={alertValue}
-        DisplayValue={DisplayValue}
-      />
-      <CardContent>
-        <Grid
-          container
-          spacing={2}
-          direction="row"
-          justify="center"
-          alignItems="center"
-        >
-          {/* card picture and title */}
-          <Grid item xs={12} sm={6}>
-            {/* container for card pciture */}
-            <Grid
-              container
-              direction="column"
-              justify="center"
-              alignItems="center"
-            >
-              <Grid item xs={12}>
-                <CardMedia
-                  component="img"
-                  className={classes.media}
-                  image={x}
-                 />
-              </Grid>
-              <Grid item xs={12}>
-                <Typography
-                  gutterBottom
-                  variant="h5"
-                  component="h2"
-                  color="textPrimary"
-                  Bold
-                  gutterBottom
-                >
-                  {props.eventTitle}
-                </Typography>
-              </Grid>
-            </Grid>
-          </Grid>
-
-          {/* card details */}
-          <Grid item xs={12} sm={6}>
-            <Grid
-              container
-              direction="column"
-              justify="center"
-              alignItems="center"
-            >
-              <Grid item xs={12}>
-                <Typography variant="h4" component="h2">
-                  Event Details
-                </Typography>{" "}
-              </Grid>
-              <Grid item xs={12}>
-                <Grid
-                  container
-                  direction="column"
-                  justify="center"
-                  alignItems="flex-start"
-                >
-                  <Grid item xs={12}>
-                    <Typography variant="h5" component="h2">
-                      Date: {props.eventDate}
-                    </Typography>
-                  </Grid>
-                  <Grid item xs={12}>
-                    <Typography variant="h5" component="h2">
-                      Venue: {props.eventVenue}
-                    </Typography>
-                  </Grid>
-
-                  <Grid item xs={12}>
-                    <Typography variant="h5" component="h2" align="left">
-                      Description: {props.eventDescription}
-                    </Typography>
-                  </Grid>
-
-                  <Grid item xs={12}>
-                    <Typography variant="h5" component="h2">
-                      Orgainser : {props.eventOrgainser}
-                    </Typography>
-                  </Grid>
-                  <Grid item xs={12}>
-                    <Typography variant="h5" component="h2">
-                      Price:{" "}
-                      {props.eventPrice == 0 ? "Free Event" : "Ticketed Event"}
-                    </Typography>
-                  </Grid>
-                  <Typography variant="body2" component="p">
-                    <br />
+    localStorage.getItem(`imageIdEvent${cardId}`) === null
+      ? ((x = imgData()), localStorage.setItem(`imageIdEvent${cardId}`, x))
+      : (x = localStorage.getItem(`imageIdEvent${cardId}`)),
+    (
+      <Card className={classes.root}>
+        <Snackbars
+          title={alertValue == 0 ? "Backend" : "Evented Deleted"}
+          alertValue={alertValue}
+          DisplayValue={DisplayValue}
+        />
+        <CardContent>
+          <Grid
+            container
+            spacing={2}
+            direction="row"
+            justify="center"
+            alignItems="center"
+          >
+            {/* card picture and title */}
+            <Grid item xs={12} sm={6}>
+              {/* container for card pciture */}
+              <Grid
+                container
+                direction="column"
+                justify="center"
+                alignItems="center"
+              >
+                <Grid item xs={12}>
+                  <CardMedia
+                    component="img"
+                    className={classes.media}
+                    image={x}
+                    style={{
+                      border: "3px solid #FFFFFF",
+                      borderRadius: "4px",
+                      padding: "0px",
+                      width: "350px",
+                      height: "350px",
+                    }}
+                  />
+                </Grid>
+                <Grid item xs={12}>
+                  <Typography
+                    gutterBottom
+                    variant="h4"
+                    component="h2"
+                    style={{color : "#002884"}}
+                    Bold
+                    gutterBottom
+                  >
+                    {props.eventTitle}
                   </Typography>
                 </Grid>
               </Grid>
             </Grid>
+
+            {/* card details */}
+            <Grid item xs={12} sm={6}>
+              <Grid
+                container
+                direction="column"
+                justify="center"
+                alignItems="center"
+              >
+                <Grid item xs={12}>
+                  <Typography variant="h4" component="h2">
+                    Event Details
+                  </Typography>{" "}
+                </Grid>
+                <Grid item xs={12}>
+                  <Grid
+                    container
+                    direction="column"
+                    justify="center"
+                    alignItems="flex-start"
+                  >
+                    <Grid item xs={12}>
+                      <Typography variant="h5" component="h2">
+                        Date: {props.eventDate}
+                      </Typography>
+                    </Grid>
+                    <Grid item xs={12}>
+                      <Typography variant="h5" component="h2">
+                        Venue: {props.eventVenue}
+                      </Typography>
+                    </Grid>
+
+                    <Grid item xs={12}>
+                      <Typography variant="h5" component="h2" align="left">
+                        Description: {props.eventDescription}
+                      </Typography>
+                    </Grid>
+
+                    <Grid item xs={12}>
+                      <Typography variant="h5" component="h2">
+                        Orgainser : {props.eventOrgainser}
+                      </Typography>
+                    </Grid>
+                    <Grid item xs={12}>
+                      <Typography variant="h5" component="h2">
+                        Price:{" "}
+                        {props.eventPrice == 0
+                          ? "Free Event"
+                          : "Ticketed Event"}
+                      </Typography>
+                    </Grid>
+                    <Typography variant="body2" component="p">
+                      <br />
+                    </Typography>
+                  </Grid>
+                </Grid>
+              </Grid>
+            </Grid>
           </Grid>
-        </Grid>
-      </CardContent>
-      <CardActions>
-        {" "}
-        <Grid container direction="row" justify="center" alignItems="center">
-          <Grid item xs={3} sm={3}>
-            <IconButton
-              classes={{ label: classes.iconButtonLabel }}
-              onClick={handleEditEvent}color="primary" variant="raised"
-            >
-              <EditIcon style={{ fontSize: 20 }} />
-              <Typography variant="h6" >Edit Event</Typography>
-            </IconButton>
+        </CardContent>
+        <CardActions>
+          {" "}
+          <Grid container direction="row" justify="center" alignItems="center">
+            <Grid item xs={3} sm={3}>
+              <IconButton
+                classes={{ label: classes.iconButtonLabel }}
+                onClick={handleEditEvent}
+                color="primary"
+                variant="raised"
+              >
+                <EditIcon style={{ fontSize: 20 }} />
+                <Typography variant="h6">Edit Event</Typography>
+              </IconButton>
+            </Grid>
+            <Grid item xs={3} sm={3}>
+              <IconButton
+                classes={{ label: classes.iconButtonLabel }}
+                onClick={handleViewGuestList}
+                color="primary"
+                variant="raised"
+              >
+                <ViewListIcon style={{ fontSize: 20 }} />
+                <Typography variant="h6">Guest View/list</Typography>
+              </IconButton>
+            </Grid>
+            <Grid item xs={3} sm={3}>
+              <IconButton
+                classes={{ label: classes.iconButtonLabel }}
+                onClick={handleClickOpen}
+                color="primary"
+                variant="raised"
+              >
+                <DeleteSweepIcon style={{ fontSize: 20 }} />
+                <Typography variant="h6">Delete Event</Typography>
+              </IconButton>
+            </Grid>
+            <Grid item xs={3} sm={3}>
+              <IconButton
+                classes={{ label: classes.iconButtonLabel }}
+                onClick={showEvent}
+                color="primary"
+                variant="raised"
+              >
+                <VisibilityIcon style={{ fontSize: 20 }} />
+                <Typography variant="h6">View Event</Typography>
+              </IconButton>
+            </Grid>
           </Grid>
-          <Grid item xs={3} sm={3}>
-            <IconButton
-              classes={{ label: classes.iconButtonLabel }}
-              onClick={handleViewGuestList}color="primary" variant="raised"
-            >
-              <ViewListIcon style={{ fontSize: 20 }} />
-              <Typography variant="h6" >Guest View/list</Typography>
-            </IconButton>
-          </Grid>
-          <Grid item xs={3} sm={3}>
-            <IconButton
-              classes={{ label: classes.iconButtonLabel }}
-              onClick={handleClickOpen}color="primary" variant="raised"
-            >
-              <DeleteSweepIcon style={{ fontSize: 20 }} />
-              <Typography variant="h6" >Delete Event</Typography>
-            </IconButton>
-          </Grid>
-          <Grid item xs={3} sm={3}>
-            <IconButton
-              classes={{ label: classes.iconButtonLabel }}
-              onClick={showEvent}color="primary" variant="raised"
-            >
-              <VisibilityIcon style={{ fontSize: 20 }} />
-              <Typography variant="h6" >View Event</Typography>
-            </IconButton>
-          </Grid>
-        </Grid>
-      
-         <Dialog
-          open={open}
-          onClose={handleClose}
-          aria-labelledby="alert-dialog-title"
-          aria-describedby="alert-dialog-description"
-        >
-          <DialogTitle id="alert-dialog-title">{"Confirmation"}</DialogTitle>
-          <DialogContent>
-            <DialogContentText id="alert-dialog-description">
-              You are going to delete this event. Are you sure?
-            </DialogContentText>
-          </DialogContent>
-          <DialogActions>
-            <Button onClick={handleDeleteEvent} color="primary">
-              Ok
-            </Button>
-            <Button onClick={handleClose} color="primary" autoFocus>
-              Cancel
-            </Button>
-          </DialogActions>
-        </Dialog>
-        
-      </CardActions>
-    </Card>
+          <Dialog
+            open={open}
+            onClose={handleClose}
+            aria-labelledby="alert-dialog-title"
+            aria-describedby="alert-dialog-description"
+          >
+            <DialogTitle id="alert-dialog-title">{"Confirmation"}</DialogTitle>
+            <DialogContent>
+              <DialogContentText id="alert-dialog-description">
+                You are going to delete this event. Are you sure?
+              </DialogContentText>
+            </DialogContent>
+            <DialogActions>
+              <Button onClick={handleDeleteEvent} color="primary">
+                Ok
+              </Button>
+              <Button onClick={handleClose} color="primary" autoFocus>
+                Cancel
+              </Button>
+            </DialogActions>
+          </Dialog>
+        </CardActions>
+      </Card>
+    )
   );
 }
