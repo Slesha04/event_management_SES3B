@@ -12,7 +12,7 @@ import { useHistory } from "react-router-dom";
 import CssBaseline from "@material-ui/core/CssBaseline";
 import Container from "@material-ui/core/Container";
 import axios from "axios";
-import { getHeaderToken, getToken, getUserID } from "../../Login/JwtConfig";
+import { getHeaderToken, getToken, getUserID,getUserName } from "../../Login/JwtConfig";
 import Paper from "@material-ui/core/Paper";
 import Dialog from "@material-ui/core/Dialog";
 import DialogActions from "@material-ui/core/DialogActions";
@@ -330,79 +330,81 @@ export default function ViewEventCard(props) {
                         <br />
                       </Typography>
                     </Grid>
-                    <Grid item sm={6}>
-                      <Paper elevation={7} className={classes.paper2}>
-                        {props.JoinOrLeave == "Leave the event?" ? (
-                          <ExitToAppIcon></ExitToAppIcon>
-                        ) : (
-                          <CheckIcon></CheckIcon>
-                        )}{" "}
-                        <Grid item xs={12}>
-                          <Typography variant="h5" component="h2">
-                            {props.JoinOrLeave}
-                          </Typography>
-                        </Grid>
-                        <CardActions>
-                          {/* button1 */}
-                          <Grid item xs={6}>
-                            <Button
-                              variant="contained"
-                              onClick={handleClickOpen}
-                              color="primary"
-                              size="medium"
-                            >
-                              Yes
-                            </Button>
-                          </Grid>
-                          {/* button 2 */}
+                    {getUserName() == props.eventOrgainser ?  " " : (
+                      <Grid item sm={6}>
+                        <Paper elevation={7} className={classes.paper2}>
+                          {props.JoinOrLeave == "Leave the event?" ? (
+                            <ExitToAppIcon></ExitToAppIcon>
+                          ) : (
+                            <CheckIcon></CheckIcon>
+                          )}{" "}
                           <Grid item xs={12}>
-                            <Button
-                              variant="contained"
-                              color="primary"
-                              size="medium"
-                            >
-                              Cancel
-                            </Button>
+                            <Typography variant="h5" component="h2">
+                              {props.JoinOrLeave}
+                            </Typography>
                           </Grid>
-                          <Dialog
-                            open={open}
-                            onClose={handleClose}
-                            aria-labelledby="alert-dialog-title"
-                            aria-describedby="alert-dialog-description"
-                          >
-                            <DialogTitle id="alert-dialog-title">
-                              {"Confirmation"}
-                            </DialogTitle>
-                            <DialogContent>
-                              <DialogContentText id="alert-dialog-description">
-                                {props.JoinOrLeave == "Leave the event?"
-                                  ? "You are going to leave this event. Are you sure?"
-                                  : "You are going to join this event. Are you sure?"}
-                              </DialogContentText>
-                            </DialogContent>
-                            <DialogActions>
+                          <CardActions>
+                            {/* button1 */}
+                            <Grid item xs={6}>
                               <Button
-                                onClick={
-                                  props.JoinOrLeave == "Leave the event?"
-                                    ? leaveEvent
-                                    : joinEvent
-                                }
+                                variant="contained"
+                                onClick={handleClickOpen}
                                 color="primary"
+                                size="medium"
                               >
-                                Ok
+                                Yes
                               </Button>
+                            </Grid>
+                            {/* button 2 */}
+                            <Grid item xs={12}>
                               <Button
-                                onClick={handleClose}
+                                variant="contained"
                                 color="primary"
-                                autoFocus
+                                size="medium"
                               >
                                 Cancel
                               </Button>
-                            </DialogActions>
-                          </Dialog>
-                        </CardActions>
-                      </Paper>
-                    </Grid>
+                            </Grid>
+                            <Dialog
+                              open={open}
+                              onClose={handleClose}
+                              aria-labelledby="alert-dialog-title"
+                              aria-describedby="alert-dialog-description"
+                            >
+                              <DialogTitle id="alert-dialog-title">
+                                {"Confirmation"}
+                              </DialogTitle>
+                              <DialogContent>
+                                <DialogContentText id="alert-dialog-description">
+                                  {props.JoinOrLeave == "Leave the event?"
+                                    ? "You are going to leave this event. Are you sure?"
+                                    : "You are going to join this event. Are you sure?"}
+                                </DialogContentText>
+                              </DialogContent>
+                              <DialogActions>
+                                <Button
+                                  onClick={
+                                    props.JoinOrLeave == "Leave the event?"
+                                      ? leaveEvent
+                                      : joinEvent
+                                  }
+                                  color="primary"
+                                >
+                                  Ok
+                                </Button>
+                                <Button
+                                  onClick={handleClose}
+                                  color="primary"
+                                  autoFocus
+                                >
+                                  Cancel
+                                </Button>
+                              </DialogActions>
+                            </Dialog>
+                          </CardActions>
+                        </Paper>
+                      </Grid>
+                    )}
                   </Grid>
                 </Grid>
               </Grid>

@@ -22,6 +22,7 @@ import DeleteSweepIcon from "@material-ui/icons/DeleteSweep";
 import axios from "axios";
 import ViewListIcon from "@material-ui/icons/ViewList";
 import EditIcon from "@material-ui/icons/Edit";
+import VisibilityIcon from '@material-ui/icons/Visibility';
 const useStyles = makeStyles((theme) => ({
   root: {
     minWidth: 275,
@@ -68,7 +69,14 @@ export default function MyEventCard(props) {
   const handleClose = () => {
     setOpen(false);
   };
-
+  const showEvent = (eventId) => {
+    //store eveent id to local storage
+    console.log("at the grid- " + cardId);
+    localStorage.setItem("viewEventId", cardId);
+    history.push({
+      pathname: "/view-event",
+      state: { AttendeeStatus: "Check into this event?" },
+    });   };
   const handleEditEvent = (event) => {
     history.push("/edit-event");
     console.log(cardId);
@@ -242,8 +250,18 @@ export default function MyEventCard(props) {
               <Typography variant="h6" >Delete Event</Typography>
             </IconButton>
           </Grid>
+          <Grid item xs={3} sm={3}>
+            <IconButton
+              classes={{ label: classes.iconButtonLabel }}
+              onClick={showEvent}color="primary" variant="raised"
+            >
+              <VisibilityIcon style={{ fontSize: 20 }} />
+              <Typography variant="h6" >View Event</Typography>
+            </IconButton>
+          </Grid>
         </Grid>
-        <Dialog
+      
+         <Dialog
           open={open}
           onClose={handleClose}
           aria-labelledby="alert-dialog-title"
@@ -264,6 +282,7 @@ export default function MyEventCard(props) {
             </Button>
           </DialogActions>
         </Dialog>
+        
       </CardActions>
     </Card>
   );
