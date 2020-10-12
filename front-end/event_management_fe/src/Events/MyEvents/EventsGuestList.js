@@ -15,6 +15,7 @@ import { Checkbox } from "semantic-ui-react";
 import Button from "@material-ui/core/Button";
 import { getUserPlatformAPIPort } from "../../Login/JwtConfig";
 import Typography from "@material-ui/core/Typography";
+import Snackbars from "../../Shared/Snackbar";
 
 const StyledTableCell = withStyles((theme) => ({
   head: {
@@ -36,7 +37,8 @@ const StyledTableRow = withStyles((theme) => ({
 
 const useStyles = makeStyles((theme) => ({
   table: {
-    minWidth: 700, border: "2px solid rgb(0, 0, 0)"
+    minWidth: 700,
+    border: "2px solid rgb(0, 0, 0)",
   },
   outsidePaper: {
     marginTop: theme.spacing(8),
@@ -70,7 +72,10 @@ export default function EventsGuestList() {
   const [post, setPostArray] = useState([]);
 
   let selectedCardId = localStorage.getItem("selectedCard");
-
+  // snackBar
+  const [alertValue, setAlertValue] = React.useState("");
+  const [alertTitle, setAlertTitle] = React.useState("");
+  const [DisplayValue, setDisplayValue] = React.useState("");
   // function handleMarkAttende(inputCode){
   //   const body = {};
   //   console.log(getHeaderToken())
@@ -105,7 +110,10 @@ export default function EventsGuestList() {
       .then(
         (res) => {
           if (res.status === 200) {
-             localStorage.setItem(`peopleGoing${selectedCardId}`,res.data.length);
+            localStorage.setItem(
+              `peopleGoing${selectedCardId}`,
+              res.data.length
+            );
             res.data.map(
               (item) =>
                 rows.push(
@@ -123,13 +131,20 @@ export default function EventsGuestList() {
           }
         },
         (error) => {
-          alert("something Went Wrong");
+          setAlertTitle("Backend");
+          setDisplayValue(true);
+          setAlertValue(0);
         }
       );
   }, []);
 
   return (
     <>
+      <Snackbars
+        title={alertTitle}
+        alertValue={alertValue}
+        DisplayValue={DisplayValue}
+      />
       {post.length == 0 ? (
         <>
           <img src={require("../noData.jpg")} />
@@ -172,7 +187,7 @@ export default function EventsGuestList() {
                         {row.attendeeUsername}
                       </StyledTableCell>
                       <StyledTableCell align="right">
-                        {row.dateRegistered.slice(0,10)}
+                        {row.dateRegistered.slice(0, 10)}
                       </StyledTableCell>
                       <StyledTableCell align="right">
                         {row.inputCode}
