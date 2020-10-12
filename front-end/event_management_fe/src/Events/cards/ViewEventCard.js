@@ -81,6 +81,7 @@ export default function ViewEventCard(props) {
   const [alertValue, setAlertValue] = React.useState("");
   const [DisplayValue, setDisplayValue] = React.useState("");
   const [alertTitle, setAlertTitle] = React.useState("");
+  const [JoinOrLeave, setJoinOrLeave ] = React.useState(props.JoinOrLeave);
 
   let selectedCardId = localStorage.getItem("viewEventId");
   const [open, setOpen] = React.useState(false);
@@ -128,6 +129,7 @@ export default function ViewEventCard(props) {
               setAlertTitle("You are added to the event!");
               setDisplayValue(true);
               setAlertValue(1);
+              setJoinOrLeave("Leave the event?");
             }
           },
           (error) => {
@@ -163,7 +165,7 @@ export default function ViewEventCard(props) {
             setDisplayValue(true);
             setAlertValue(1);
             setTimeout(() => {
-              history.push("/MyEventRoster");
+              history.goBack();
             }, 2500);
           }
         },
@@ -333,14 +335,14 @@ export default function ViewEventCard(props) {
                     {getUserName() == props.eventOrgainser ?  " " : (
                       <Grid item sm={6}>
                         <Paper elevation={7} className={classes.paper2}>
-                          {props.JoinOrLeave == "Leave the event?" ? (
+                          {JoinOrLeave == "Leave the event?" ? (
                             <ExitToAppIcon></ExitToAppIcon>
                           ) : (
                             <CheckIcon></CheckIcon>
                           )}{" "}
                           <Grid item xs={12}>
                             <Typography variant="h5" component="h2">
-                              {props.JoinOrLeave}
+                              {JoinOrLeave}
                             </Typography>
                           </Grid>
                           <CardActions>
@@ -376,7 +378,7 @@ export default function ViewEventCard(props) {
                               </DialogTitle>
                               <DialogContent>
                                 <DialogContentText id="alert-dialog-description">
-                                  {props.JoinOrLeave == "Leave the event?"
+                                  {JoinOrLeave == "Leave the event?"
                                     ? "You are going to leave this event. Are you sure?"
                                     : "You are going to join this event. Are you sure?"}
                                 </DialogContentText>
@@ -384,7 +386,7 @@ export default function ViewEventCard(props) {
                               <DialogActions>
                                 <Button
                                   onClick={
-                                    props.JoinOrLeave == "Leave the event?"
+                                    JoinOrLeave == "Leave the event?"
                                       ? leaveEvent
                                       : joinEvent
                                   }
