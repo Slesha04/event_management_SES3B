@@ -184,7 +184,7 @@ export default function ViewEventCard(props) {
               // set the input code to the state
               setInputCode(res.data.inputCode);
               //set the arrivalStatus to the state
-              setArrivalStatus(res.data.arrivalStatus);
+              setArrivalStatus(res.data.attendeeArrived);
               setDisplayValue(true);
               setAlertValue(1);
               setJoinOrLeave("Leave the event?");
@@ -532,63 +532,65 @@ export default function ViewEventCard(props) {
                                   </Typography>
                                 </Grid>
                                 {arrivalStatus == false ? (
-
-                               
-                                <CardActions>
-                                  {/* button1 */}
-                                  <Grid item xs={6}>
-                                    <Button
-                                      variant="contained"
-                                      onClick={handleOpenCheckInDialog}
-                                      color="primary"
-                                      size="medium"
-                                    >
-                                      Yes
-                                    </Button>
-                                  </Grid>
-                                  {/* button 2 */}
-                                  <Grid item xs={12}>
-                                    <Button
-                                      variant="contained"
-                                      color="primary"
-                                      size="medium"
-                                    >
-                                      Cancel
-                                    </Button>
-                                  </Grid>
-                                  <Dialog
-                                    open={checkInDialog}
-                                    onClose={handleCloseCheckInEventDialog}
-                                    aria-labelledby="alert-dialog-title"
-                                    aria-describedby="alert-dialog-description"
-                                  >
-                                    <DialogTitle id="alert-dialog-title">
-                                      {"Confirmation"}
-                                    </DialogTitle>
-                                    <DialogContent>
-                                      <DialogContentText id="alert-dialog-description">
-                                        You are going to check-in for this
-                                        event. Are you sure?
-                                      </DialogContentText>
-                                    </DialogContent>
-                                    <DialogActions>
+                                  <CardActions>
+                                    {/* button1 */}
+                                    <Grid item xs={6}>
                                       <Button
-                                        onClick={handleCheckInEvent}
+                                        variant="contained"
+                                        onClick={handleOpenCheckInDialog}
                                         color="primary"
+                                        size="medium"
                                       >
-                                        Ok
+                                        Yes
                                       </Button>
+                                    </Grid>
+                                    {/* button 2 */}
+                                    <Grid item xs={12}>
                                       <Button
-                                        onClick={handleCloseCheckInEventDialog}
+                                        variant="contained"
                                         color="primary"
-                                        autoFocus
+                                        size="medium"
                                       >
                                         Cancel
                                       </Button>
-                                    </DialogActions>
-                                  </Dialog>
-                                </CardActions>
-                                 ) : " "}
+                                    </Grid>
+                                    <Dialog
+                                      open={checkInDialog}
+                                      onClose={handleCloseCheckInEventDialog}
+                                      aria-labelledby="alert-dialog-title"
+                                      aria-describedby="alert-dialog-description"
+                                    >
+                                      <DialogTitle id="alert-dialog-title">
+                                        {"Confirmation"}
+                                      </DialogTitle>
+                                      <DialogContent>
+                                        <DialogContentText id="alert-dialog-description">
+                                          You are going to check-in for this
+                                          event. Are you sure?
+                                        </DialogContentText>
+                                      </DialogContent>
+                                      <DialogActions>
+                                        <Button
+                                          onClick={handleCheckInEvent}
+                                          color="primary"
+                                        >
+                                          Ok
+                                        </Button>
+                                        <Button
+                                          onClick={
+                                            handleCloseCheckInEventDialog
+                                          }
+                                          color="primary"
+                                          autoFocus
+                                        >
+                                          Cancel
+                                        </Button>
+                                      </DialogActions>
+                                    </Dialog>
+                                  </CardActions>
+                                ) : (
+                                  " "
+                                )}
                               </Paper>
                             </Grid>
                           )
