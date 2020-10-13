@@ -338,26 +338,26 @@ export default function ViewEventCard(props) {
                         <Paper elevation={7} className={classes.paper1}>
                           <Flairs
                             eventType={
-                              props.eventType == 0
+                              props.eventType === 0
                                 ? "Meet Up"
-                                : props.eventType == 1
+                                : props.eventType === 1
                                 ? "Study"
-                                : props.eventType == 2
+                                : props.eventType === 2
                                 ? "Party"
                                 : "Special"
                             }
                             ticketTypes={
-                              props.eventPrice == 0
+                              props.eventPrice === 0
                                 ? "Free Event"
                                 : "Ticketed Event"
                             }
                             eventVisibilityTypes={
-                              props.eventVisibility == 0 ? "Public" : "Unlisted"
+                              props.eventVisibility === 0 ? "Public" : "Unlisted"
                             }
                             UTSEvent={
-                              console.log(props.eventVenue.includes('UTS')) ,props.eventVenue.includes('UTS')
-                                ? "On-Campus Event"
-                                : "Off-Campus event"
+                               props.eventVenue.includes('University')
+                                ? "On-Campus event"
+                                : (props.eventVenue.includes('UTS') ? "On-Campus event" : "Off-Campus event" ) 
                             }
                           />{" "}
                         </Paper>
