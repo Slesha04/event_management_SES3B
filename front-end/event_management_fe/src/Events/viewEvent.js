@@ -257,6 +257,8 @@ const MyEvents = (props) => {
           eventOrganiserId={eventOrganiserID}
           eventVisibility={eventVisibility}
           JoinOrLeave={props.location.state.AttendeeStatus}
+          inputCode={props.location.state.inputCode}
+          ArrivalStatus={props.location.state.ArrivalStatus}
         />  
         <Typography className={classes.title} component="div" variant={"h4"}>
         {" "}

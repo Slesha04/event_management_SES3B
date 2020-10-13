@@ -11,6 +11,7 @@ import upcomingEvent from "../Events.jpg";
 import { useHistory } from "react-router-dom";
 import CssBaseline from "@material-ui/core/CssBaseline";
 import Container from "@material-ui/core/Container";
+import AddAlertIcon from "@material-ui/icons/AddAlert";
 import axios from "axios";
 import {
   getHeaderToken,
@@ -34,6 +35,7 @@ import PersonIcon from "@material-ui/icons/Person";
 import batman from "./avatar-viewEvent.png";
 import Ratings from "../../Shared/Rating";
 import Flairs from "../../Shared/Flairs";
+import { useEffect } from "react";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -86,21 +88,66 @@ export default function ViewEventCard(props) {
   const [alertValue, setAlertValue] = React.useState("");
   const [DisplayValue, setDisplayValue] = React.useState("");
   const [alertTitle, setAlertTitle] = React.useState("");
+
   const [JoinOrLeave, setJoinOrLeave] = React.useState(props.JoinOrLeave);
+
+  const [inputCode, setInputCode] = React.useState(props.inputCode);
+
+  const [arrivalStatus, setArrivalStatus] = React.useState(props.ArrivalStatus);
 
   let selectedCardId = localStorage.getItem("viewEventId");
   const [open, setOpen] = React.useState(false);
+  const [checkInDialog, setCheckInDialog] = React.useState(false);
+
+  //on click open dialog for user arrivalto the event
   const handleClickOpen = (event) => {
     event.preventDefault();
     setOpen(true);
   };
-  // const handleEditEvent = (event) => {
-  //   history.push("/edit-event");
-  //   console.log(cardId);
-  //   localStorage.setItem("selectedCard", cardId);
-  // };
+  //on click open dialog for user joined the event
+  const handleOpenCheckInDialog = (event) => {
+    event.preventDefault();
+    setCheckInDialog(true);
+  };
+
   const handleClose = () => {
     setOpen(false);
+  };
+
+  const handleCloseCheckInEventDialog = () => {
+    setCheckInDialog(false);
+  };
+
+  const handleCheckInEvent = () => {
+    const body = {};
+    console.log(getHeaderToken());
+    console.log(props.inputCode);
+
+    const res = axios
+      .put(
+        `https://localhost:5001/api/EventRosterController/MarkAttendeeSelf/${inputCode}/${selectedCardId}`,
+        body,
+        {
+          headers: {
+            Authorization: getHeaderToken(),
+          },
+        }
+      )
+      .then(
+        (res) => {
+          if (res.status === 200) setArrivalStatus();
+          setAlertTitle("You're are checked in!");
+          setDisplayValue(true);
+          setAlertValue(1);
+        },
+        (error) => {
+          setAlertTitle("Backend");
+          setDisplayValue(true);
+          setAlertValue(0);
+          console.log(error);
+        }
+      );
+    setCheckInDialog(false);
   };
 
   const joinEvent = (event) => {
@@ -131,7 +178,13 @@ export default function ViewEventCard(props) {
           (res) => {
             console.log(res);
             if (res.status === 200) {
+              console.log(res.status);
+              //  alert that the user joined into the event
               setAlertTitle("You are added to the event!");
+              // set the input code to the state
+              setInputCode(res.data.inputCode);
+              //set the arrivalStatus to the state
+              setArrivalStatus(res.data.arrivalStatus);
               setDisplayValue(true);
               setAlertValue(1);
               setJoinOrLeave("Leave the event?");
@@ -182,6 +235,7 @@ export default function ViewEventCard(props) {
       );
     setOpen(false);
   };
+
   return (
     <Card className={classes.root}>
       <Snackbars
@@ -352,12 +406,16 @@ export default function ViewEventCard(props) {
                                 : "Ticketed Event"
                             }
                             eventVisibilityTypes={
-                              props.eventVisibility === 0 ? "Public" : "Unlisted"
+                              props.eventVisibility === 0
+                                ? "Public"
+                                : "Unlisted"
                             }
                             UTSEvent={
-                               props.eventVenue.includes('University')
+                              props.eventVenue.includes("University")
                                 ? "On-Campus event"
-                                : (props.eventVenue.includes('UTS') ? "On-Campus event" : "Off-Campus event" ) 
+                                : props.eventVenue.includes("UTS")
+                                ? "On-Campus event"
+                                : "Off-Campus event"
                             }
                           />{" "}
                         </Paper>
@@ -369,80 +427,177 @@ export default function ViewEventCard(props) {
                     {getUserName() == props.eventOrgainser ? (
                       " "
                     ) : (
-                      <Grid item sm={6}>
-                        <Paper elevation={7} className={classes.paper2}>
-                          {JoinOrLeave == "Leave the event?" ? (
-                            <ExitToAppIcon></ExitToAppIcon>
-                          ) : (
-                            <CheckIcon></CheckIcon>
-                          )}{" "}
-                          <Grid item xs={12}>
-                            <Typography variant="h5" component="h2">
-                              {JoinOrLeave}
-                            </Typography>
-                          </Grid>
-                          <CardActions>
-                            {/* button1 */}
-                            <Grid item xs={6}>
-                              <Button
-                                variant="contained"
-                                onClick={handleClickOpen}
-                                color="primary"
-                                size="medium"
-                              >
-                                Yes
-                              </Button>
-                            </Grid>
-                            {/* button 2 */}
+                      <Grid
+                        container
+                        direction="row"
+                        justify="flex-start"
+                        alignItems="flex-start"
+                        spacing={3}
+                      >
+                        <Grid item sm={6}>
+                          <Paper elevation={7} className={classes.paper2}>
+                            {JoinOrLeave == "Leave the event?" ? (
+                              <ExitToAppIcon></ExitToAppIcon>
+                            ) : (
+                              <AddAlertIcon></AddAlertIcon>
+                            )}{" "}
                             <Grid item xs={12}>
-                              <Button
-                                variant="contained"
-                                color="primary"
-                                size="medium"
-                              >
-                                Cancel
-                              </Button>
+                              <Typography variant="h5" component="h2">
+                                {JoinOrLeave}
+                              </Typography>
                             </Grid>
-                            <Dialog
-                              open={open}
-                              onClose={handleClose}
-                              aria-labelledby="alert-dialog-title"
-                              aria-describedby="alert-dialog-description"
-                            >
-                              <DialogTitle id="alert-dialog-title">
-                                {"Confirmation"}
-                              </DialogTitle>
-                              <DialogContent>
-                                <DialogContentText id="alert-dialog-description">
-                                  {JoinOrLeave == "Leave the event?"
-                                    ? "You are going to leave this event. Are you sure?"
-                                    : "You are going to join this event. Are you sure?"}
-                                </DialogContentText>
-                              </DialogContent>
-                              <DialogActions>
+                            <CardActions>
+                              {/* button1 */}
+                              <Grid item xs={6}>
                                 <Button
-                                  onClick={
-                                    JoinOrLeave == "Leave the event?"
-                                      ? leaveEvent
-                                      : joinEvent
-                                  }
+                                  variant="contained"
+                                  onClick={handleClickOpen}
                                   color="primary"
+                                  size="medium"
                                 >
-                                  Ok
+                                  Yes
                                 </Button>
+                              </Grid>
+                              {/* button 2 */}
+                              <Grid item xs={12}>
                                 <Button
-                                  onClick={handleClose}
+                                  variant="contained"
                                   color="primary"
-                                  autoFocus
+                                  size="medium"
                                 >
                                   Cancel
                                 </Button>
-                              </DialogActions>
-                            </Dialog>
-                          </CardActions>
-                        </Paper>
+                              </Grid>
+                              <Dialog
+                                open={open}
+                                onClose={handleClose}
+                                aria-labelledby="alert-dialog-title"
+                                aria-describedby="alert-dialog-description"
+                              >
+                                <DialogTitle id="alert-dialog-title">
+                                  {"Confirmation"}
+                                </DialogTitle>
+                                <DialogContent>
+                                  <DialogContentText id="alert-dialog-description">
+                                    {JoinOrLeave == "Leave the event?"
+                                      ? "You are going to leave this event. Are you sure?"
+                                      : "You are going to join this event. Are you sure?"}
+                                  </DialogContentText>
+                                </DialogContent>
+                                <DialogActions>
+                                  <Button
+                                    onClick={
+                                      JoinOrLeave == "Leave the event?"
+                                        ? leaveEvent
+                                        : joinEvent
+                                    }
+                                    color="primary"
+                                  >
+                                    Ok
+                                  </Button>
+                                  <Button
+                                    onClick={handleClose}
+                                    color="primary"
+                                    autoFocus
+                                  >
+                                    Cancel
+                                  </Button>
+                                </DialogActions>
+                              </Dialog>
+                            </CardActions>
+                          </Paper>
+                        </Grid>
+                        {/* {eventAttended} */}
+                        {JoinOrLeave == "Leave the event?" ? (
+                          arrivalStatus == true ? (
+                            <Grid item sm={6}>
+                              <Paper elevation={7} className={classes.paper2}>
+                                <CheckIcon></CheckIcon>
+                                <Grid item xs={12}>
+                                  <Typography variant="h5" component="h2">
+                                    {"You went to this event!"}
+                                  </Typography>
+                                </Grid>
+                              </Paper>
+                            </Grid>
+                          ) : (
+                            <Grid item sm={6}>
+                              <Paper elevation={7} className={classes.paper2}>
+                                <CheckIcon></CheckIcon>
+                                <Grid item xs={12}>
+                                  <Typography variant="h5" component="h2">
+                                    {arrivalStatus == false
+                                      ? "Arrived at the Venue? check-in"
+                                      : "You went to the event!"}
+                                  </Typography>
+                                </Grid>
+                                {arrivalStatus == false ? (
+
+                               
+                                <CardActions>
+                                  {/* button1 */}
+                                  <Grid item xs={6}>
+                                    <Button
+                                      variant="contained"
+                                      onClick={handleOpenCheckInDialog}
+                                      color="primary"
+                                      size="medium"
+                                    >
+                                      Yes
+                                    </Button>
+                                  </Grid>
+                                  {/* button 2 */}
+                                  <Grid item xs={12}>
+                                    <Button
+                                      variant="contained"
+                                      color="primary"
+                                      size="medium"
+                                    >
+                                      Cancel
+                                    </Button>
+                                  </Grid>
+                                  <Dialog
+                                    open={checkInDialog}
+                                    onClose={handleCloseCheckInEventDialog}
+                                    aria-labelledby="alert-dialog-title"
+                                    aria-describedby="alert-dialog-description"
+                                  >
+                                    <DialogTitle id="alert-dialog-title">
+                                      {"Confirmation"}
+                                    </DialogTitle>
+                                    <DialogContent>
+                                      <DialogContentText id="alert-dialog-description">
+                                        You are going to check-in for this
+                                        event. Are you sure?
+                                      </DialogContentText>
+                                    </DialogContent>
+                                    <DialogActions>
+                                      <Button
+                                        onClick={handleCheckInEvent}
+                                        color="primary"
+                                      >
+                                        Ok
+                                      </Button>
+                                      <Button
+                                        onClick={handleCloseCheckInEventDialog}
+                                        color="primary"
+                                        autoFocus
+                                      >
+                                        Cancel
+                                      </Button>
+                                    </DialogActions>
+                                  </Dialog>
+                                </CardActions>
+                                 ) : " "}
+                              </Paper>
+                            </Grid>
+                          )
+                        ) : (
+                          " "
+                        )}
                       </Grid>
                     )}
+                    {/* //register */}
                   </Grid>
                 </Grid>
               </Grid>

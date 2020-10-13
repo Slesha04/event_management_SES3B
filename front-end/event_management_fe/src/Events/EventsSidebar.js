@@ -109,7 +109,7 @@ export default function EventSidebar() {
     localStorage.setItem("viewEventId", eventId);
     history.push({
       pathname: "/view-event",
-      state: { AttendeeStatus: "Check into this event?" },
+      state: { AttendeeStatus: "Register for this event?" },
     });
   };
 

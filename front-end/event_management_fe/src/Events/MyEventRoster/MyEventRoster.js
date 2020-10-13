@@ -105,11 +105,12 @@ export default function MyEventsRoster() {
   //       }
   //     );
   // };
-  function handleViewEvent(eventId) {
+  function handleViewEvent(eventId, Code, arrivedStatus) {
     localStorage.setItem("viewEventId", eventId);
+ 
     history.push({
       pathname: "/view-event",
-      state: { AttendeeStatus: "Leave the event?" },
+      state: { AttendeeStatus: "Leave the event?", inputCode: Code, ArrivalStatus : arrivedStatus  },
     });
   }
 
@@ -187,7 +188,7 @@ export default function MyEventsRoster() {
                       <StyledTableRow
                         key={row.eventId}
                         hover="true"
-                        onClick={() => handleViewEvent(row.eventId)}
+                        onClick={() => handleViewEvent(row.eventId,row.inputCode,row.attendeeArrived)}
                       >
                         <StyledTableCell align="right">
                           {row.eventTitle}
