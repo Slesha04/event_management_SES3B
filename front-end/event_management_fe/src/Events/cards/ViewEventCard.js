@@ -36,6 +36,11 @@ import batman from "./avatar-viewEvent.png";
 import Ratings from "../../Shared/Rating";
 import Flairs from "../../Shared/Flairs";
 import { useEffect } from "react";
+import Badge from "@material-ui/core/Badge";
+import MailIcon from "@material-ui/icons/Mail";
+import { IconButton } from "@material-ui/core";
+import ThumbUpAltIcon from "@material-ui/icons/ThumbUpAlt";
+import Cookies from 'js-cookie'
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -98,7 +103,9 @@ export default function ViewEventCard(props) {
   let selectedCardId = localStorage.getItem("viewEventId");
   const [open, setOpen] = React.useState(false);
   const [checkInDialog, setCheckInDialog] = React.useState(false);
-
+  const [count, setCount] = React.useState(
+    localStorage.getItem(`eventLikes${cardId}`)
+  );
   //on click open dialog for user arrivalto the event
   const handleClickOpen = (event) => {
     event.preventDefault();
@@ -118,6 +125,39 @@ export default function ViewEventCard(props) {
     setCheckInDialog(false);
   };
 
+  //likes
+
+  const handleLikes = () => {
+    let userLikeStatus = localStorage.getItem(
+      `eventLikes${cardId}UserId${getUserID()}`
+    );
+    console.log(localStorage.getItem(`eventLikes${cardId}`));
+    let numberOfLikes = Number(localStorage.getItem(`eventLikes${cardId}`));
+    //check if the user has liked the event or not
+    if (userLikeStatus == null || userLikeStatus == 0) {
+      //if the user has not liked it already then like this event
+      localStorage.setItem(`eventLikes${cardId}UserId${getUserID()}`, 1);
+      numberOfLikes += 1;
+      localStorage.setItem(`eventLikes${cardId}`, numberOfLikes);
+      setCount(localStorage.getItem(`eventLikes${cardId}`));
+
+      setAlertTitle("You liked this event!");
+      setDisplayValue(true);
+      setAlertValue(1);
+
+      //if the user has already liked the event then do nothing
+    } else if (userLikeStatus == 1) {
+      localStorage.setItem(`eventLikes${cardId}UserId${getUserID()}`, 0);
+      numberOfLikes -= 1;
+      localStorage.setItem(`eventLikes${cardId}`, numberOfLikes);
+      setCount(localStorage.getItem(`eventLikes${cardId}`));
+      setAlertTitle("You removed your like! no-");
+      setDisplayValue(true);
+      setAlertValue(0);
+    }
+
+    console.log(count);
+  };
   const handleCheckInEvent = () => {
     const body = {};
     console.log(getHeaderToken());
@@ -135,7 +175,11 @@ export default function ViewEventCard(props) {
       )
       .then(
         (res) => {
-          if (res.status === 200) setArrivalStatus();
+          if (res.status === 200) setArrivalStatus(true);
+
+          Cookies.set(`user${getUserID()}event${selectedCardId}ArrivalStatus`, true);
+
+
           setAlertTitle("You're are checked in!");
           setDisplayValue(true);
           setAlertValue(1);
@@ -154,6 +198,7 @@ export default function ViewEventCard(props) {
     const body = {};
     console.log(props.eventOrganiserId);
     console.log(getUserID());
+    console.log( cardId )
 
     if (props.eventOrganiserId == getUserID()) {
       //open snackbar
@@ -185,6 +230,9 @@ export default function ViewEventCard(props) {
               setInputCode(res.data.inputCode);
               //set the arrivalStatus to the state
               setArrivalStatus(res.data.attendeeArrived);
+              //set the cookie to usercode
+              Cookies.set(`user${getUserID()}event${selectedCardId}`, res.data.inputCode);
+
               setDisplayValue(true);
               setAlertValue(1);
               setJoinOrLeave("Leave the event?");
@@ -201,6 +249,7 @@ export default function ViewEventCard(props) {
       setOpen(false);
     }
   };
+
   const leaveEvent = (event) => {
     const body = {};
     console.log(selectedCardId);
@@ -208,7 +257,6 @@ export default function ViewEventCard(props) {
     const res = axios
       .delete(
         `${getUserPlatformAPIPort()}api/EventRosterController/RemoveAttendee/${selectedCardId}/${getUserID()}`,
-
         {
           headers: {
             Authorization: getHeaderToken(),
@@ -220,6 +268,11 @@ export default function ViewEventCard(props) {
           console.log(res);
           if (res.status === 200) {
             setAlertTitle("You left the event!");
+            setArrivalStatus(false)
+             //set the cookie to null
+            Cookies.set(`user${getUserID()}event${selectedCardId}`,1);
+            Cookies.set(`user${getUserID()}event${selectedCardId}ArrivalStatus`, 1);
+
             setDisplayValue(true);
             setAlertValue(1);
             setTimeout(() => {
@@ -235,6 +288,7 @@ export default function ViewEventCard(props) {
       );
     setOpen(false);
   };
+
 
   return (
     <Card className={classes.root}>
@@ -382,11 +436,25 @@ export default function ViewEventCard(props) {
                         </Paper>{" "}
                       </Grid>
                       <Grid item xs={12}>
-                        {/* event rating */}
-                        <Paper elevation={7} className={classes.paper1}>
-                          <Ratings />{" "}
-                        </Paper>
+                        {/* event like */}
+                        <IconButton
+                          onClick={() => {
+                            handleLikes();
+                          }}
+                        >
+                          <Paper elevation={7} className={classes.paper1}>
+                            <Typography component="div" variant={"h5"}>
+                              {" "}
+                              likes :
+                              {/* {localStorage.getItem(
+                              `peopleLike${selectedCardId}`
+                            )} */}
+                              <ThumbUpAltIcon fontSize="medium" /> {count}
+                            </Typography>{" "}
+                          </Paper>
+                        </IconButton>
                       </Grid>
+
                       <Grid item xs={12}>
                         {/* event rating */}
                         <Paper elevation={7} className={classes.paper1}>
@@ -443,7 +511,8 @@ export default function ViewEventCard(props) {
                             )}{" "}
                             <Grid item xs={12}>
                               <Typography variant="h5" component="h2">
-                                {JoinOrLeave}
+                              {arrivalStatus=== true ? "Leave this thread?" :
+                                 JoinOrLeave}
                               </Typography>
                             </Grid>
                             <CardActions>
@@ -602,6 +671,16 @@ export default function ViewEventCard(props) {
                     {/* //register */}
                   </Grid>
                 </Grid>
+                {arrivalStatus == true ? (
+                  <Grid item xs={12}>
+                    {/* event rating */}
+                    <Paper elevation={7} className={classes.paper1}>
+                      <Ratings />{" "}
+                    </Paper>
+                  </Grid>
+                ) : (
+                  " "
+                )}
               </Grid>
             </Grid>
           </Grid>

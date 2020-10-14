@@ -255,9 +255,30 @@ const CreateEvent = (props) => {
     //store eveent id to local storage
     console.log("at the grid- " + eventId);
     localStorage.setItem("viewEventId", eventId);
+    let AttendeeStatus = "";
+    let ArrivalStatus = "";
+
+    console.log(Cookies.get(`user${getUserID()}event${eventId}`));
+
+    Cookies.get(`user${getUserID()}event${eventId}`) === undefined
+      ? (AttendeeStatus = "Register for this event?")
+      : parseInt(Cookies.get(`user${getUserID()}event${eventId}`)) === 1
+      ? (AttendeeStatus = "Register for this event?")
+      : (AttendeeStatus = "Leave the event?");
+
+    Cookies.get(`user${getUserID()}event${eventId}ArrivalStatus`) === undefined
+      ? (ArrivalStatus = false)
+      : Cookies.get(`user${getUserID()}event${eventId}ArrivalStatus`) == 1
+      ? (ArrivalStatus = false)
+      : (ArrivalStatus = true);
+
     history.push({
       pathname: "/view-event",
-      state: { AttendeeStatus: "Register for this event?" },
+      state: {
+        AttendeeStatus: AttendeeStatus,
+        inputCode: Cookies.get(`user${getUserID()}event${eventId}`),
+        ArrivalStatus: ArrivalStatus,
+      },
     });
   };
 
