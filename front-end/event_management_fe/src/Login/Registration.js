@@ -137,7 +137,7 @@ const Registration = (props) => {
       //register user
       axios
         .get(
-          `https://localhost:5001/api/UserController/RegisterUser/${username}/${birthDate}/${gender}/${email}/${password}`
+          `${getUserPlatformAPIPort()}api/UserController/RegisterUser/${username}/${birthDate}/${gender}/${email}/${password}`
         )
         .then(
           (res) => {
