@@ -24,8 +24,10 @@ import axios from "axios";
 import Paper from "@material-ui/core/Paper";
 import { getHeaderToken, getToken, getUserID } from "../Login/JwtConfig";
 import Snackbars from "../Shared/Snackbar";
-import { getUserPlatformAPIPort} from "../Login/JwtConfig";
-
+import { getUserPlatformAPIPort } from "../Login/JwtConfig";
+import DesktopMacTwoToneIcon from "@material-ui/icons/DesktopMacTwoTone";
+import LaptopWindowsTwoToneIcon from "@material-ui/icons/LaptopWindowsTwoTone";
+import { IconButton } from "@material-ui/core";
 /* https://github.com/mui-org/material-ui/blob/master/docs/src/pages/getting-started/templates/sign-up/SignUp.js*/
 
 function Copyright() {
@@ -87,6 +89,7 @@ const Registration = (props) => {
   const [password, setPassword] = React.useState("");
   const [username, setUsername] = React.useState("");
   const [birthDate, setBirthDate] = React.useState("");
+  const [uservalue, setUservalue] = React.useState("");
 
   const [alertValue, setAlertValue] = React.useState("");
 
@@ -107,10 +110,21 @@ const Registration = (props) => {
   const handleBirthDateChange = (event) => {
     setBirthDate(event.target.value);
   };
+
+  const handleAPIPortNumMac = (event) => {
+    setUservalue("http://localhost:5000/");
+  };
+  const handleAPIPortNumWindows = (event) => {
+    setUservalue("https://localhost:5001/");
+  };
+
   const history = useHistory();
 
   const handleRegister = (event) => {
     event.preventDefault();
+    Cookies.set("user-platform-api-port",uservalue);
+    console.log("user-platform-api-port -"+uservalue);
+    
     if (
       username !== "" ||
       password !== "" ||
@@ -145,7 +159,7 @@ const Registration = (props) => {
             setDisplayValue(true);
             setAlertValue(1);
             setTimeout(() => {
-              history.push("/homePage");
+              history.push("/login");
             }, 2500);
           },
           (error) => {
@@ -153,7 +167,7 @@ const Registration = (props) => {
             setAlertValue(0);
           }
         );
-    }else {
+    } else {
       setDisplayValue(true);
       setAlertValue(0);
     }
@@ -242,7 +256,31 @@ const Registration = (props) => {
                   }}
                 />
               </Grid>
-
+              <Grid
+                container
+                direction="row"
+                justify="center"
+                alignItems="center"
+              >
+                <Grid item xs={12} sm={6}>
+                  <IconButton
+                    classes={{ label: classes.iconButtonLabel }}
+                    onClick={handleAPIPortNumMac}
+                  >
+                    <DesktopMacTwoToneIcon style={{ fontSize: 60 }} />
+                    <div>Mac</div>
+                  </IconButton>
+                </Grid>
+                <Grid item xs={12} sm={6}>
+                  <IconButton
+                    classes={{ label: classes.iconButtonLabel }}
+                    onClick={handleAPIPortNumWindows}
+                  >
+                    <LaptopWindowsTwoToneIcon style={{ fontSize: 60 }} />
+                    <div>Windows</div>
+                  </IconButton>
+                </Grid>
+              </Grid>
               <Grid item xs={12}>
                 <FormControlLabel
                   control={

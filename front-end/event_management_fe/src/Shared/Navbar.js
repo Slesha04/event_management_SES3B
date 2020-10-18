@@ -68,12 +68,14 @@ function Navbar() {
    // snackBar
   const [alertValue, setAlertValue] = React.useState("");
   const [DisplayValue, setDisplayValue] = React.useState("");
- const[val,setVal] = React.useState("");
+  const[val,setVal] = React.useState("");
   const handleClick = () => setClick(!click);
   const closeMobileMenu = () => setClick(false);
+
   const showUserProfile = () => {
     history.push("/profile");
   };
+
   const showButton = () => {
     if (window.innerWidth <= 960) {
       setButton(false);
@@ -81,6 +83,7 @@ function Navbar() {
       setButton(true);
     }
   };
+
   //avis code
   const history = useHistory();
 

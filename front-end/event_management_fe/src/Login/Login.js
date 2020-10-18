@@ -95,6 +95,7 @@ const Login = (props) => {
   const handleAPIPortNumWindows = (event) => {
     setUservalue("https://localhost:5001/");
   };
+  
   const handleRegister = (event) => {
     event.preventDefault();
     Cookies.set("user-platform-api-port",uservalue);
