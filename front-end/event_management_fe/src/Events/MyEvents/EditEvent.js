@@ -312,12 +312,12 @@ const EditEvent = (props) => {
       }, 3500);
     } else {
       console.log(
-        `http://localhost:5000/api/EventController/UpdateEvent/${selectedCardId}/${eventTitle}/${eventBodyText}/${eventLocation}/${eventDate}/${eventStatus}/${ticketPrice}/${eventType}/${eventVisibility}`
+        `${getUserPlatformAPIPort()}api/EventController/UpdateEvent/${selectedCardId}/${eventTitle}/${eventBodyText}/${eventLocation}/${eventDate}/${eventStatus}/${ticketPrice}/${eventType}/${eventVisibility}`
       );
       console.log(getHeaderToken());
       const res = axios
         .put(
-          `https://localhost:5001/api/EventController/UpdateEvent/${selectedCardId}/${eventTitle}/${eventBodyText}/${eventLocation}/${eventDate}/${eventStatus}/${ticketPrice}/${eventType}/${eventVisibility}`,
+          `${getUserPlatformAPIPort()}api/EventController/UpdateEvent/${selectedCardId}/${eventTitle}/${eventBodyText}/${eventLocation}/${eventDate}/${eventStatus}/${ticketPrice}/${eventType}/${eventVisibility}`,
           body,
           {
             headers: {
