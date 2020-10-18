@@ -16,6 +16,7 @@ import TextField from "@material-ui/core/TextField";
 import { getHeaderToken, getToken, getUserID } from "../Login/JwtConfig";
 import EventSidebar from "../Events/EventsSidebar";
 import { CTX } from "./ChatStore";
+import { teal } from "@material-ui/core/colors";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -23,7 +24,8 @@ const useStyles = makeStyles((theme) => ({
     padding: theme.spacing(3, 2),      
     height: theme.spacing(150),
     width: theme.spacing(150),
-    marginRight:20
+    marginRight:20,
+    backgroundColor: "rgba(127,157,180,0.2)"
   },
   flex: {
     display: "flex",
@@ -31,20 +33,36 @@ const useStyles = makeStyles((theme) => ({
   },
   topicsWindow: {
     width: "30%",
-    height: "450px",
-    borderRight: "1px ridge navy",
+    height: "500px",
+    // borderRight: "1px ridge rgba(127,157,180,0.2)",
   },
   chatWindow: {
     width: "70%",
     height: "450px",
-    padding: "20px",
+    padding: "60px",
+    backgroundColor: "rgba(76,105,137,0.2)",
   },
   chatBox: {
-    width: "85%",
+    width: "57%",
+    // backgroundColor:"rgba(76,105,137,0.05)",
   },
   button: {
-    width: "15%",
+    width: "6%",
+    color: "white",
+    backgroundColor : "#b63160",
   },
+  line:{
+    color: "rgba(76,105,137,0.10)"
+  },
+  TypographyStyle:{
+    color: "rgb(4, 44, 84)",
+    fontFamily: `sans-serif`,
+    fontSize: 30,
+    fontWeight: "bold",
+  },
+  Other:{
+    backgroundColor: "rgba(4, 44, 84, 0.10)",
+  }
 }));
 
 export default function GlobalChat() {
@@ -61,19 +79,29 @@ export default function GlobalChat() {
       {" "}
       <Grid item xs={12} sm={6}>
         <div className={classes.root}>
-          <Paper>
-            <Typography variant="h4">Global Chat</Typography>
-            <Typography component="h3">{activeTopic}</Typography>
+          <Paper className={classes.Other}>
+            <Typography 
+            className={classes.TypographyStyle} 
+            // color = "secondary"
+            variant="h4">
+            <i class="fas fa-glass-cheers"></i></Typography>
+            <Typography 
+            className={classes.TypographyStyle}
+            component="h3"
+            >{activeTopic}</Typography>
             <div className={classes.flex}>
               <div className={classes.topicsWindow}>
                 <List>
                   {topic.map((topic) => (
                     <ListItem
+                    className="send-message-form"
                       onClick={(e) => changeActiveTopic(e.target.innerText)}
                       key={topic}
                       button
                     >
-                      <ListItemText primary={topic}></ListItemText>
+                      <ListItemText 
+                      className="rooms-list > ul"
+                      primary={topic}></ListItemText>
                     </ListItem>
                   ))}
                 </List>
@@ -82,14 +110,18 @@ export default function GlobalChat() {
                 <List>
                   {allChats[activeTopic].map((chat, i) => (
                     <div className={classes.flex} key={i}>
-                      <Typography variant="caption">{chat.from}</Typography>
-                      <Chip label={chat.msg} className={classes.Chip}></Chip>
+                      <Typography variant="caption"
+                      className="message-username"
+                      >{chat.from}
+                      </Typography>
+                      <Chip label={chat.msg} className="message .message-text"></Chip>
                     </div>
                   ))}
                 </List>
               </div>
             </div>
             <div className={classes.flex}>
+            <div><Typography className={classes.line}>__________________________________---</Typography></div>
               <TextField
                 id="standard-basic"
                 label="Type your text here"
@@ -99,7 +131,7 @@ export default function GlobalChat() {
               />
               <Button
                 variant="contained"
-                color="secondary"
+                className={classes.button}
                 onClick={() => {
                   sendChatAction({
                     from: user,
@@ -109,7 +141,7 @@ export default function GlobalChat() {
                   changeTextValue("");
                 }}
               >
-                Send
+                <i class="fa fa-paper-plane" aria-hidden="true"></i>
               </Button>
             </div>
           </Paper>

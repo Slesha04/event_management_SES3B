@@ -7,17 +7,17 @@ export const CTX = React.createContext();
 
 
 const initState ={
-    '#general':[
-        // {from : 'Slesh',msg : 'How are you?'},
-        // {from : 'Andre',msg : 'Grapee'},
-        // {from : 'Slesh',msg : 'Okay'}
+    '#General':[
+        {from : 'Slesh',msg : 'How are you?'},
+        {from : 'Andre',msg : 'Grapee'},
+        {from : 'Slesh',msg : 'Okay'}
     ],
-    '#photography':[
-        // {from : 'Slesh',msg : 'How are you?'},
-        // {from : 'meow',msg : 'yesh ok'},
-        // {from : 'Slesh',msg : 'Okay'}
+    '#Photography':[
+        {from : 'Slesh',msg : 'How are you?'},
+        {from : 'meow',msg : 'yesh ok'},
+        {from : 'Slesh',msg : 'Okay'}
     ],
-    '#exam_prep':[]
+    '#ExamPrep':[]
 }
 
 //help remember previous state given that the current state is displaying well
@@ -50,7 +50,7 @@ export default function ChatStore(props) {
 
     React.useEffect(() => {
         if(!socket){
-            socket = io(':3008')
+            socket = io(':3012')
             socket.on('chat message', function(msg){
                 // console.log(msg)
                 dispatch({type: 'RECEIVE_MESSAGE', payload: msg});

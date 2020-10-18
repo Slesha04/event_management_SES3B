@@ -42,6 +42,8 @@ import Snackbars from "../Shared/Snackbar";
 import { getUserPlatformAPIPort } from "../Login/JwtConfig";
 import FullCalendar from '@fullcalendar/react'
 import dayGridPlugin from '@fullcalendar/daygrid'
+import stars from "./stars.jpg"
+
 const ProjectData = [
   { imageUrl: require("./dummyData/img1.jpg") },
   {
@@ -78,7 +80,8 @@ const useStyles = makeStyles((theme) => ({
     display: "flex",
     height: theme.spacing(150),
     width: theme.spacing(300),
-    backgroundImage: `url(${utsBackground})`,
+    // backgroundImage: `url(${utsBackground})`,
+    backgroundImage:`url(${stars})`
   },
   formtwo: {
     margin: theme.spacing(5, 40, 40, 40),

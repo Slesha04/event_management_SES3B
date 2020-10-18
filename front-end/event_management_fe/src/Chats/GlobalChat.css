@@ -1,5 +1,5 @@
 :root {
-    --main-color: #5ea3d0;
+    --main-color: #587080;
     --secondary-color: white;
     --main-text-color: #3e5869;
     --secondary-text-color: #b0c7d6;
@@ -33,7 +33,7 @@ html, body {
         "n f f f f f";
 }
 
-.new-room-form {
+.new- form {
     grid-area: n;
 }
 
@@ -62,6 +62,7 @@ html, body {
     list-style-type: none;    
     padding: 0;
     overflow: scoll;
+    color: white
 }
 
 .rooms-list li {
