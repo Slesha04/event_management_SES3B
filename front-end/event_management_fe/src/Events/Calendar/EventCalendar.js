@@ -23,8 +23,8 @@ const useStyles = makeStyles((theme) => ({
   paper: {
     marginTop: 100,
     marginBottom: 100,
-    marginLeft: 300,
-    marginRight: 300,
+    marginLeft: 100,
+    marginRight: 100,
     flexDirection: "column",
     alignItems: "center",
   },
@@ -94,7 +94,7 @@ const Cavents = (props) => {
     history.push({
       pathname: "/view-event",
       state: {
-        AttendeeStatus: AttendeeStatus,
+        AttendeeStatus: "Leave the event?",
         inputCode: Cookies.get(`user${getUserID()}event${event.id}`),
         ArrivalStatus: ArrivalStatus,
       },
@@ -104,7 +104,6 @@ const Cavents = (props) => {
   useEffect(() => {
     const userId = getUserID();
     let apiData = [];
-
     axios
       .get(
         `${getUserPlatformAPIPort()}api/EventRosterController/GetRosterEntriesByUser`,
@@ -133,10 +132,11 @@ const Cavents = (props) => {
           alert("something Went Wrong");
         }
       );
-    console.log(apiData);
-  }, []);
+  },[]);
 
   return (
+    console.log(post),
+
     <Paper
       style={{
         marginTop: 100,
@@ -152,9 +152,11 @@ const Cavents = (props) => {
       <FullCalendar
         plugins={[dayGridPlugin]}
         initialView="dayGridMonth"
-        weekends={false}
+        weekends={true}
         events={post}
         eventClick={handleEventClick}
+        lazyFetching={true} 
+
       />
     </Paper>
   );
