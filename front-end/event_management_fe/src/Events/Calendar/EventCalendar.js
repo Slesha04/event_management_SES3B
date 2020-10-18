@@ -1,28 +1,110 @@
-import React, { Component } from "react";
+import React from "react";
+import Avatar from "@material-ui/core/Avatar";
+import Button from "@material-ui/core/Button";
+import CssBaseline from "@material-ui/core/CssBaseline";
+import TextField from "@material-ui/core/TextField";
+import FormControlLabel from "@material-ui/core/FormControlLabel";
+import Checkbox from "@material-ui/core/Checkbox";
+
+import Paper from "@material-ui/core/Paper";
+import LockOutlinedIcon from "@material-ui/icons/LockOutlined";
+import Typography from "@material-ui/core/Typography";
+import { makeStyles } from "@material-ui/core/styles";
+import Cookies from "js-cookie";
+
+import { useHistory } from "react-router-dom";
+import axios from "axios";
+import { useEffect, useState } from "react";
+import { getHeaderToken, getToken, getUserID } from "../../Login/JwtConfig";
+import { getUserPlatformAPIPort } from "../../Login/JwtConfig";
 import FullCalendar from "@fullcalendar/react";
 import dayGridPlugin from "@fullcalendar/daygrid";
-import interactionPlugin from "@fullcalendar/interaction";
-import axios from "axios";
-import { getUserPlatformAPIPort } from "../../Login/JwtConfig";
-import { Paper } from "@material-ui/core";
-import { Typography } from "@material-ui/core";
-import { getHeaderToken, getToken, getUserID } from "../../Login/JwtConfig";
-import { useHistory } from "react-router-dom";
-import { withRouter } from "react-router";
+const useStyles = makeStyles((theme) => ({
+  paper: {
+    marginTop: 100,
+    marginBottom: 100,
+    marginLeft: 300,
+    marginRight: 300,
+    flexDirection: "column",
+    alignItems: "center",
+  },
+  outsidePaper: {
+    marginTop: theme.spacing(8),
+    marginBottom: theme.spacing(8),
+    marginLeft: theme.spacing(30),
+    marginRight: theme.spacing(30),
+    flexDirection: "column",
+    alignItems: "center",
+    backgroundColor: theme.palette.background.paper,
+  },
+  avatar: {
+    margin: theme.spacing(1),
+    backgroundColor: theme.palette.secondary.main,
+  },
+  form: {
+    width: "100%", // Fix IE 11 issue.
+    marginTop: theme.spacing(3),
+  },
+  submit: {
+    margin: theme.spacing(3, 0, 2),
+  },
+  title: {
+    margin: theme.spacing(3, 0, 2),
+  },
+  formControl: {
+    margin: theme.spacing(1),
+    minWidth: 120,
+  },
+}));
 
-export default class Schedule extends Component {
-  // declare any necessary functions such as handleDateClick, etc.
+const Cavents = (props) => {
+  const classes = useStyles();
+  let selectedEvent = localStorage.getItem("viewEventId");
 
-  constructor(props) {
-    super(props);
+  const [post, setPostArray] = useState([]);
 
-    this.state = {
-      events: [],
-    };
-  }
+  const history = useHistory();
+  let selectedCardId = localStorage.getItem("selectedCard");
 
-  componentDidMount() {
+  // snackBar
+  const [alertValue, setAlertValue] = React.useState("");
+  const [DisplayValue, setDisplayValue] = React.useState("");
+
+  const handleEventClick = ({ event }) => {
+    //store eveent id to local storage
+    console.log("at the grid- " + event.id);
+    localStorage.setItem("viewEventId", event.id);
+    let AttendeeStatus = "";
+    let ArrivalStatus = "";
+
+    console.log(Cookies.get(`user${getUserID()}event${event.id}`));
+
+    Cookies.get(`user${getUserID()}event${event.id}`) === undefined
+      ? (AttendeeStatus = "Register for this event?")
+      : parseInt(Cookies.get(`user${getUserID()}event${event.id}`)) === 1
+      ? (AttendeeStatus = "Register for this event?")
+      : (AttendeeStatus = "Leave the event?");
+
+    Cookies.get(`user${getUserID()}event${event.id}ArrivalStatus`) === undefined
+      ? (ArrivalStatus = false)
+      : Cookies.get(`user${getUserID()}event${event.id}ArrivalStatus`) == 1
+      ? (ArrivalStatus = false)
+      : (ArrivalStatus = true);
+
+    history.push({
+      pathname: "/view-event",
+      state: {
+        AttendeeStatus: AttendeeStatus,
+        inputCode: Cookies.get(`user${getUserID()}event${event.id}`),
+        ArrivalStatus: ArrivalStatus,
+      },
+    });
+  };
+
+  useEffect(() => {
+    const userId = getUserID();
     let apiData = [];
+
     axios
       .get(
         `${getUserPlatformAPIPort()}api/EventRosterController/GetRosterEntriesByUser`,
@@ -44,108 +126,38 @@ export default class Schedule extends Component {
               myObject["id"] = item.rosterEntry.eventId;
               apiData.push(myObject);
             });
-            this.setState({
-              events: apiData,
-            });
+            setPostArray(apiData);
           }
         },
         (error) => {
           alert("something Went Wrong");
         }
       );
-    // axios
-    //   .get(
-    //     `${getUserPlatformAPIPort()}api/EventController/SearchEventsByDate/${"06-10-2020"}/1?resultLimit=20`
-    //   )
-    //   .then(
-    //     (res) => {
-    //       if (res.status === 200) {
-    //         res.data.map((item) => {
-    //           var myObject = {};
-    //           // console.log(item.eventTitle);
-    //           myObject["title"] = item.eventTitle;
-    //           //console.log(item.eventDate.slice(0, 10));
-    //           myObject["start"] = item.eventDate.slice(0, 10);
-    //           apiData.push(myObject);
-    //         });
-    //         this.setState({
-    //           events: apiData,
-    //         });
-    //       }
-    //     },
-    //     (error) => {
-    //       alert("something Went Wrong");
-    //     }
-    //   );
-
     console.log(apiData);
-  }
+  }, []);
 
-  formatEvents() {
-    return this.props.appointments.map((appointment) => {
-      const { title, end, start } = appointment;
+  return (
+    <Paper
+      style={{
+        marginTop: 100,
+        marginBottom: 100,
+        marginLeft: 300,
+        marginRight: 300,
+        flexDirection: "column",
+        alignItems: "center",
+      }}
+    >
+      {" "}
+      <Typography variant="h3">Event Calendar</Typography>
+      <FullCalendar
+        plugins={[dayGridPlugin]}
+        initialView="dayGridMonth"
+        weekends={false}
+        events={post}
+        eventClick={handleEventClick}
+      />
+    </Paper>
+  );
+};
 
-      let startTime = new Date(start);
-      let endTime = new Date(end);
-
-      return {
-        title,
-        start: startTime,
-        end: endTime,
-        extendedProps: { ...appointment },
-      };
-    });
-  }
-
-  handleEventClick = ({ event }) => {
-    // openAppointment is a function I wrote to open a form to edit that appointment
-    localStorage.setItem("viewEventId", event.id);
-    this.props.history.push({
-      pathname: "/view-event",
-      state: { AttendeeStatus: "Leave the event?" },
-    });
-  };
-
-  handleEventDrop = (info) => {
-    if (window.confirm("Are you sure you want to change the event date?")) {
-      console.log("change confirmed");
-
-      // updateAppointment is another custom method
-      this.props.updateAppointment({
-        ...info.event.extendedProps,
-        start: info.event.start,
-        end: info.event.end,
-      });
-    } else {
-      console.log("change aborted");
-    }
-  };
-
-  render() {
-    console.log(this.state.events);
-
-    return (
-      <Paper
-        style={{
-          marginTop: 100,
-          marginBottom: 100,
-          marginLeft: 300,
-          marginRight: 300,
-          flexDirection: "column",
-          alignItems: "center",
-        }}
-      >
-        {" "}
-        <Typography variant="h3">Event Calendar</Typography>
-        <FullCalendar
-          defaultView="dayGridMonth"
-          plugins={[dayGridPlugin, interactionPlugin]}
-          editable={true}
-          eventDrop={this.handleEventDrop}
-          eventClick={this.handleEventClick}
-          events={this.state.events}
-        />
-      </Paper>
-    );
-  }
-}
+export default Cavents;

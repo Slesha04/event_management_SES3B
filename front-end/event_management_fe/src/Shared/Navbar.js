@@ -233,7 +233,7 @@ function Navbar() {
         <Tooltip title="Events Calendar ">
           <div className="nav-item">
             <Link
-              to="/events-calendar"
+              to="/EventsCalendar"
               className="nav-links"
               onClick={closeMobileMenu}
             >

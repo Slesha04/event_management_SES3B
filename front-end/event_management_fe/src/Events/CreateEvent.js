@@ -40,7 +40,8 @@ import upcomingEvent from "./Events.jpg";
 import { useForm } from "react-hook-form";
 import Snackbars from "../Shared/Snackbar";
 import { getUserPlatformAPIPort } from "../Login/JwtConfig";
-
+import FullCalendar from '@fullcalendar/react'
+import dayGridPlugin from '@fullcalendar/daygrid'
 const ProjectData = [
   { imageUrl: require("./dummyData/img1.jpg") },
   {
@@ -591,6 +592,7 @@ const CreateEvent = (props) => {
           </GridList>
         </Paper>
       </form>
+    
     </div>
   );
 };

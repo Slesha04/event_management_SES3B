@@ -1074,3 +1074,6 @@ C:\Users\avira\Desktop\event_management_SES3B\back-end\Event_Management_Applicat
 C:\Users\avira\Desktop\event_management_SES3B\back-end\Event_Management_Application\Event_Management_Application\obj\Debug\net461\Event_Management_Application.csproj.CopyComplete
 C:\Users\avira\Desktop\event_management_SES3B\back-end\Event_Management_Application\Event_Management_Application\obj\Debug\net461\Event_Management_Application.exe
 C:\Users\avira\Desktop\event_management_SES3B\back-end\Event_Management_Application\Event_Management_Application\obj\Debug\net461\Event_Management_Application.pdb
+C:\Users\avira\Desktop\event_management_SES3B\back-end\Event_Management_Application\Event_Management_Application\bin\Debug\net461\Microsoft.DiaSymReader.Native.x86.dll
+C:\Users\avira\Desktop\event_management_SES3B\back-end\Event_Management_Application\Event_Management_Application\bin\Debug\net461\Geocoding.Core.dll
+C:\Users\avira\Desktop\event_management_SES3B\back-end\Event_Management_Application\Event_Management_Application\bin\Debug\net461\Geocoding.Microsoft.dll
