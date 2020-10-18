@@ -165,7 +165,7 @@ export default function ViewEventCard(props) {
 
     const res = axios
       .put(
-        `https://localhost:5001/api/EventRosterController/MarkAttendeeSelf/${inputCode}/${selectedCardId}`,
+        `${getUserPlatformAPIPort()}api/EventRosterController/MarkAttendeeSelf/${inputCode}/${selectedCardId}`,
         body,
         {
           headers: {
