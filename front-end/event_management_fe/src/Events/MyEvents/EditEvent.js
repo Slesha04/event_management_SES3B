@@ -557,8 +557,7 @@ const EditEvent = (props) => {
                 </DialogTitle>
                 <DialogContent>
                   <DialogContentText id="alert-dialog-description">
-                    You are going to update the details for this event. Are you
-                    sure?
+                    You are going to create this event? Are the details correct?
                   </DialogContentText>
                 </DialogContent>
                 <DialogActions>

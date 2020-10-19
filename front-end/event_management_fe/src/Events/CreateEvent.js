@@ -40,9 +40,16 @@ import upcomingEvent from "./Events.jpg";
 import { useForm } from "react-hook-form";
 import Snackbars from "../Shared/Snackbar";
 import { getUserPlatformAPIPort } from "../Login/JwtConfig";
-import FullCalendar from '@fullcalendar/react'
-import dayGridPlugin from '@fullcalendar/daygrid'
-import stars from "./stars.jpg"
+import FullCalendar from "@fullcalendar/react";
+import dayGridPlugin from "@fullcalendar/daygrid";
+import stars from "./stars.jpg";
+
+import Dialog from "@material-ui/core/Dialog";
+import DialogActions from "@material-ui/core/DialogActions";
+import DialogContent from "@material-ui/core/DialogContent";
+import DialogContentText from "@material-ui/core/DialogContentText";
+import DialogTitle from "@material-ui/core/DialogTitle";
+import { HistoryTwoTone } from "@material-ui/icons";
 
 const ProjectData = [
   { imageUrl: require("./dummyData/img1.jpg") },
@@ -81,7 +88,7 @@ const useStyles = makeStyles((theme) => ({
     height: theme.spacing(150),
     width: theme.spacing(300),
     // backgroundImage: `url(${utsBackground})`,
-    backgroundImage:`url(${stars})`
+    backgroundImage: `url(${stars})`,
   },
   formtwo: {
     margin: theme.spacing(5, 40, 40, 40),
@@ -224,6 +231,8 @@ const CreateEvent = (props) => {
 
   const [eventVisibility, setEventVisibility] = React.useState(0);
   const history = useHistory();
+  const [open, setOpen] = React.useState(false);
+
   console.log(ProjectData[0].imageUrl);
   const handleEventTitleChange = (event) => {
     setEventTitle(event.target.value);
@@ -244,7 +253,15 @@ const CreateEvent = (props) => {
   const handleTicketPriceChange = (event) => {
     setTicketPrice(event.target.value);
   };
+  const handleClickOpen = (event) => {
+    event.preventDefault();
 
+    setOpen(true);
+  };
+
+  const handleClose = () => {
+    setOpen(false);
+  };
   const handleEventTypeChange = (event) => {
     setEventType(event.target.value);
   };
@@ -362,18 +379,21 @@ const CreateEvent = (props) => {
               console.log(res);
               //andre has  to fix this backend error
               setAlertTitle("Create Event");
-              setDisplayValue(true);
-              setAlertValue(1);
             }
           },
           (error) => {
             console.log(error);
             setAlertTitle("Create Event");
+            setTimeout(() => {
+              history.push("/myEvents");
+            }, 1500);
+
             setDisplayValue(true);
             setAlertValue(1);
           }
         );
     }
+    setOpen(false);
   };
 
   return (
@@ -386,7 +406,7 @@ const CreateEvent = (props) => {
       <form
         noValidate
         autoComplete="off"
-        onSubmit={handleRegister}
+        onSubmit={handleClickOpen}
         className={classes.formtwo}
       >
         <Paper variant="outlined" elevation={6}>
@@ -595,7 +615,27 @@ const CreateEvent = (props) => {
           </GridList>
         </Paper>
       </form>
-    
+      <Dialog
+        open={open}
+        onClose={handleClose}
+        aria-labelledby="alert-dialog-title"
+        aria-describedby="alert-dialog-description"
+      >
+        <DialogTitle id="alert-dialog-title">{"Confirmation"}</DialogTitle>
+        <DialogContent>
+          <DialogContentText id="alert-dialog-description">
+            You are going to update the details for this event. Are you sure?
+          </DialogContentText>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={handleRegister} color="primary">
+            Ok
+          </Button>
+          <Button onClick={handleClose} color="primary" autoFocus>
+            Cancel
+          </Button>
+        </DialogActions>
+      </Dialog>
     </div>
   );
 };
