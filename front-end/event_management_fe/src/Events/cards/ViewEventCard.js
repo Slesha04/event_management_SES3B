@@ -13,6 +13,8 @@ import CssBaseline from "@material-ui/core/CssBaseline";
 import Container from "@material-ui/core/Container";
 import AddAlertIcon from "@material-ui/icons/AddAlert";
 import axios from "axios";
+import { ChatList } from "react-chat-elements";
+
 import {
   getHeaderToken,
   getToken,
@@ -40,7 +42,15 @@ import Badge from "@material-ui/core/Badge";
 import MailIcon from "@material-ui/icons/Mail";
 import { IconButton } from "@material-ui/core";
 import ThumbUpAltIcon from "@material-ui/icons/ThumbUpAlt";
-import Cookies from 'js-cookie'
+import Cookies from "js-cookie";
+import GlobalChat from "../../Chats/GlobalChat";
+// RCE CSS
+import "react-chat-elements/dist/main.css";
+// MessageBox component
+import { MessageBox } from "react-chat-elements";
+import { ChatItem } from "react-chat-elements";
+import { MessageList } from "react-chat-elements";
+import { Input } from 'react-chat-elements'
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -68,8 +78,6 @@ const useStyles = makeStyles((theme) => ({
     marginBottom: theme.spacing(2),
   },
   paper: {
-    display: "flex",
-
     margin: theme.spacing(1),
     width: theme.spacing(70),
     height: theme.spacing(90),
@@ -177,8 +185,10 @@ export default function ViewEventCard(props) {
         (res) => {
           if (res.status === 200) setArrivalStatus(true);
 
-          Cookies.set(`user${getUserID()}event${selectedCardId}ArrivalStatus`, true);
-
+          Cookies.set(
+            `user${getUserID()}event${selectedCardId}ArrivalStatus`,
+            true
+          );
 
           setAlertTitle("You're are checked in!");
           setDisplayValue(true);
@@ -198,7 +208,7 @@ export default function ViewEventCard(props) {
     const body = {};
     console.log(props.eventOrganiserId);
     console.log(getUserID());
-    console.log( cardId )
+    console.log(cardId);
 
     if (props.eventOrganiserId == getUserID()) {
       //open snackbar
@@ -231,7 +241,10 @@ export default function ViewEventCard(props) {
               //set the arrivalStatus to the state
               setArrivalStatus(res.data.attendeeArrived);
               //set the cookie to usercode
-              Cookies.set(`user${getUserID()}event${selectedCardId}`, res.data.inputCode);
+              Cookies.set(
+                `user${getUserID()}event${selectedCardId}`,
+                res.data.inputCode
+              );
 
               setDisplayValue(true);
               setAlertValue(1);
@@ -268,10 +281,13 @@ export default function ViewEventCard(props) {
           console.log(res);
           if (res.status === 200) {
             setAlertTitle("You left the event!");
-            setArrivalStatus(false)
-             //set the cookie to null
-            Cookies.set(`user${getUserID()}event${selectedCardId}`,1);
-            Cookies.set(`user${getUserID()}event${selectedCardId}ArrivalStatus`, 1);
+            setArrivalStatus(false);
+            //set the cookie to null
+            Cookies.set(`user${getUserID()}event${selectedCardId}`, 1);
+            Cookies.set(
+              `user${getUserID()}event${selectedCardId}ArrivalStatus`,
+              1
+            );
 
             setDisplayValue(true);
             setAlertValue(1);
@@ -288,7 +304,6 @@ export default function ViewEventCard(props) {
       );
     setOpen(false);
   };
-
 
   return (
     <Card className={classes.root}>
@@ -511,8 +526,9 @@ export default function ViewEventCard(props) {
                             )}{" "}
                             <Grid item xs={12}>
                               <Typography variant="h5" component="h2">
-                              {arrivalStatus=== true ? "Leave this thread?" :
-                                 JoinOrLeave}
+                                {arrivalStatus === true
+                                  ? "Leave this thread?"
+                                  : JoinOrLeave}
                               </Typography>
                             </Grid>
                             <CardActions>
@@ -697,17 +713,156 @@ export default function ViewEventCard(props) {
               <Grid item xs={6} sm={6}>
                 <Typography variant={"h4"}> Event Chat</Typography>
               </Grid>
-              {/* grid item 2 */}
-              <Grid item xs={6} sm={6}>
+              <Grid
+                container
+                direction="column"
+                justify="center"
+                alignItems="center"
+              >
+                {/* grid item 2 */}
                 <Paper elevation={7} className={classes.paper}>
-                  <Typography component="div" variant={"h5"}>
-                    {" "}
-                    event chat goes here
-                  </Typography>
-                </Paper>
-              </Grid>
-              {/* grid item 3 */}
+                  <Grid item xs={12}>
+                    <ChatItem
+                      avatar={localStorage.getItem(
+                        `imageIdEvent${selectedCardId}`
+                      )}
+                      alt={"Reactjs"}
+                      title={props.eventOrgainser}
+                      subtitle={
+                        "Hey, you all. \n Please join this event thread!"
+                      }
+                      date={new Date()}
+                      unread={0}
+                    />{" "}
+                  </Grid>
+                  <Grid item xs={12}>
+                    <ChatItem
+                      avatar={localStorage.getItem(
+                        `imageIdEvent${selectedCardId}`
+                      )}
+                      alt={"Reactjs"}
+                      title={props.eventOrgainser}
+                      subtitle={"Make sure to press the like Button!"}
+                      date={new Date()}
+                      unread={0}
+                    />{" "}
+                  </Grid>
+                  <Grid item xs={12}>
+                    <ChatItem
+                      avatar={localStorage.getItem(
+                        `imageIdEvent${selectedCardId}`
+                      )}
+                      alt={"Reactjs"}
+                      title={props.eventOrgainser}
+                      title={"I'll see you at the event"}
+                      date={new Date()}
+                      unread={0}
+                    />{" "}
+                  </Grid>
+                  <Grid item xs={12}>
+                    <ChatItem
+                      avatar={require("./avatar-viewEvent.png")}
+                      alt={"Reactjs"}
+                      title={getUserName()}
+                      subtitle={"Hey, I am keen for this event"}
+                      date={new Date()}
+                      unread={0}
+                    />{" "}
+                  </Grid>
+                  <Grid item xs={12}>
+                    <ChatItem
+                      avatar={localStorage.getItem(
+                        `imageIdEvent${selectedCardId}`
+                      )}
+                      alt={"Reactjs"}
+                      title={props.eventOrgainser}
+                      subtitle={
+                        "thats good, please do come to event. Heaps of fun!"
+                      }
+                      date={new Date()}
+                      unread={1}
+                    />{" "}
+                  </Grid>
+                  <Grid item xs={12}>
+                    <ChatItem
+                      avatar={require("./avatar-viewEvent.png")}
+                      alt={"Reactjs"}
+                      title={getUserName()}
+                      subtitle={"Sure Thing!"}
+                      date={new Date()}
+                      unread={0}
+                    />{" "}
+                  </Grid>
+                  <Grid item xs={12}>
+                    <MessageBox
+                      reply={{
+                        photoURL:
+                          "https://facebook.github.io/react/img/logo.svg",
+                        title: getUserName(),
+                        titleColor: "#8717ae",
+                        message: "Hey, I am keen for this event",
+                      }}
+                      onReplyMessageClick={() => console.log("reply clicked!")}
+                      position={"left"}
+                      type={"text"}
+                      text={
+                        "Don't forget to check in when you arrive at the venue"
+                      }
+                    />
+                  </Grid>
+                  <Grid item xs={12}>
+                    <ChatItem
+                      avatar={require("./avatar-viewEvent.png")}
+                      alt={"Reactjs"}
+                      title={getUserName()}
+                      subtitle={"I'll Keep in mind"}
+                      date={new Date()}
+                      unread={0}
+                    />{" "}
+                  </Grid>{" "}
+                  <Grid item xs={12}>
+                    <MessageList
+                      className="message-list"
+                      lockable={true}
+                      toBottomHeight={"100%"}
+                      dataSource={[
+                        {
+                          position: "right",
+                          type: "text",
+                          text:
+                            "Lorem ipsum dolor sit amet, consectetur adipisicing elit",
+                          date: new Date(),
+                        },
+                        {
+                          position: "right",
+                          type: "text",
+                          text:
+                            "Lorem ipsum dolor sit amet, consectetur adipisicing elit",
+                          date: new Date(),
+                        },
+                      ]}
+                    />{" "}
+                  </Grid>                  <Grid item xs={12}>
+
+                  <Input
+                    placeholder="Type here..."
+                    multiline={true}
+                    rightButtons={
+                      <Button
+                        color="white"
+                        backgroundColor="black"
+                        text="Send"
+                      />
+                    }
+                  />
+                 
+                         </Grid>{" "}
+
+                 </Paper>
+              </Grid>{" "}
             </Grid>
+
+            {/* grid item 3 */}
           </Grid>
         </Grid>
       </CardContent>
