@@ -19,7 +19,7 @@
     "js-cookie": "^2.2.1",
     "material-ui-icons": "^1.0.0-beta.36",
     "material-ui-search-bar": "^1.0.0",
-    "node-sass": "^4.14.1",
+    "node-sass": "^7.0.0",
     "react": "^16.13.1",
     "react-cookie": "^4.0.3",
     "react-dom": "^16.13.1",
